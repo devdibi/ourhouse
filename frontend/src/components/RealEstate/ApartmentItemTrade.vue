@@ -3,44 +3,23 @@
 		<div class="border-top border-2 w-75"></div>
 		<div class="d-flex flex-row pink text-center">
 			<div class="p-2 w-25">거래 금액</div>
-			<div class="p-2 w-50">{{ deal.price }}</div>
+			<div class="p-2 w-50">{{ price }} 만원</div>
 		</div>
 		<div class="border-top border-2 w-75"></div>
 		<div class="d-flex flex-row text-center">
 			<div class="p-2 w-25">거래 날짜</div>
-			<div class="p-2 w-50">{{ deal.year }}.{{ deal.month }}</div>
+			<div class="p-2 w-50">{{ deal.year }}년 {{ deal.month }}월</div>
 		</div>
 		<div class="d-flex text-center border-top border-2">
 			<div class="p-2 w-25 flex-fill">면적</div>
-			<div class="p-2 w-25 flex-fill">{{ deal.area }}</div>
+			<div class="p-2 w-25 flex-fill">{{ deal.area }}㎡</div>
 			<div class="p-2 w-25 flex-fill">층</div>
-			<div class="p-2 w-25 flex-fill">{{ deal.floor }}</div>
+			<div class="p-2 w-25 flex-fill">{{ deal.floor }}층</div>
 		</div>
 		<div class="p-1 square">
 			<img src="@/assets/icon/empty-star.svg" alt="" class="w-100" />
 		</div>
 	</div>
-	<!-- <div id="container">
-		<div class="deal-info-head">
-			<dt class="info-title">거래 날짜</dt>
-			<dd class="info-data">2019년 1월</dd>
-			<img src="@/assets/icon/empty-star.svg" alt="" />
-		</div>
-		<div>
-			<dl>
-				<dt class="info-title">층</dt>
-				<dd class="info-data">{{ deal.floor }}</dd>
-			</dl>
-			<dl>
-				<dt class="info-title">거래 금액</dt>
-				<dd class="info-data">{{ deal.price }}</dd>
-			</dl>
-			<dl>
-				<dt class="info-title">면적</dt>
-				<dd class="info-data">{{ deal.area }}</dd>
-			</dl>
-		</div>
-	</div> -->
 </template>
 
 <script>
@@ -50,6 +29,11 @@ export default {
 	},
 	props: {
 		deal: Object,
+	},
+	computed: {
+		price() {
+			return this.deal.price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		},
 	},
 };
 </script>
