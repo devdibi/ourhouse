@@ -13,10 +13,10 @@
 					<div class="info-title">통계</div>
 					<div class="info-data">
 						<p class="info-first-data bold">평균 면적</p>
-						<p class="info-second-data">{{ showDetailWindowData.areaAvg }}</p>
+						<p class="info-second-data">{{ showDetailWindowData.areaAvg }}㎡</p>
 						<div class="info-data-second">
 							<p class="info-first-data bold">평균 거래 가격</p>
-							<p class="info-second-data">{{ showDetailWindowData.priceAvg }}</p>
+							<p class="info-second-data">{{ price }} 만원</p>
 						</div>
 					</div>
 				</li>
@@ -33,7 +33,7 @@
 				</li>
 				<li class="add-top-border">
 					<div class="info-title">건축년도</div>
-					<div class="info-data">{{ showDetailWindowData.buildYear }}</div>
+					<div class="info-data">{{ showDetailWindowData.buildYear }}년</div>
 				</li>
 			</div>
 		</div>
@@ -75,35 +75,16 @@ import ApartmentItemTrade from "./ApartmentItemTrade.vue";
 
 export default {
 	data() {
-		return {
-			// avgOfPrice: -1,
-			//   avgOfArea: -1,
-		};
+		return {};
 	},
 	props: ["showDetailWindowData"],
 	components: {
 		ApartmentItemTrade,
 	},
 	computed: {
-		// avgOfArea() {
-		// 	let data = this.showDetailWindowData.deals;
-		// 	console.log(data);
-		// 	let length = data.length;
-		// 	let sumOfArea = 0;
-		// 	for (let i = 0; i < length; i++) {
-		// 		sumOfArea += Number(data[i].area);
-		// 	}
-		// 	return sumOfArea / length;
-		// },
-		// avgOfPrice() {
-		// 	let data = this.showDetailWindowData.deals;
-		// 	let length = data.length;
-		// 	let sumOfPrice = 0;
-		// 	for (let i = 0; i < length; i++) {
-		// 		sumOfPrice += Number(data[i].price);
-		// 	}
-		// 	return sumOfPrice / length;
-		// },
+		price() {
+			return this.showDetailWindowData.priceAvg.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		},
 	},
 };
 </script>
