@@ -4,7 +4,7 @@
       <legend id="title">회원가입</legend>
       <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일">
       <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호">
-      <input @change="test" type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="비밀번호 확인">
+      <input type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="비밀번호 확인">
       <input type="text" id="name" class="textbox" v-model="user.name" placeholder="이름">
       <input type="number" id="age" class="textbox" v-model="user.age" placeholder="나이">
       <button type="submit" id="joinbutton" class="button">회원가입</button>
@@ -18,15 +18,13 @@
       </label>
         <div id="likearea">관심지역(선택)</div>
         <div>
-          <select name="likeareasSido" id="likeareasSido" class="likeareas">
-            <option value="">시도</option>
-            <option value="">임시값</option>
-            <option value="">임시값</option>
+          <select name="likeareasSido" id="likeareasSido" class="likeareas" @change="selectSido">
+            <option value="">시도 선택</option>
+            <option v-for="(item, index) in sidos" :key="index" :value="item.sidoCode">{{ item.name }}</option>
           </select>
           <select name="likeareasGungu" id="likeareasGungu" class="likeareas">
-            <option value="">시군구</option>
-            <option value="">임시값</option>
-            <option value="">임시값</option>
+            <option value="">시군구 선택</option>
+            <option v-for="(item, index) in sigungus" :key="index" :value="item.sigunguCode">{{ item.name }}</option>
           </select>
           <select name="likeareasDong" id="likeareasDong" class="likeareas">
             <option value="">동코드</option>
@@ -37,6 +35,7 @@
 
       <div id="dwellarea">거주지역(선택)</div>
         <div>
+          
           <select name="dwellareasSido" id="dwellareasSido" class="dwellareas">
             <option value="">시도</option>
             <option value="">임시값</option>
@@ -58,6 +57,9 @@
 </template>
 
 <script>
+// import { getSido, getSigungu, getDong } from "@/api/user";
+import { getSido, getSigungu } from "@/api/user";
+
 export default {
   name: 'userJoin',
   components: {},
@@ -70,13 +72,34 @@ export default {
         name: "",
         age: "",
         gender: "",
-      }
+      },
+      sidos: [],
+      sidoCode:"",
+      sigungus: [],
+      sigungucode: "",
+      dongs: [],
+      dongCode:""
     };
   },
-  created() { },
+  created() { 
+    getSido(({ data }) => { 
+      console.log("시도 얻어오기")
+      if (data.message == "success") {
+        this.sidos = data.sidoList;
+      }
+      else { 
+        console.log("axios fail")
+      }
+    }, (error) => { 
+      console.log(error);
+    })
+  },
   methods: {
-    test() {
-      console.log(this.passwordcheck);
+    selectSido() { 
+      getSigungu(this.sidoCode, ({ data }) => { 
+        console.log(data)
+      }, (error) => { console.log(error); }
+      )
     }
   },
 
@@ -132,7 +155,6 @@ export default {
 #title {
   position: absolute;
   top: 30px;
-  left: 189px;
   font-size: 36px;
   line-height: 49px;
   color: #000000;

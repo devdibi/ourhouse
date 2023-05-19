@@ -80,7 +80,6 @@ export default {
 #title {
   position: absolute;
   top: 30px;
-  left: 189px;
   font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 400;
