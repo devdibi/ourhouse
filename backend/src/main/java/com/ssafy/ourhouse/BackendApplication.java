@@ -1,4 +1,4 @@
-package com.ssafy.todayhouse;
+package com.ssafy.ourhouse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

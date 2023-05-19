@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.ourhouse.mapper.UserMapper">
+
+	<insert id="registerUser" parameterType="userDto">
+		INSERT INTO User (email, password, name, gender, age, age_group, join_date)
+		VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW())
+	</insert>
+	
+	<select id="loginUser" parameterType="map" resultType="userDto">
+		SELECT email, name, gender, age, dwell_area, favorite_area, password
+		FROM USER
+		WHERE email = #{email} AND password = #{password}
+	</select>
+	
+	<update id="updatePassword" parameterType="String">
+		UPDATE USER
+		SET password = #{password}
+		WHERE email = #{email}
+	</update>
+	
+	<update id="deleteUser" parameterType="String">
+		UPDATE USER
+		SET status = 0
+		WHERE email = #{email}
+	</update>
+	
+	<select id="loadAllUsers" resultType="userDto">
+		SELECT email, name, gender, age, dwell_area, favorite_area, password        
+		FROM USER
+		WHERE status = 1
+		ORDER BY join_date
+	</select>
+	
+	<update id="randomPassword" parameterType="map">
+		UPDATE USER
+)		SET password = #{password}
+		WHERE email = #{email}
+	</update>
+	
+</mapper>

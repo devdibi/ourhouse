@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.ourhouse.mapper.NoticeMapper">
+
+<resultMap type="noticeDto" id="noticeDto">
+	<result column="notice_no" property="noticeNo" />
+	<result column="title" property="title"/>
+	<result column="content" property="content" />
+	<result column="hit" property="hit"/>
+	<result column="create_at" property="createDate" />
+	<result column="update_at" property="updateDate" />
+	<result column="email" property="email" />
+</resultMap>
+
+
+
+<!-- 자유게시판 리스트 로드 -->
+<select id="getNotices" resultMap="noticeDto">
+	SELECT notice_no, title, content, hit, create_at, update_at, email
+	FROM notice
+	ORDER BY notice_no DESC
+</select>
+
+<!-- 게시글을 작성 -->
+<insert id="writeNotice" parameterType="noticeDto">
+	INSERT INTO notice (title, content, email)
+	VALUES (#{title}, #{content}, #{email})
+</insert>
+
+<!-- 게시글 조회 -->
+<select id="getNotice" resultMap="noticeDto">
+	SELECT notice_no, title, content, hit, create_at, update_at, email
+	FROM notice
+	WHERE notice_no = #{noticeNo}
+</select>
+
+
+<!-- 게시글 수정 -->
+<update id="updateNotice" parameterType="noticeDto">
+	UPDATE notice 
+	SET title = #{noticeDto.title}, content=#{noticeDto.content}, update_at = NOW() 
+	WHERE notice_no = #{noticeNo}
+</update>
+
+<!-- 게시글 삭제 -->
+<delete id="deleteNotice" parameterType="int">
+	DELETE FROM notice
+	WHERE notice_no = #{noticeNo}
+</delete>
+
+<!-- 조회수 추가 -->
+<update id="updateHit" parameterType="int">
+	UPDATE notice
+	SET hit = hit+1
+	WHERE notice_no = #{noticeNo}
+</update>
+
+
+
+
+</mapper>
