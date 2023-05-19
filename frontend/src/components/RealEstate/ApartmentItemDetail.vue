@@ -12,22 +12,22 @@
 				<li class="add-top-border">
 					<div class="info-title">통계</div>
 					<div class="info-data">
-						<p>평균 면적</p>
-						<p class="test1">{{ showDetailWindowData.areaAvg }}</p>
-						<div class="test">
-							<p class="test1">평균 거래 가격</p>
-							<p class="test1">{{ showDetailWindowData.priceAvg }}</p>
+						<p class="info-first-data bold">평균 면적</p>
+						<p class="info-second-data">{{ showDetailWindowData.areaAvg }}</p>
+						<div class="info-data-second">
+							<p class="info-first-data bold">평균 거래 가격</p>
+							<p class="info-second-data">{{ showDetailWindowData.priceAvg }}</p>
 						</div>
 					</div>
 				</li>
 				<li class="add-top-border">
 					<div class="info-title">주소</div>
 					<div class="info-data">
-						<p>지번 주소</p>
-						<p class="test1">{{ showDetailWindowData.jibunAddress }}</p>
-						<div class="test">
-							<p class="test1">도로명 주소</p>
-							<p class="test1">{{ showDetailWindowData.roadAddress }}</p>
+						<p class="info-first-data bold">지번 주소</p>
+						<p class="info-second-data">{{ showDetailWindowData.jibunAddress }}</p>
+						<div class="info-data-second">
+							<p class="info-first-data bold">도로명 주소</p>
+							<p class="info-second-data">{{ showDetailWindowData.roadAddress }}</p>
 						</div>
 					</div>
 				</li>
@@ -54,7 +54,7 @@
 				<a href="#">면적 순</a>
 			</div>
 			<div id="hr"></div>
-			<div style="height: calc(100% - 100px); overflow-y: auto">
+			<div style="height: calc(100% - 80px); overflow-y: auto">
 				<!-- <div> -->
 				<div>
 					<ApartmentItemTrade
@@ -109,14 +109,14 @@ export default {
 </script>
 
 <style scoped>
-#info-conatiner p {
-	margin-bottom: 0px;
+.info-first-data {
+	margin: 0px;
 }
-.test1 {
+.info-second-data {
 	margin: 0px;
 	margin-top: 4px;
 }
-.test {
+.info-data-second {
 	border-top: 1.5px solid lightgrey;
 	margin-top: 16px;
 	padding-top: 16px;
