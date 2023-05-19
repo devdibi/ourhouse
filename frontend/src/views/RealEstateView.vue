@@ -87,6 +87,8 @@
 						:key="index"
 						:apartDealData="apartDealData"
 						:index="index"
+						:lastClickIndex="showDetailWindowIdx"
+						:show="showDetailWindow"
 						@showDetailWindow="eventShowDetailWindow"
 					/>
 				</div>
@@ -139,7 +141,7 @@ export default {
 				lat: 33.450701,
 				lng: 126.570667,
 			},
-			lastIndex: -1,
+			lastOptionIndex: -1,
 			isOpen: [true, false, false, false],
 			showDetailWindow: false,
 			showDetailWindowIdx: -1,
@@ -237,19 +239,19 @@ export default {
 		 * 상세 옵션 열고 닫기 함수
 		 */
 		changeWindow(index) {
-			if (this.lastIndex === index) {
+			if (this.lastOptionIndex === index) {
 				this.$set(this.isOpen, index, !this.isOpen[index]);
 			} else {
-				this.$set(this.isOpen, this.lastIndex, false);
+				this.$set(this.isOpen, this.lastOptionIndex, false);
 				this.$set(this.isOpen, index, !this.isOpen[index]);
-				this.lastIndex = index;
+				this.lastOptionIndex = index;
 			}
 		},
 		/**
 		 * 아파트 거래 정보 창 열고 닫기 함수
 		 */
 		eventShowDetailWindow(data) {
-			console.log(data);
+			// console.log(data);
 
 			this.location.lat = data.lat;
 			this.location.lng = data.lng;
