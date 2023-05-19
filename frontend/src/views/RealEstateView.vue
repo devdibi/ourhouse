@@ -3,11 +3,50 @@
 		<content id="content">
 			<!-- 상세 검색 Container -->
 			<div id="search-bar">
-				<h3 style="margin: 0px; margin-left: 50px">검색</h3>
+				<h3 class="m-0 mr-3 ml-3">검색</h3>
+
 				<!-- 기본 검색 -->
-				<button class="btn btn-primary m-2">시도 선택</button>
+				<!-- <button class="btn btn-primary m-2">시도 선택</button>
 				<button class="btn btn-primary m-2">구군 선택</button>
-				<button class="btn btn-primary m-2">동 선택</button>
+				<button class="btn btn-primary m-2">동 선택</button> -->
+				<div class="location-option-container">
+					<!-- <b-form-select class="mr-2" v-model="selectSido" :options="sidoList"> </b-form-select> -->
+					<b-form-select class="mr-2" v-model="selectSido">
+						<b-form-select-option :value="null" disabled>시도 검색</b-form-select-option>
+						<b-form-select-option
+							v-for="sido in sidoList"
+							:key="sido.sidoCode"
+							:value="sido.sidoCode"
+						>
+							{{ sido.name }}
+						</b-form-select-option>
+					</b-form-select>
+					<b-form-select class="mr-2" v-model="selectSigungu">
+						<b-form-select-option :value="null" selected :disabled="true"
+							>시군구 검색</b-form-select-option
+						>
+						<b-form-select-option
+							v-for="(sigungu, index) in sigunguList"
+							:key="index"
+							:value="sigungu.sigunguCode"
+						>
+							{{ sigungu.name }}
+						</b-form-select-option>
+					</b-form-select>
+					<b-form-select class="mr-2" v-model="selectDong">
+						<b-form-select-option :value="null" selected :disabled="true"
+							>동 검색</b-form-select-option
+						>
+						<b-form-select-option
+							v-for="(dong, index) in dongList"
+							:key="index"
+							:value="dong.dongCode"
+						>
+							{{ dong.name }}
+						</b-form-select-option>
+					</b-form-select>
+					<!-- <b-form-select v-model="selected" :options="options"></b-form-select> -->
+				</div>
 				<!-- 기본 검색 -->
 				<h3>|</h3>
 				<!-- <div style="display: inline-block; position: relative">
@@ -38,10 +77,12 @@
 			<!-- 상세 검색 Container -->
 			<!-- 카카오 지도 -->
 			<div id="wrap-map">
-				<kakao-map :location="location" />
+				<KakaoMap :location="location" />
 				<!-- 검색 결과 -->
 				<div id="result">
+					<h3 v-if="resultIsEmpty" class="text-center mt-3">검색 결과가 없습니다.</h3>
 					<ApartmentItem
+						v-else
 						v-for="(apartDealData, index) in dealData"
 						:key="index"
 						:apartDealData="apartDealData"
@@ -67,7 +108,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 import KakaoMap from "@/components/KakaoMap.vue";
 import ApartmentItem from "@/components/RealEstate/ApartmentItem.vue";
 import ApartmentItemDetail from "@/components/RealEstate/ApartmentItemDetail.vue";
@@ -87,6 +128,13 @@ export default {
 	},
 	data() {
 		return {
+			resultIsEmpty: true,
+			selectSido: String,
+			sidoList: Array,
+			selectSigungu: String,
+			sigunguList: Array,
+			selectDong: String,
+			dongList: Array,
 			location: {
 				lat: 33.450701,
 				lng: 126.570667,
@@ -97,298 +145,92 @@ export default {
 			showDetailWindowIdx: -1,
 			showDetailWindowData: Object,
 			areaOptionPopUpFlag: false,
-			dealData: [
-				{
-					aptCode: "11110000000015",
-					buildYear: "2008",
-					name: "종로센트레빌",
-					jibunAddress: "숭인동 2-1",
-					roadAddress: "동망산길 47-47",
-					lng: "127.015738287163",
-					lat: "37.5815574293752",
-					dongCode: "1111017500",
-					houseLike: false,
-					deals: [
-						{
-							dealCode: "111101501000036",
-							price: "38900",
-							year: "2015",
-							month: "1",
-							area: "59.92",
-							floor: "11",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000038",
-							price: "47000",
-							year: "2015",
-							month: "1",
-							area: "84.92",
-							floor: "5",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000041",
-							price: "38200",
-							year: "2015",
-							month: "1",
-							area: "59.92",
-							floor: "5",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000042",
-							price: "47500",
-							year: "2015",
-							month: "1",
-							area: "84.92",
-							floor: "4",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000045",
-							price: "37900",
-							year: "2015",
-							month: "1",
-							area: "59.92",
-							floor: "4",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000046",
-							price: "37800",
-							year: "2015",
-							month: "1",
-							area: "59.92",
-							floor: "2",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000047",
-							price: "55000",
-							year: "2015",
-							month: "1",
-							area: "114.67",
-							floor: "5",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000048",
-							price: "38700",
-							year: "2015",
-							month: "1",
-							area: "59.92",
-							floor: "6",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000052",
-							price: "39000",
-							year: "2015",
-							month: "1",
-							area: "59.92",
-							floor: "11",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000054",
-							price: "46000",
-							year: "2015",
-							month: "1",
-							area: "84.92",
-							floor: "2",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000056",
-							price: "38200",
-							year: "2015",
-							month: "1",
-							area: "59.92",
-							floor: "5",
-							dealLike: false,
-						},
-					],
-				},
-				{
-					aptCode: "11110000000016",
-					buildYear: "2013",
-					name: "종로중흥S클래스",
-					jibunAddress: "숭인동 202-3",
-					roadAddress: "종로66길 28-28",
-					lng: "127.021707822617",
-					lat: "37.5735312366803",
-					dongCode: "1111017500",
-					houseLike: false,
-					deals: [
-						{
-							dealCode: "111101501000037",
-							price: "14000",
-							year: "2015",
-							month: "1",
-							area: "19.466",
-							floor: "14",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000053",
-							price: "13400",
-							year: "2015",
-							month: "1",
-							area: "19.466",
-							floor: "13",
-							dealLike: false,
-						},
-					],
-				},
-				{
-					aptCode: "11110000000017",
-					buildYear: "2004",
-					name: "롯데캐슬천지인",
-					jibunAddress: "숭인동 76",
-					roadAddress: "종로 347-347",
-					lng: "127.016000015149",
-					lat: "37.5740562569508",
-					dongCode: "1111017500",
-					houseLike: false,
-					deals: [
-						{
-							dealCode: "111101501000039",
-							price: "52600",
-							year: "2015",
-							month: "1",
-							area: "84.95",
-							floor: "30",
-							dealLike: false,
-						},
-					],
-				},
-				{
-					aptCode: "11110000000018",
-					buildYear: "2009",
-					name: "종로청계힐스테이트",
-					jibunAddress: "숭인동 766",
-					roadAddress: "숭인동길 21-21",
-					lng: "127.020959405051",
-					lat: "37.5757847596495",
-					dongCode: "1111017500",
-					houseLike: false,
-					deals: [
-						{
-							dealCode: "111101501000040",
-							price: "39500",
-							year: "2015",
-							month: "1",
-							area: "59.9426",
-							floor: "7",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000043",
-							price: "56000",
-							year: "2015",
-							month: "1",
-							area: "114.7153",
-							floor: "2",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000044",
-							price: "39000",
-							year: "2015",
-							month: "1",
-							area: "59.9426",
-							floor: "5",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000049",
-							price: "37150",
-							year: "2015",
-							month: "1",
-							area: "59.9426",
-							floor: "2",
-							dealLike: false,
-						},
-						{
-							dealCode: "111101501000055",
-							price: "39600",
-							year: "2015",
-							month: "1",
-							area: "59.9426",
-							floor: "8",
-							dealLike: false,
-						},
-					],
-				},
-				{
-					aptCode: "11110000000019",
-					buildYear: "2003",
-					name: "탑스빌",
-					jibunAddress: "숭인동 178-76",
-					roadAddress: "종로65길 12-12",
-					lng: "127.020120466443",
-					lat: "37.5750071670982",
-					dongCode: "1111017500",
-					houseLike: false,
-					deals: [
-						{
-							dealCode: "111101501000050",
-							price: "34500",
-							year: "2015",
-							month: "1",
-							area: "82.94",
-							floor: "2",
-							dealLike: false,
-						},
-					],
-				},
-				{
-					aptCode: "11110000000020",
-					buildYear: "2012",
-					name: "삼전솔하임2차",
-					jibunAddress: "숭인동 296-19",
-					roadAddress: "종로58가길 27-27",
-					lng: "127.016735679084",
-					lat: "37.5723925579397",
-					dongCode: "1111017500",
-					houseLike: false,
-					deals: [
-						{
-							dealCode: "111101501000051",
-							price: "12300",
-							year: "2015",
-							month: "1",
-							area: "16.67",
-							floor: "5",
-							dealLike: false,
-						},
-					],
-				},
-			],
+			dealData: Array,
 		};
 	},
+	watch: {
+		selectSido(sido) {
+			let config = {
+				method: "get", // 기본값
+				baseURL: "http://localhost:9999/house/sigungu",
+				params: {
+					sido,
+				},
+			};
+			axios(config)
+				.then(({ data }) => {
+					// console.log(data.sidoList);
+					this.sigunguList = data.sidoList;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		selectSigungu(sigungu) {
+			console.log(sigungu);
+			let config = {
+				method: "get", // 기본값
+				baseURL: "http://localhost:9999/house/dong",
+				params: {
+					sigungu,
+				},
+			};
+			axios(config)
+				.then(({ data }) => {
+					console.log(data.sidoList);
+					this.dongList = data.dongList;
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		selectDong(dongCode) {
+			let config = {
+				method: "post",
+				baseURL: "http://localhost:9999/house/",
+				data: {
+					dongCode,
+					// email: "",
+					// month: 1,
+					// year: 2015,
+				},
+			};
+			axios(config)
+				.then(({ data }) => {
+					if (data.data.length === 0) {
+						this.resultIsEmpty = true;
+					} else {
+						console.log(data.data);
+						this.resultIsEmpty = false;
+						this.dealData = data.data;
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+	},
 	created() {
-		// let config = {
-		// 	method: "post", // 기본값
-		// 	// `url`이 절대값이 아닌 경우 `baseURL`은 URL 앞에 붙습니다.
-		// 	// 상대적인 URL을 인스턴스 메서드에 전달하려면 `baseURL`을 설정하는 것은 편리합니다.
-		// 	baseURL: "http://192.168.31.53:8080/house/",
-		// 	data: {
-		// 		dongCode: "1111017500",
-		// 		email: "",
-		// 		month: 1,
-		// 		year: 2015,
-		// 	},
-		// };
-		// axios(config)
-		// 	.then(({ data }) => {
-		// 		this.dealData = data.data;
-		// 		// console.log(this.dealData);
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 	});
+		// let tmp = [];
+
+		let config = {
+			method: "get", // 기본값
+			baseURL: "http://localhost:9999/house/sido",
+		};
+		axios(config)
+			.then(({ data }) => {
+				console.log(data);
+				this.sidoList = data.sidoList;
+				// data.sidoList.forEach((element) => {
+				// 	tmp.push({ text: element.name, value: element.sidoCode });
+				// });
+				// console.log(tmp);
+				// tmp.unshift({ text: "시도 검색", value: null, disabled: true });
+				// this.sidoList = tmp;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	},
 	methods: {
 		/**
@@ -427,6 +269,11 @@ export default {
 </script>
 
 <style scoped>
+.location-option-container {
+	width: 500px;
+	display: flex;
+	justify-content: space-between;
+}
 #close-detail {
 	position: absolute;
 	/* left: 966px; */
@@ -463,6 +310,7 @@ export default {
 	border: 1px black solid;
 	border-top: none;
 	border-bottom: none;
+	overflow-y: auto;
 }
 #wrap-map {
 	position: relative;

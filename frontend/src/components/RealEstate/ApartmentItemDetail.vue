@@ -13,10 +13,10 @@
 					<div class="info-title">통계</div>
 					<div class="info-data">
 						<p>평균 면적</p>
-						<p class="test1">{{ avgOfArea }}</p>
+						<p class="test1">{{ showDetailWindowData.areaAvg }}</p>
 						<div class="test">
 							<p class="test1">평균 거래 가격</p>
-							<p class="test1">{{ avgOfPrice }}</p>
+							<p class="test1">{{ showDetailWindowData.priceAvg }}</p>
 						</div>
 					</div>
 				</li>
@@ -85,26 +85,25 @@ export default {
 		ApartmentItemTrade,
 	},
 	computed: {
-		avgOfArea() {
-			let data = this.showDetailWindowData.deals;
-			let length = this.showDetailWindowData.deals.length;
-			let sumOfArea = 0;
-			for (let i = 0; i < length; i++) {
-				sumOfArea += Number(data[i].area);
-			}
-
-			return sumOfArea / length;
-		},
-		avgOfPrice() {
-			let data = this.showDetailWindowData.deals;
-			let length = this.showDetailWindowData.deals.length;
-			let sumOfPrice = 0;
-			for (let i = 0; i < length; i++) {
-				sumOfPrice += Number(data[i].price);
-			}
-
-			return sumOfPrice / length;
-		},
+		// avgOfArea() {
+		// 	let data = this.showDetailWindowData.deals;
+		// 	console.log(data);
+		// 	let length = data.length;
+		// 	let sumOfArea = 0;
+		// 	for (let i = 0; i < length; i++) {
+		// 		sumOfArea += Number(data[i].area);
+		// 	}
+		// 	return sumOfArea / length;
+		// },
+		// avgOfPrice() {
+		// 	let data = this.showDetailWindowData.deals;
+		// 	let length = data.length;
+		// 	let sumOfPrice = 0;
+		// 	for (let i = 0; i < length; i++) {
+		// 		sumOfPrice += Number(data[i].price);
+		// 	}
+		// 	return sumOfPrice / length;
+		// },
 	},
 };
 </script>
