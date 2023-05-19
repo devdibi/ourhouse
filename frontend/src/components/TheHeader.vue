@@ -9,8 +9,8 @@
 					<b-navbar-nav class="ml-5">
 						<!-- View Nav -->
 						<b-nav-item to="/land" link-classes="text-white">지도 검색</b-nav-item>
-						<b-nav-item link-classes="text-white">공지 사항</b-nav-item>
-						<b-nav-item link-classes="text-white">자유 게시판</b-nav-item>
+						<b-nav-item link-classes="text-white" @click="moveNotice()">공지 사항</b-nav-item>
+						<b-nav-item link-classes="text-white" @click="moveBoard()">자유 게시판</b-nav-item>
 
 						<!-- 매매 좋아요 Nav -->
 						<b-nav-item-dropdown text="내 목록" toggle-class="text-white">
@@ -44,7 +44,15 @@ export default {
 		};
 	},
 	created() {},
-	methods: {},
+	methods: {
+		moveNotice() {
+			this.$router.push('/notice')
+		},
+		moveBoard() {
+			this.$router.push('/board')
+		}
+	},
+
 };
 </script>
 
