@@ -57,6 +57,11 @@
 					<div class="pop-up" v-show="areaOptionPopUpFlag"></div>
 				</div> -->
 				<!-- 상세 검색 -->
+				<ApartmentItemOptionDateVue
+					optionName="날짜"
+					:isOpen="isOpen[0]"
+					@toggleOptionWindow="changeWindow(0)"
+				/>
 				<ApartmentItemOption
 					optionName="가격대"
 					:isOpen="isOpen[1]"
@@ -118,6 +123,7 @@ import ApartmentItemDetail from "@/components/RealEstate/ApartmentItemDetail.vue
 // import TheFooter from "@/components/TheFooter.vue";
 
 import ApartmentItemOption from "@/components/RealEstate/ApartmentItemOption.vue";
+import ApartmentItemOptionDateVue from "@/components/RealEstate/ApartmentItemOptionDate.vue";
 
 export default {
 	components: {
@@ -127,6 +133,7 @@ export default {
 		// TheHeader,
 		// TheFooter,
 		ApartmentItemOption,
+		ApartmentItemOptionDateVue,
 	},
 	data() {
 		return {
@@ -142,7 +149,7 @@ export default {
 				lng: 126.570667,
 			},
 			lastOptionIndex: -1,
-			isOpen: [true, false, false, false],
+			isOpen: [false, false, false, false],
 			showDetailWindow: false,
 			showDetailWindowIdx: -1,
 			showDetailWindowData: Object,
