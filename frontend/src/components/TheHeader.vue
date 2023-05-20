@@ -11,9 +11,10 @@
             <b-nav-item to="/land" link-classes="text-white">지도 검색</b-nav-item>
             <b-nav-item link-classes="text-white" @click="moveNotice()">공지 사항</b-nav-item>
             <b-nav-item link-classes="text-white" @click="moveBoard()">자유 게시판</b-nav-item>
+            <b-nav-item link-classes="text-white" @click="moveNews()">부동산 뉴스</b-nav-item>
 
             <!-- 매매 좋아요 Nav -->
-            <b-nav-item-dropdown text="내 목록" toggle-class="text-white">
+            <b-nav-item-dropdown text="내 목록" toggle-class="text-white" v-if="this.userinfo">
               <b-dropdown-group id="dropdown-group-1" header="부동산">
                 <b-dropdown-item href="#">관심 단지</b-dropdown-item>
                 <b-dropdown-item href="#">관심 매물</b-dropdown-item>
@@ -24,7 +25,7 @@
           </b-navbar-nav>
 
           <!-- 유저부분 Nav -->
-          <b-navbar-nav class="ml-auto">
+          <b-navbar-nav class="ml-auto" v-if="this.userinfo">
             <b-nav-item @click="moveLogin()" link-classes="text-white">로그인</b-nav-item>
             <b-nav-item @click="moveJoin()" link-classes="text-white">회원 가입</b-nav-item>
           </b-navbar-nav>
@@ -40,22 +41,26 @@ export default {
   components: {},
   data() {
     return {
+      userinfo: "true", // 로그인 회원가입 표시 용도
       message: "",
     };
   },
   created() {},
   methods: {
     moveNotice() {
-      this.$router.push("/notice");
+      this.$router.push("/notice").catch(() => {});
     },
     moveBoard() {
-      this.$router.push("/board");
+      this.$router.push("/board").catch(() => {});
     },
     moveLogin() {
-      this.$router.push("/user/login");
+      this.$router.push("/user/login").catch(() => {});
     },
     moveJoin() {
-      this.$router.push("/user/join");
+      this.$router.push("/user/join").catch(() => {});
+    },
+    moveNews() {
+      this.$router.push("/news").catch(() => {});
     },
   },
 };
