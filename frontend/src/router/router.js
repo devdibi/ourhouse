@@ -1,3 +1,5 @@
+/** @format */
+
 import Vue from "vue";
 import VueRouter from "vue-router";
 
@@ -10,7 +12,6 @@ import BoardList from "@/components/board/BoardList.vue";
 import BoardDetail from "@/components/board/BoardDetail.vue";
 import BoardWrite from "@/components/board/BoardWrite.vue";
 import BoardUpdate from "@/components/board/BoardUpdate.vue";
-import BoardDelete from "@/components/board/BoardDelete.vue";
 
 // notice
 import NoticeView from "@/views/NoticeView.vue";
@@ -18,7 +19,6 @@ import NoticeList from "@/components/notice/NoticeList.vue";
 import NoticeDetail from "@/components/notice/NoticeDetail.vue";
 import NoticeWrite from "@/components/notice/NoticeWrite.vue";
 import NoticeUpdate from "@/components/notice/NoticeUpdate.vue";
-import NoticeDelete from "@/components/notice/NoticeDelete.vue";
 
 Vue.use(VueRouter);
 
@@ -59,11 +59,6 @@ const routes = [
         name: "boardupdate",
         component: BoardUpdate,
       },
-      {
-        path: "delete/:board_no",
-        name: "boarddelete",
-        component: BoardDelete,
-      },
     ],
   },
   {
@@ -91,11 +86,6 @@ const routes = [
         path: "update/:notice_no",
         name: "noticeupdate",
         component: NoticeUpdate,
-      },
-      {
-        path: "delete/:notice_no",
-        name: "noticedelete",
-        component: NoticeDelete,
       },
     ],
   },
