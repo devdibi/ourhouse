@@ -1,7 +1,6 @@
 package com.ssafy.ourhouse.util;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -10,7 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -98,47 +96,77 @@ public class NaverSearch {
         }
         return;
     }
-
-    //[CODE 0]
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String node = "news"; // 크롤링 할 대상
-        System.out.print("검색어를 입력하세요: ");
-        String srcText = scanner.nextLine();
-        int cnt = 0;
-        JSONArray jsonResult = new JSONArray();
-
-        JSONObject jsonResponse = getNaverSearch(node, srcText, 1, 100); // [CODE 2]
-        int total = jsonResponse.getInt("total");
-
-        while (jsonResponse != null && jsonResponse.getInt("display") != 0) {
+    
+    public static JSONArray jsonSave() {
+    	int cnt = 0;
+    	String node = "news";
+    	String text = "부동산";
+    	
+    	JSONArray jsonResult = new JSONArray();
+    	
+    	JSONObject jsonResponse = getNaverSearch(node, text, 1, 100); // [CODE 2]
+    	
+    	while (jsonResponse != null && jsonResponse.getInt("display") != 0) {
             JSONArray items = jsonResponse.getJSONArray("items");
             for (int i = 0; i < items.length(); i++) {
                 JSONObject post = items.getJSONObject(i);
-                System.out.println(post);
                 cnt++;
                 // jsonarray 저장
                 getPostData(post, jsonResult, cnt); // [CODE 3]
             }
 
             int start = jsonResponse.getInt("start") + jsonResponse.getInt("display");
-            jsonResponse = getNaverSearch(node, srcText, start, 100); // [CODE 2]
             
-            if(cnt == 100) break;
+            jsonResponse = getNaverSearch(node, text, start, 100); // [CODE 2]
+            
+            if(cnt == 100) break; // 종
         }
-
-        System.out.printf("전체 검색 : %d 건\n", total);
-
-        try {
-            FileWriter fileWriter = new FileWriter(String.format("%s_naver_%s.json", srcText, node));
-            String jsonFile = jsonResult.toString();
-            fileWriter.write(jsonFile);
-            fileWriter.close();
-            System.out.printf("가져온 데이터 : %d 건\n", cnt);
-            System.out.printf("%s_naver_%s.json SAVED\n", srcText, node);
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        scanner.close();
+        return jsonResult;
     }
+    
+    //[CODE 0]
+//    public static void main(String[] args) {
+//    	System.out.println(jsonSave());
+//    	Calendar now = Calendar.getInstance();
+//    	String date = ""+now.get(Calendar.YEAR)+now.get(Calendar.MONTH)+now.get(Calendar.DAY_OF_MONTH);
+//    	
+//        Scanner scanner = new Scanner(System.in);
+//        String node = "news"; // 크롤링 할 대상
+//        System.out.print("검색어를 입력하세요: ");
+//        String srcText = "부동산";
+//        int cnt = 0;
+//        JSONArray jsonResult = new JSONArray();
+//
+//        JSONObject jsonResponse = getNaverSearch(node, srcText, 1, 100); // [CODE 2]
+//        int total = jsonResponse.getInt("total");
+//
+//        while (jsonResponse != null && jsonResponse.getInt("display") != 0) {
+//            JSONArray items = jsonResponse.getJSONArray("items");
+//            for (int i = 0; i < items.length(); i++) {
+//                JSONObject post = items.getJSONObject(i);
+//                System.out.println(post);
+//                cnt++;
+//                // jsonarray 저장
+//                getPostData(post, jsonResult, cnt); // [CODE 3]
+//            }
+//
+//            int start = jsonResponse.getInt("start") + jsonResponse.getInt("display");
+//            jsonResponse = getNaverSearch(node, srcText, start, 100); // [CODE 2]
+//            
+//            if(cnt == 100) break;
+//        }
+//        System.out.printf("전체 검색 : %d 건\n", total);
+//
+//        try {
+//            FileWriter fileWriter = new FileWriter(String.format("%s_%s_naver_%s.json", date, srcText, node));
+//            String jsonFile = jsonResult.toString();
+//            fileWriter.write(jsonFile);
+//            fileWriter.close();
+//            System.out.printf("가져온 데이터 : %d 건\n", cnt);
+//            System.out.printf("%s_%s_naver_%s.json SAVED\n", date,srcText, node);
+//        } catch (Exception e) {
+//            System.out.println("Error: " + e.getMessage());
+//        }
+//        scanner.close();
+//    }
 }

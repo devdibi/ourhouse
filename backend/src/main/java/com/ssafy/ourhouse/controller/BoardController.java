@@ -64,7 +64,7 @@ public class BoardController {
 	}
 	
 	// detail, hit, comment
-	@ApiOperation(value = "게시글의 상세페이지 조회 및 댓글 조")
+	@ApiOperation(value = "게시글의 상세페이지 조회 및 댓글 조회")
 	@GetMapping("/{boardNo}")
 	public ResponseEntity<Map<String,Object>> getBoard(@PathVariable("boardNo")int boardNo ){
 		logger.info("게시글을 불러와요");

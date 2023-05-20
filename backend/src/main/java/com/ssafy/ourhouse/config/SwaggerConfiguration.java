@@ -72,6 +72,11 @@ public class SwaggerConfiguration  extends WebMvcConfigurationSupport {
 		return getDocket("아파트", Predicates.or(PathSelectors.regex("/house.*")));
 
 	}
+	@Bean
+	public Docket newsApi() {
+		return getDocket("뉴스", Predicates.or(PathSelectors.regex("/news.*")));
+
+	}
 //
 	@Bean
 	public Docket allApi() {
