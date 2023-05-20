@@ -20,6 +20,9 @@ import NoticeDetail from "@/components/notice/NoticeDetail.vue";
 import NoticeWrite from "@/components/notice/NoticeWrite.vue";
 import NoticeUpdate from "@/components/notice/NoticeUpdate.vue";
 
+// news
+import NewsList from "@/components/news/NewsList";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -116,6 +119,11 @@ const routes = [
         component: () => import("@/components/user/UserJoinAgreement"),
       },
     ],
+  },
+  {
+    path: "/news",
+    name: "news",
+    component: NewsList,
   },
 ];
 
