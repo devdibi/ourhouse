@@ -1,28 +1,69 @@
 <template>
   <div class="background">
-    <form action="submit" id="loginform">
-      <legend id="title">비밀번호 찾기</legend>
-      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일">
-      <input type="text" id="name" class="textbox" v-model="user.name" placeholder="이름">
-      <button type="submit" id="submitbutton" class="button">임시 비밀번호 발급</button>
-    </form>
+    <div id="loginform">
+      <legend id="title">비밀번호 재발급</legend>
+      <input
+        type="email"
+        id="email"
+        class="textbox"
+        v-model="user.email"
+        placeholder="이메일"
+      />
+      <input
+        type="text"
+        id="name"
+        class="textbox"
+        v-model="user.name"
+        placeholder="이름"
+      />
+      <button id="submitbutton" class="button" @click="password">
+        임시 비밀번호 발급
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import { randomPassword } from "@/api/user";
+
 export default {
-  name: 'userFindPassword',
+  name: "userFindPassword",
   components: {},
   data() {
     return {
       user: {
         email: "",
-        password: "",
+        name: "",
       },
     };
   },
-  created() { },
-  methods: {},
+  created() {},
+  methods: {
+    password() {
+      if (this.user.email == "" || this.user.name == "") {
+        alert("이메일과 이름을 입력해주세요");
+        return;
+      }
+      randomPassword(
+        this.user.email,
+        this.user.name,
+        ({ data }) => {
+          console.log(data);
+          if (data.message == "fail") {
+            alert("다시 시도해주세요");
+          } else if (data.compareResult == "fail") {
+            alert("일치하는 유저 정보가 없습니다.");
+          } else {
+            alert("이메일로 비밀번호 전송 완료");
+            this.$router.push({ name: "login" });
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+  },
 };
 </script>
 
@@ -36,18 +77,18 @@ export default {
   left: 60px;
   width: 360px;
   height: 50px;
-  background: #FFFFFF;
-  border-bottom: 1px solid #D9D9D9;
+  background: #ffffff;
+  border-bottom: 1px solid #d9d9d9;
 
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
 }
 
-.textbox::placeholder{
-  color: #D9D9D9;
+.textbox::placeholder {
+  color: #d9d9d9;
 }
 
 .button {
@@ -56,7 +97,7 @@ export default {
   width: 350px;
   height: 60px;
   border-radius: 5px;
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -69,16 +110,17 @@ export default {
   height: 450px;
   display: inline-block;
   text-align: center;
-  background: #FFFFFF;
+  background: #ffffff;
   background-blend-mode: color-dodge;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3),
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
 }
 
 #title {
   position: absolute;
   top: 30px;
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   font-style: normal;
   font-weight: 400;
   font-size: 36px;
@@ -101,7 +143,7 @@ export default {
   color: #939393;
 }
 
-#submitbutton:hover{
+#submitbutton:hover {
   background: #cccccc;
   color: #4b4b4b;
 }

@@ -106,7 +106,8 @@ const routes = [
       {
         path: "join",
         name: "join",
-        component: () => import("@/components/user/UserJoin"),
+        component: () => import("@/components/user/UserJoinAgreement"),
+        
       },
       {
         path: "findpassword",
@@ -114,9 +115,9 @@ const routes = [
         component: () => import("@/components/user/UserFindPassword.vue"),
       },
       {
-        path: "joinagreement",
-        name: "joinagreement",
-        component: () => import("@/components/user/UserJoinAgreement"),
+        path: "joinform",
+        name: "joinform",
+        component: () => import("@/components/user/UserJoin"),
       },
     ],
   },

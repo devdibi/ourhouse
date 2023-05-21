@@ -1,6 +1,6 @@
 <template>
-  <div class="joinform">
-    <div id="joinform">
+  <div id="rootDiv">
+    <form id="joinform">
       <legend id="title">회원가입</legend>
       <input
         type="email"
@@ -37,14 +37,16 @@
         v-model="user.age"
         placeholder="나이"
       />
-      <label class="gender">
-        <input type="radio" name="gender1" value="1" v-model="user.gender" />
-        <div id="gender1">남</div>
-      </label>
-      <label class="gender">
-        <input type="radio" name="gender2" value="2" v-model="user.gender" />
-        <div id="gender2">여</div>
-      </label>
+
+      <b-form-group id="genderbtn">
+        <b-form-radio-group
+          id="gender"
+          class="gender"
+          v-model="user.gender"
+          :options="genderOptions"
+          buttons
+        ></b-form-radio-group>
+      </b-form-group>
       <div id="likearea">관심지역(선택)</div>
       <div>
         <select
@@ -150,7 +152,7 @@
       <button id="joinbutton" class="button" @click="clickJoin()">
         회원가입
       </button>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -184,6 +186,11 @@ export default {
       dwellSigunguCode: "",
       dwellDongs: [],
       dwellDongCode: "",
+
+      genderOptions: [
+        { text: "남", value: "1" },
+        { text: "녀", value: "2" },
+      ],
     };
   },
   created() {
@@ -344,7 +351,8 @@ export default {
 }
 
 #joinform {
-  position: relative;
+  position: absolute;
+  margin: auto;
   width: 480px;
   height: 775px;
   display: inline-block;
@@ -386,32 +394,16 @@ export default {
   width: 170px;
 }
 
-.gender input[type="radio"] {
-  display: none;
-}
-
-.gender input[type="radio"] + div {
+.gender {
   position: absolute;
   top: 420px;
   display: inline-block;
   text-align: center;
   line-height: 40px;
-
-  width: 70px;
-  height: 40px;
-  background: #e8e8e8;
-  color: #989898;
-}
-
-#gender1 {
-  border-radius: 5px 0px 0px 5px;
-  left: 270px;
-}
-
-#gender2 {
-  left: 340px;
-  border-radius: 0px 5px 5px 0px;
-  border-left: 1px solid rgba(152, 152, 152, 0.8);
+  padding: none;
+  /* width: 140px; */
+  /* height: 40px; */
+  color: #d9d9d9;
 }
 
 #likearea {

@@ -18,4 +18,8 @@ function register(user, success, fail) {
   api.post(`/user/register`, JSON.stringify(user)).then(success).catch(fail);
 }
 
-export { getSido, getSigungu, getDong, register };
+function randomPassword(userEmail, userName, success, fail) {
+  api.get(`/user/randomPassword`, { params: {userEmail:userEmail, userName:userName} }).then(success).catch(fail);
+}
+
+export { getSido, getSigungu, getDong, register, randomPassword };
