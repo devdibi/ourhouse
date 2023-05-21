@@ -114,28 +114,38 @@ public class UserController {
 		return null;
 	}
 	
-	@ApiOperation(value = "비밀번호 찾기", notes = "해당 유저에게 임시 비밀번호 이메일을 통해 할당", response = String.class)
-	@PutMapping("/randomPassword")
-	public ResponseEntity<Map<String, Object>> randomPassword(@RequestParam String userEmail){
-		logger.debug("비밀번호 발급할 email: '{}'", userEmail);
+	@ApiOperation(value = "비밀번호 찾기", notes = "해당 유저 정보를 비교 후, 이메일과 이름이 일치할 시 임시 비밀번호 이메일을 통해 할당", response = String.class)
+	@GetMapping("/randomPassword")
+	public ResponseEntity<Map<String, Object>> randomPassword(@RequestParam String userEmail, @RequestParam String userName){
+		logger.debug("유저 이메일({})과 이름({}) 비교", userEmail, userName);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("email", userEmail);
 		try {
-			//서비스 단에서 랜덤 패스워드 생성 후 유저에게 이메일로 전송
-			userService.randomPassword(map);
-			resultMap.put("message", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			String name = userService.compareName(userEmail);
+			//이름과 이메일이 일치할 때
+			if(userName.equals(name)) {
+				logger.debug("일치");
+				resultMap.put("compareResult", SUCCESS);
+				
+				//비밀번호 재발급 후 이메일 전송(서비스에서)
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("email", userEmail);
+				userService.randomPassword(map);
+				logger.debug("이메일 전송 완료");
+				resultMap.put("message", SUCCESS);
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			}
+			//불일치할 때
+			else {
+				logger.debug("불일치");
+				resultMap.put("compareResult", FAIL);
+				resultMap.put("message", SUCCESS);
+				return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("message", FAIL);
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
 	}
-	
-	//관심지역 출력
-	
-	//관심 거래 출력
-	
-	// 쓴 게시글 출력
+
 }

@@ -14,4 +14,5 @@ public interface UserService {
 	Boolean deleteUser(String email) throws Exception;
 	List<UserDto> loadAllUsers() throws Exception;
 	void randomPassword(Map<String, String> map) throws Exception;
+	String compareName(String userEmail) throws Exception;
 }

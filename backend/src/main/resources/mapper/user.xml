@@ -56,4 +56,10 @@
 		WHERE email = #{email}
 	</update>
 	
+	<select id="compareName" parameterType="String" resultType="String">
+		SELECT name
+		FROM user
+		WHERE email = #{email}
+	</select>
+	
 </mapper>
