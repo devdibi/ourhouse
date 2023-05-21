@@ -11,8 +11,8 @@
 	</select>
 
 	<insert id="registerUser" parameterType="userDto">
-		INSERT INTO User (email, password, name, gender, age, age_group, join_date)
-		VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW())
+		INSERT INTO User (email, password, name, gender, age, age_group, join_date, role)
+		VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW(), #{role})
 	</insert>
 	
 	<select id="loginUser" parameterType="map" resultType="userDto">

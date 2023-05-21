@@ -6,7 +6,9 @@ import java.util.Map;
 
 import com.ssafy.ourhouse.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ourhouse.dto.UserDto;
@@ -16,11 +18,12 @@ import com.ssafy.ourhouse.mapper.UserMapper;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper) {
-        super();
+    public UserServiceImpl(UserMapper userMapper, @Lazy PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(UserDto userDto) throws Exception {
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userMapper.registerUser(userDto);
     }
 
