@@ -48,6 +48,24 @@
       	<if test="month != null and month != 0">
           AND month = #{month}
       	</if>
+      	<if test="minPrice != null and minPrice != 0">
+          AND price >= #{minPrice}
+      	</if>
+      	<if test="maxPrice != null and maxPrice != 0">
+      	  AND price <![CDATA[ <= ]]> #{maxPrice}
+      	</if>
+      	<if test="minFloor != null and minFloor != 0">
+          AND floor >= #{minFloor}
+      	</if>
+      	<if test="maxFloor != null and maxFloor != 0">
+          AND floor <![CDATA[ <= ]]> #{maxFloor}
+      	</if>
+      	<if test="minArea != null and minArea != 0">
+          AND area >= #{minArea}
+      	</if>
+      	<if test="maxArea != null and maxArea != 0">
+          AND area <![CDATA[ <= ]]> #{maxArea}
+      	</if> 
 	</select>
 
 	<!-- 관심 아파트 출력(house_code) -->

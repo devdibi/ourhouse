@@ -28,4 +28,16 @@ public class HouseSearchConditionDto {
 	@ApiModelProperty(value = "아파트의 가격(최댓값)")
 	private int maxPrice;
 	
+	@ApiModelProperty(value = "아파트의 층수(최소값)")
+	private int minFloor;
+	
+	@ApiModelProperty(value = "아파트의 층수(최댓값)")
+	private int maxFloor;
+	
+	@ApiModelProperty(value = "아파트의 면적(최소값)")
+	private int minArea;
+	
+	@ApiModelProperty(value = "아파트의 면적(최댓값)")
+	private int maxArea;
+	
 }

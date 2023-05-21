@@ -96,7 +96,7 @@ public class HouseController {
 		}
 	}
 
-	@ApiOperation(value = "동코드, 거래일자를 기준으로 house 출력")
+	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력")
 	@PostMapping("/")
 	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition) {
 		System.out.println("house 출력");
