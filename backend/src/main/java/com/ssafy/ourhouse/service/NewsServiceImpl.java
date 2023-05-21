@@ -28,8 +28,8 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public void updateNews(NewsDto news) throws Exception {
-		newsMapper.updateNews(news);
+	public void updateNews(List<NewsDto> newsList) throws Exception {
+		newsMapper.updateNews(newsList);
 	}
 
 }

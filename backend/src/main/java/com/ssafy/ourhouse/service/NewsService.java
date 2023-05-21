@@ -9,5 +9,5 @@ public interface NewsService {
 	
 	void updateHit(int newsNo) throws Exception;
 	
-	void updateNews(NewsDto news) throws Exception;
+	void updateNews(List<NewsDto> newsList) throws Exception;
 }

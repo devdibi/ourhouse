@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.json.JSONArray;
 
 import com.ssafy.ourhouse.dto.NewsDto;
 
@@ -14,5 +13,5 @@ public interface NewsMapper {
 	
 	void updateHit(int newsNo) throws SQLException;
 	
-	void updateNews(NewsDto news) throws SQLException;
+	void updateNews(List<NewsDto> newsList) throws SQLException;
 }
