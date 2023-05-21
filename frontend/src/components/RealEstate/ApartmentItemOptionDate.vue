@@ -35,6 +35,11 @@ export default {
     optionName: String,
     isOpen: Boolean,
   },
+  watch: {
+    picker(date) {
+      console.log(date);
+    },
+  },
 };
 </script>
 
