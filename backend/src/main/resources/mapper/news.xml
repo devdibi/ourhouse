@@ -30,6 +30,9 @@
 <!-- 뉴스 기사 업데이트 -->
 <insert id="updateNews" parameterType="newsDto">
 	INSERT INTO news (title, context, link, post_date, hit)
-	VALUES (#{title}, #{context}, #{link}, #{postDate}, 0)
+	VALUES 
+	<foreach collection="list" item="item" separator=","> 
+		(#{item.title}, #{item.context}, #{item.link}, #{item.postDate}, 0)
+	</foreach>
 </insert>
 </mapper>

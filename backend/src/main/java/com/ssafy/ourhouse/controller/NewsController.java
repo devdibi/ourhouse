@@ -1,5 +1,6 @@
 package com.ssafy.ourhouse.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,13 +80,14 @@ public class NewsController {
 		}
 	}
 	
-	// Spring Boot Scheduler(뉴스 리스트 자동 갱신) - 매일 9시 수
+	// Spring Boot Scheduler(뉴스 리스트 자동 갱신) - 매일 9시 수행
 	// 일단 뉴스를 json으로 가져와서 바로 DB로 적용하는 방식으로 진행 뉴스 기사는 1회 100개 수행
-	// Scheduler와 버튼으로 관리자에서 구현하는 방식으로 수
+	// Scheduler와 버튼으로 관리자에서 구현하는 방식으로 수행
 	@ApiOperation(value="뉴스 추가 버튼으로 구현(겹치는 뉴스기사를 불러올 수도 있습니다.)")
 	@PostMapping("/")
 	public ResponseEntity<String> updateNews(){
 		logger.info("뉴스 추가");
+		List<NewsDto> newsList = new ArrayList<>();
 		JSONObject news = null;
 		NewsDto newsDto = null;
 		try {
@@ -97,8 +99,9 @@ public class NewsController {
 				newsDto.setContext(news.get("description").toString());
 				newsDto.setLink(news.get("link").toString());
 				newsDto.setPostDate(news.get("pDate").toString());
-				newsService.updateNews(newsDto);
+				newsList.add(newsDto);
 			}
+			newsService.updateNews(newsList);
 			return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
