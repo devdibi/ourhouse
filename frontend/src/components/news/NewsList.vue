@@ -41,12 +41,8 @@
           <td @click="next" class="paging">&gt;&gt;</td>
         </tr>
       </table>
-      <button class="crud" style="float: right" @click="newsUpdate()">불러오기</button>
-    </div>
-    <div style="margin-top: 50px">
-      불러오기는 되도록이면 데이터베이스를 초기화하고 사용하시기 바랍니다. <br />100개의 기사를 불러오는데 같은기사가 불러오게 되는 경우가 있어 겹치는 경우가 발생할 수 있습니다. <br />Scheduler를
-      이용하여 특정시간마다 불러오는 형식으로 구현해볼까 싶습니다.<br />
-      임시로 버튼을 클릭했을때 크롤링을 실행하는 기능을 만들었을뿐 완성본에서는 사용하지 않습니다.
+      <!-- SpringSchedule 구현 완료 매일 9시마다 자동으로 실행 예정 -->
+      <!-- <button class="crud" style="float: right" @click="newsUpdate()">불러오기</ㅍbutton> -->
     </div>
   </div>
 </template>

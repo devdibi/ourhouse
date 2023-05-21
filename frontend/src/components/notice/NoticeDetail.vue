@@ -21,7 +21,7 @@
         </div>
         <!-- update/delete -->
         <!-- 관리자만 사용가능(유저 개발 끝나면 적용) -->
-        <div class="ud" v-if="this.userinfo != 'admin'">
+        <div class="ud" v-if="this.userinfo == 'admin'">
           <span class="ud-content" @click="update()" style="cursor: pointer">수정</span> |
           <span class="ud-content" @click="remove()" style="cursor: pointer">삭제</span>
         </div>

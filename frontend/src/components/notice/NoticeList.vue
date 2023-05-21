@@ -34,7 +34,7 @@
           <td @click="next" class="paging">&gt;&gt;</td>
         </tr>
         <!-- 관리자만 사용가능(유저 개발 끝나면 적용) -->
-        <router-link :to="{ name: 'noticewrite' }" style="float: right; verticla-align: middle" v-if="this.userinfo != 'admin'">
+        <router-link :to="{ name: 'noticewrite' }" style="float: right; verticla-align: middle" v-if="this.userinfo == 'admin'">
           <button class="crud">글 작성</button>
         </router-link>
       </table>
