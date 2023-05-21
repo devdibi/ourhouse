@@ -4,6 +4,12 @@
 	
 <mapper namespace="com.ssafy.ourhouse.mapper.UserMapper">
 
+	<select id="findUserByEmail" parameterType="String" resultType="userDto">
+		SELECT email, name, gender, age, dwell_area, favorite_area, password
+		FROM USER
+		WHERE email = #{email};
+	</select>
+
 	<insert id="registerUser" parameterType="userDto">
 		INSERT INTO User (email, password, name, gender, age, age_group, join_date)
 		VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW())
@@ -36,7 +42,7 @@
 	
 	<update id="randomPassword" parameterType="map">
 		UPDATE USER
-)		SET password = #{password}
+		SET password = #{password}
 		WHERE email = #{email}
 	</update>
 	
