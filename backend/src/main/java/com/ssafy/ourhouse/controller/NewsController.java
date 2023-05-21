@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,7 @@ import com.ssafy.ourhouse.util.NaverSearch;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+@Component
 @CrossOrigin(origins = { "*" }, maxAge = 600)
 @RestController
 @RequestMapping("/news")
@@ -83,6 +86,7 @@ public class NewsController {
 	// Spring Boot Scheduler(뉴스 리스트 자동 갱신) - 매일 9시 수행
 	// 일단 뉴스를 json으로 가져와서 바로 DB로 적용하는 방식으로 진행 뉴스 기사는 1회 100개 수행
 	// Scheduler와 버튼으로 관리자에서 구현하는 방식으로 수행
+	@Scheduled(cron="0 0 9 * * *") // 0초 0분 9시 매일 매월 매요일 자동 실행
 	@ApiOperation(value="뉴스 추가 버튼으로 구현(겹치는 뉴스기사를 불러올 수도 있습니다.)")
 	@PostMapping("/")
 	public ResponseEntity<String> updateNews(){
