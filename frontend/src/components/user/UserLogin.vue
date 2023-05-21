@@ -5,8 +5,10 @@
       <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일">
       <input type="text" id="password" class="textbox" v-model="user.password" placeholder="비밀번호">
       <button type="submit" id="loginbutton" class="button">로그인</button>
-      <button id="joinbutton" class="button">회원가입</button>
-      <div id="findpassworddiv">비밀번호를 잊으셨나요? <a href="" id="findpassword">비밀번호 찾기</a></div>
+      <button id="joinbutton" class="button" @click="join()">회원가입</button>
+      <div id="findpassworddiv">비밀번호를 잊으셨나요? 
+        <router-link to="/user/findpassword" id="findpassword">비밀번호 찾기</router-link>
+      </div>
     </form>
   </div>
 </template>
@@ -24,7 +26,11 @@ export default {
     };
   },
   created() { },
-  methods: {},
+  methods: {
+    join(){
+      this.$router.push({name:'join'})
+    }
+  },
 };
 </script>
 

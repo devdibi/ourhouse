@@ -1,67 +1,164 @@
 <template>
   <div class="joinform">
-    <form action="submit" id="joinform">
+    <div id="joinform">
       <legend id="title">회원가입</legend>
-      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일">
-      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호">
-      <input type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="비밀번호 확인">
-      <input type="text" id="name" class="textbox" v-model="user.name" placeholder="이름">
-      <input type="number" id="age" class="textbox" v-model="user.age" placeholder="나이">
-      <button type="submit" id="joinbutton" class="button">회원가입</button>
-      <label class="gender" >
-        <input type="radio" name="gender1" value="1" v-model="user.gender">
+      <input
+        type="email"
+        id="email"
+        class="textbox"
+        v-model="user.email"
+        placeholder="이메일"
+      />
+      <input
+        type="password"
+        id="password"
+        class="textbox"
+        v-model="user.password"
+        placeholder="비밀번호"
+      />
+      <input
+        type="password"
+        id="passwordcheck"
+        class="textbox"
+        v-model="passwordcheck"
+        placeholder="비밀번호 확인"
+      />
+      <input
+        type="text"
+        id="name"
+        class="textbox"
+        v-model="user.name"
+        placeholder="이름"
+      />
+      <input
+        type="number"
+        id="age"
+        class="textbox"
+        v-model="user.age"
+        placeholder="나이"
+      />
+      <label class="gender">
+        <input type="radio" name="gender1" value="1" v-model="user.gender" />
         <div id="gender1">남</div>
       </label>
       <label class="gender">
-        <input type="radio" name="gender2" value="2" v-model="user.gender">
+        <input type="radio" name="gender2" value="2" v-model="user.gender" />
         <div id="gender2">여</div>
       </label>
-        <div id="likearea">관심지역(선택)</div>
-        <div>
-          <select name="likeareasSido" id="likeareasSido" class="likeareas" @change="selectSido">
-            <option value="">시도 선택</option>
-            <option v-for="(item, index) in sidos" :key="index" :value="item.sidoCode">{{ item.name }}</option>
-          </select>
-          <select name="likeareasGungu" id="likeareasGungu" class="likeareas">
-            <option value="">시군구 선택</option>
-            <option v-for="(item, index) in sigungus" :key="index" :value="item.sigunguCode">{{ item.name }}</option>
-          </select>
-          <select name="likeareasDong" id="likeareasDong" class="likeareas">
-            <option value="">동코드</option>
-            <option value="">임시값</option>
-            <option value="">임시값</option>
-          </select>
+      <div id="likearea">관심지역(선택)</div>
+      <div>
+        <select
+          name="likeareasSido"
+          id="likeareasSido"
+          class="likeareas sido"
+          @change="selectSido('like')"
+          v-model="likeSidoCode"
+        >
+          <option value="">시도 선택</option>
+          <option
+            v-for="(item, index) in likeSidos"
+            :key="index"
+            :value="item.sidoCode"
+          >
+            {{ item.name }}
+          </option>
+        </select>
+        <select
+          name="likeareasGungu"
+          id="likeareasGungu"
+          class="likeareas sigungu"
+          @change="selectSigungu('like')"
+          v-model="likeSigunguCode"
+        >
+          <option value="">군구 선택</option>
+          <option
+            v-for="(item, index) in likeSigungus"
+            :key="index"
+            :value="item.sigunguCode"
+          >
+            {{ item.name }}
+          </option>
+        </select>
+        <select
+          name="likeareasDong"
+          id="likeareasDong"
+          class="likeareas dong"
+          v-model="likeDongCode"
+        >
+          <option value="">동 선택</option>
+          <option
+            v-for="(item, index) in likeDongs"
+            :key="index"
+            :value="item.dongCode"
+          >
+            {{ item.name }}
+          </option>
+        </select>
       </div>
 
       <div id="dwellarea">거주지역(선택)</div>
-        <div>
-          
-          <select name="dwellareasSido" id="dwellareasSido" class="dwellareas">
-            <option value="">시도</option>
-            <option value="">임시값</option>
-            <option value="">임시값</option>
-          </select>
-          <select name="dwellareasGungu" id="dwellareasGungu" class="dwellareas">
-            <option value="">시군구</option>
-            <option value="">임시값</option>
-            <option value="">임시값</option>
-          </select>
-          <select name="dwellareasDong" id="dwellareasDong" class="dwellareas">
-            <option value="">동코드</option>
-            <option value="">임시값</option>
-            <option value="">임시값</option>
-          </select>
+      <div>
+        <select
+          name="dwellareasSido"
+          id="dwellareasSido"
+          class="dwellareas sido"
+          @change="selectSido('dwell')"
+          v-model="dwellSidoCode"
+        >
+          <option value="">시도 선택</option>
+          <option
+            v-for="(item, index) in dwellSidos"
+            :key="index"
+            :value="item.sidoCode"
+          >
+            {{ item.name }}
+          </option>
+        </select>
+        <select
+          name="dwellareasGungu"
+          id="dwellareasGungu"
+          class="dwellareas sigungu"
+          @change="selectSigungu('dwell')"
+          v-model="dwellSigunguCode"
+        >
+          <option value="">군구 선택</option>
+          <option
+            v-for="(item, index) in dwellSigungus"
+            :key="index"
+            :value="item.sigunguCode"
+          >
+            {{ item.name }}
+          </option>
+        </select>
+
+        <select
+          name="dwellareasDong"
+          id="dwellareasDong"
+          class="dwellareas dong"
+          v-model="dwellDongCode"
+        >
+          <option value="">동 선택</option>
+          <option
+            v-for="(item, index) in dwellDongs"
+            :key="index"
+            :value="item.dongCode"
+          >
+            {{ item.name }}
+          </option>
+        </select>
       </div>
-    </form>
+      <button id="joinbutton" class="button" @click="clickJoin()">
+        회원가입
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-// import { getSido, getSigungu, getDong } from "@/api/user";
-import { getSido, getSigungu } from "@/api/user";
+import { getSido, getSigungu, getDong, register } from "@/api/user";
 
 export default {
-  name: 'userJoin',
+  name: "userJoin",
   components: {},
   data() {
     return {
@@ -72,37 +169,144 @@ export default {
         name: "",
         age: "",
         gender: "",
+        dwellArea: "",
+        favoriteArea: "",
       },
-      sidos: [],
-      sidoCode:"",
-      sigungus: [],
-      sigungucode: "",
-      dongs: [],
-      dongCode:""
+      likeSidos: [],
+      likeSidoCode: "",
+      likeSigungus: [],
+      likeSigunguCode: "",
+      likeDongs: [],
+      likeDongCode: "",
+      dwellSidos: [],
+      dwellSidoCode: "",
+      dwellSigungus: [],
+      dwellSigunguCode: "",
+      dwellDongs: [],
+      dwellDongCode: "",
     };
   },
-  created() { 
-    getSido(({ data }) => { 
-      console.log("시도 얻어오기")
-      if (data.message == "success") {
-        this.sidos = data.sidoList;
+  created() {
+    getSido(
+      ({ data }) => {
+        console.log("시도 얻어오기");
+        if (data.message == "success") {
+          this.likeSidos = data.sidoList;
+          this.dwellSidos = data.sidoList;
+        } else {
+          console.log("axios fail");
+        }
+      },
+      (error) => {
+        console.log(error);
       }
-      else { 
-        console.log("axios fail")
-      }
-    }, (error) => { 
-      console.log(error);
-    })
+    );
   },
   methods: {
-    selectSido() { 
-      getSigungu(this.sidoCode, ({ data }) => { 
-        console.log(data)
-      }, (error) => { console.log(error); }
-      )
-    }
-  },
+    //시도 선택시 시군구 얻어오기
+    selectSido(status) {
+      if (status == "like") {
+        this.likeSigunguCode = "";
+        this.likeDongCode = "";
+        getSigungu(
+          this.likeSidoCode,
+          ({ data }) => {
+            console.log("시군구 얻어오기");
+            this.likeSigungus = data.sidoList;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      if (status == "dwell") {
+        this.dwellSigunguCode = "";
+        this.dwellDongCode = "";
+        getSigungu(
+          this.dwellSidoCode,
+          ({ data }) => {
+            console.log("시군구 얻어오기");
+            this.dwellSigungus = data.sidoList;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    },
 
+    //시군구 선택시 동 얻어오기
+    selectSigungu(status) {
+      if (status == "like") {
+        this.likeDongCode = "";
+        getDong(
+          this.likeSigunguCode,
+          ({ data }) => {
+            console.log("동 얻어오기");
+            this.likeDongs = data.dongList;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      if (status == "dwell") {
+        this.dwellDongCode = "";
+        getDong(
+          this.dwellSigunguCode,
+          ({ data }) => {
+            console.log("동 얻어오기");
+            this.dwellDongs = data.dongList;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    },
+
+    //회원가입 버튼 누를 시 이벤트
+    clickJoin() {
+      if (
+        this.user.age == "" ||
+        this.user.password == "" ||
+        this.user.name == "" ||
+        this.passwordcheck == "" ||
+        this.user.email == "" ||
+        this.user.gender == ""
+      ) {
+        alert("빈 칸 없이 입력해주세요!");
+        return;
+      }
+      if (this.user.password != this.passwordcheck) {
+        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        return;
+      }
+      //회원 등록 진행
+      this.user.dwellArea = this.dwellDongCode;
+      this.user.favoriteArea = this.likeDongCode;
+      console.log("거주지");
+      console.log(this.user.dwellArea);
+      console.log("거주지 : " + this.user.dwellArea);
+      console.log("관심지역 : " + this.user.likeArea);
+      console.log(this.user);
+      register(
+        this.user,
+        ({ data }) => {
+          console.log(data);
+          if (data == "success") {
+            console.log("회원가입 성공");
+            this.$router.push({ path: "login" });
+          } else {
+            console.log("실패");
+          }
+        },
+        () => {
+          console.log("실패");
+        }
+      );
+    },
+  },
 };
 </script>
 
@@ -112,7 +316,7 @@ export default {
   padding: 0;
   margin: 0;
 
-  font-family: 'Noto Sans';
+  font-family: "Noto Sans";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -124,12 +328,11 @@ export default {
   left: 60px;
   width: 360px;
   height: 60px;
-  background: #FFFFFF;
-  border-bottom: 1px solid #D9D9D9;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .textbox::placeholder {
-  color: #D9D9D9;
+  color: #d9d9d9;
 }
 
 .button {
@@ -146,9 +349,10 @@ export default {
   height: 775px;
   display: inline-block;
   text-align: center;
-  background: #FFFFFF;
+  background: #ffffff;
   background-blend-mode: color-dodge;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3),
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
 }
 
@@ -186,7 +390,7 @@ export default {
   display: none;
 }
 
-.gender input[type="radio"]+div {
+.gender input[type="radio"] + div {
   position: absolute;
   top: 420px;
   display: inline-block;
@@ -195,7 +399,7 @@ export default {
 
   width: 70px;
   height: 40px;
-  background: #E8E8E8;
+  background: #e8e8e8;
   color: #989898;
 }
 
@@ -210,32 +414,43 @@ export default {
   border-left: 1px solid rgba(152, 152, 152, 0.8);
 }
 
-#likearea{
-  position:absolute;
+#likearea {
+  position: absolute;
   top: 490px;
-  color: #D9D9D9;
-  left:58px;
+  color: #d9d9d9;
+  left: 58px;
 }
 
-.likeareas{
+.likeareas {
   position: absolute;
   top: 520px;
-  left:58px;
+  left: 58px;
+  width: 98.49px;
+  height: 30px;
 }
 
-#dwellarea{
-  position:absolute;
+#dwellarea {
+  position: absolute;
   top: 570px;
-  color: #D9D9D9;
-  left:58px;
+  color: #d9d9d9;
+  left: 58px;
 }
 
-.dwellareas{
+.dwellareas {
   position: absolute;
   top: 600px;
-  left:58px;
+  left: 58px;
+  width: 98.49px;
+  height: 30px;
 }
 
+.sigungu {
+  left: 183px;
+}
+
+.dong {
+  left: 308px;
+}
 #joinbutton {
   top: 655px;
   background: rgba(217, 217, 217, 0.6);
@@ -243,7 +458,7 @@ export default {
 }
 
 #joinbutton:hover {
-  background: #6960D5;
-  color: #FFFFFF;
+  background: #6960d5;
+  color: #ffffff;
 }
 </style>

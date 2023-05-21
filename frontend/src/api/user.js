@@ -7,11 +7,15 @@ function getSido(success, fail) {
 }
 
 function getSigungu(sido, success, fail) {
-  api.get(`/house/sigungu`, { params: sido }).then(success).catch(fail);
+  api.get(`/house/sigungu`, { params: {sido: sido} }).then(success).catch(fail);
 }
 
 function getDong(sigungu, success, fail) {
-  api.get(`http://localhost:9999/house/`, { params: sigungu }).then(success).catch(fail);
+  api.get(`/house/dong`, { params: {sigungu: sigungu} }).then(success).catch(fail);
 }
 
-export { getSido, getSigungu, getDong };
+function register(user, success, fail) { 
+  api.post(`/user/register`, JSON.stringify(user)).then(success).catch(fail);
+}
+
+export { getSido, getSigungu, getDong, register };
