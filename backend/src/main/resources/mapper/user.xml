@@ -52,7 +52,7 @@
 	
 	<update id="randomPassword" parameterType="map">
 		UPDATE USER
-)		SET password = #{password}
+		SET password = #{password}
 		WHERE email = #{email}
 	</update>
 	

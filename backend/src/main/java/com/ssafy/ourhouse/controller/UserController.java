@@ -114,23 +114,22 @@ public class UserController {
 		return null;
 	}
 	
-	@ApiOperation(value = "비밀번호 찾기", notes = "해당 유저에게 임시 비밀번호 할당", response = String.class)
+	@ApiOperation(value = "비밀번호 찾기", notes = "해당 유저에게 임시 비밀번호 이메일을 통해 할당", response = String.class)
 	@PutMapping("/randomPassword")
-	public ResponseEntity<String> randomPassword(@RequestParam String userEmail){
-		String randomPassword = UUID.randomUUID().toString().substring(0, 8);
-		logger.debug("email: '{}'", userEmail);
-		logger.debug("create random password: {}", randomPassword);
-		
+	public ResponseEntity<Map<String, Object>> randomPassword(@RequestParam String userEmail){
+		logger.debug("비밀번호 발급할 email: '{}'", userEmail);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("email", userEmail);
-		map.put("password", randomPassword);
-		
 		try {
+			//서비스 단에서 랜덤 패스워드 생성 후 유저에게 이메일로 전송
 			userService.randomPassword(map);
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+			resultMap.put("message", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+			resultMap.put("message", FAIL);
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
 	}
 	
