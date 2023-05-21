@@ -10,9 +10,11 @@ import com.ssafy.ourhouse.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +46,32 @@ public class UserController {
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
+    // TODO: Logic 코드를 나중에 서비스 계층으로 빼기
+    @PostMapping(value = "/authenticate", produces = "application/json; charset=utf8")
+    public ResponseEntity<String> authenticate(@RequestBody UserDto user) {
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getEmail(), user.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            logger.warn("'{}'님의 로그인 실패: {}", user.getEmail(), e.toString());
+            String errorMsg = "로그인에 실패했습니다.";
+            return new ResponseEntity<>(errorMsg, HttpStatus.UNAUTHORIZED);
+        }
+
+        UserDto findUser = userService.loadUserByUsername(user.getEmail());
+
+        String jwtToken = jwtService.generateToken(findUser);
+
+        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+    }
+
+    // TODO: JWT 사용할 예정이기에, 나중에 제거하기!
     @ApiOperation(value = "로그인", notes = "로그인을 위해 아이디와 비밀번호 입력, 성공시 userDto 반환, 실패 시 null 값의 userDto 반환", response = Map.class)
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserDto user) {
@@ -75,9 +102,9 @@ public class UserController {
         logger.debug("userDto info : {}", userDto);
         try {
             userService.registerUser(userDto);
-			String jwtToken = jwtService.generateToken(userDto);
+            String jwtToken = jwtService.generateToken(userDto);
 
-			return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
+            return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);

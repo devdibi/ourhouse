@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User loadUserByUsername(String username) {
+    public UserDto loadUserByUsername(String username) {
 
         try {
             return userMapper.findUserByEmail(username);

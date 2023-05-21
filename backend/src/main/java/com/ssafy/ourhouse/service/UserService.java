@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.ssafy.ourhouse.domain.User;
 import com.ssafy.ourhouse.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public interface UserService extends UserDetailsService {
 
 	@Override
-	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+    UserDto loadUserByUsername(String username) throws UsernameNotFoundException;
 
 	void registerUser(UserDto userDto) throws Exception;
 

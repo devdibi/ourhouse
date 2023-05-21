@@ -12,7 +12,7 @@ import com.ssafy.ourhouse.dto.UserDto;
 @Mapper
 public interface UserMapper {
 
-    User findUserByEmail(String email) throws SQLException;
+    UserDto findUserByEmail(String email) throws SQLException;
 
     void registerUser(UserDto userDto) throws SQLException;
 

@@ -5,7 +5,7 @@
 <mapper namespace="com.ssafy.ourhouse.mapper.UserMapper">
 
 	<select id="findUserByEmail" parameterType="String" resultType="userDto">
-		SELECT email, name, gender, age, dwell_area, favorite_area, password
+		SELECT email, name, gender, age, dwell_area, favorite_area, password, role
 		FROM USER
 		WHERE email = #{email};
 	</select>
