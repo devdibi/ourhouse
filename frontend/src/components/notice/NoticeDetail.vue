@@ -1,122 +1,141 @@
 <template>
-    <div>
-        <div class="inner-box">
-            <div>
-                <span class="title">{{ notice.title}}</span>
-            </div>
-            <div class="meta" >
-                <span style="margin-right:10px">{{notice.email}}</span>
-                <span v-if="notice.updateDate == null">
-                    {{notice.createDate}}
-                </span>
-                <span v-else>
-                    {{notice.updateDate}} (수정됨)
-                </span>
-                <span style="float:right">조회수 {{ notice.hit }}</span>
-            </div>
-            <v-divider></v-divider>
-
-            <!-- 본문 영역 -->
-            <div class="content" >
-                {{notice.content}}
-            </div>
-            <div class="ud">
-                <router-link :to="{name:'noticeupdate',params:{notice_no:this.noticeNo}}" class="ud-content">수정</router-link> | 
-                <router-link :to="{name:'noticedelete'}" class="ud-content">삭제</router-link>
-            </div>
-            <v-divider></v-divider>
-
+  <div>
+    <div class="inner-box">
+      <span class="back" @click="() => this.$router.go(-1)"><mdicon name="arrow-left" />뒤로가기</span>
+      <div class="main">
+        <!-- title -->
+        <div>
+          <span class="title">{{ notice.title }}</span>
         </div>
-    </div> 
+        <!-- meta-data -->
+        <div class="meta">
+          <span style="margin-right: 10px">{{ notice.email }}</span>
+          <span v-if="notice.updateDate == null">{{ notice.createDate }}</span>
+          <span v-else> {{ notice.updateDate }} (수정됨) </span>
+          <span style="float: right">조회수 {{ notice.hit }}</span>
+        </div>
+        <hr />
+        <!-- 본문 영역 -->
+        <div class="content">
+          {{ notice.content }}
+        </div>
+        <!-- update/delete -->
+        <!-- 관리자만 사용가능(유저 개발 끝나면 적용) -->
+        <div class="ud" v-if="this.userinfo == 'admin'">
+          <span class="ud-content" @click="update()" style="cursor: pointer">수정</span> |
+          <span class="ud-content" @click="remove()" style="cursor: pointer">삭제</span>
+        </div>
+        <hr />
+      </div>
+    </div>
+  </div>
 </template>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet"/>
 <script>
-import { detail } from "@/api/notice.js";
+import { detail, remove } from "@/api/notice.js";
 
 export default {
-    name: 'noticeDetail',
-    components: {},
-    data() {
-        return {
-            notice: {},
-            comments: [],
-            noticeNo: this.$route.params.notice_no,
-            comment: {
-                noticeNo: 0,
-                comment: "",
-                email: "",
-                commentId: 0
-            }
-        };
+  name: "noticeDetail",
+  components: {},
+  data() {
+    return {
+      userinfo: "", // 오류메시지 제거용
+      notice: {},
+      comments: [],
+      noticeNo: this.$route.params.notice_no,
+      comment: {
+        noticeNo: 0,
+        comment: "",
+        email: "",
+        commentId: 0,
+      },
+    };
+  },
+  created() {
+    detail(this.noticeNo, ({ data }) => {
+      this.notice = data.notice;
+      this.comments = data.comments;
+    });
+  },
+  methods: {
+    update() {
+      this.$router.push(`/notice/update/${this.noticeNo}`);
     },
-    created() {
-        detail(this.noticeNo, ({data}) => {
-            this.notice = data.notice;
-            this.comments = data.comments;
-        })
-
+    remove() {
+      remove(this.noticeNo, ({ data }) => {
+        if (confirm("삭제하시겠습니까?")) {
+          if (data === "success") {
+            alert("삭제가 완료되었습니다.");
+            this.$router.push("/notice");
+          } else {
+            alert("삭제에 실패했습니다.");
+          }
+        }
+      });
     },
-    methods: {
-        
-    },
+  },
 };
 </script>
 
 <style scoped>
-.inner-box{
-    margin:auto;
-    margin-top:100px;
-    margin-bottom:100px;
-    box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-    min-width:900px;
-    max-width:1200px;
-	border-radius:4px;
-    border:solid 1px #d9d9d9;
-    padding:100px
+.inner-box {
+  margin: auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  min-width: 900px;
+  max-width: 1200px;
+  border-radius: 4px;
+  border: solid 1px #d9d9d9;
+  padding: 30px 100px 100px 30px;
 }
-.title { 
-    font-size:24px; 
-    font-weight: bold;
+.back {
+  cursor: pointer;
+  color: #d9d9d9;
 }
-.meta{
-    font-size:12px; 
-    color:#939393;
-     margin: 10px 0 5px 10px
+.back:hover {
+  color: #939393;
 }
-.content{
-    height:500px;
-    padding:20px
+.main {
+  margin-top: 60px;
+  margin-left: 60px;
+  padding: 0;
 }
-
-.ud{
-    text-align:right; 
-    font-size:12px;
-    margin-right:5px;
-    margin-bottom:5px;
-    color:#939393
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  width: 100%;
 }
-.ud-content{
-    text-decoration:none;
-    color:#939393;
-    padding:0px;
-    size:10px;
+.meta {
+  font-size: 14px;
+  color: #939393;
+  margin: 10px 0 5px 10px;
 }
-
-.comment-write{
-    padding:1%;
-    vertical-align: middle;
-    border:solid 1px #f3f3f3;
-    margin:10px;
-    width:87%;
-    height:50px
+.content {
+  height: 500px;
+  padding: 20px;
+  font-size: 18px;
 }
 
-.comment-list{
-    padding:10px;
-    margin-bottom:10px; 
-    margin-left:10px;
-    font-size:12px;
-    background-color:#f3f3f3;
-    width:90%
+.ud {
+  text-align: right;
+  font-size: 14px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: #939393;
+}
+.ud-content {
+  text-decoration: none;
+  padding: 5px;
+  cursor: pointer;
+}
+.ud-content:hover {
+  color: #6f6f6f;
+}
+
+hr {
+  background: #d9d9d9;
+  height: 1px;
+  border: 0;
+  display: block;
 }
 </style>

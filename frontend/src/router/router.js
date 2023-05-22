@@ -1,3 +1,5 @@
+/** @format */
+
 import Vue from "vue";
 import VueRouter from "vue-router";
 
@@ -10,7 +12,6 @@ import BoardList from "@/components/board/BoardList.vue";
 import BoardDetail from "@/components/board/BoardDetail.vue";
 import BoardWrite from "@/components/board/BoardWrite.vue";
 import BoardUpdate from "@/components/board/BoardUpdate.vue";
-import BoardDelete from "@/components/board/BoardDelete.vue";
 
 // notice
 import NoticeView from "@/views/NoticeView.vue";
@@ -18,7 +19,9 @@ import NoticeList from "@/components/notice/NoticeList.vue";
 import NoticeDetail from "@/components/notice/NoticeDetail.vue";
 import NoticeWrite from "@/components/notice/NoticeWrite.vue";
 import NoticeUpdate from "@/components/notice/NoticeUpdate.vue";
-import NoticeDelete from "@/components/notice/NoticeDelete.vue";
+
+// news
+import NewsList from "@/components/news/NewsList";
 
 Vue.use(VueRouter);
 
@@ -59,11 +62,6 @@ const routes = [
         name: "boardupdate",
         component: BoardUpdate,
       },
-      {
-        path: "delete/:board_no",
-        name: "boarddelete",
-        component: BoardDelete,
-      },
     ],
   },
   {
@@ -92,12 +90,41 @@ const routes = [
         name: "noticeupdate",
         component: NoticeUpdate,
       },
+    ],
+  },
+  {
+    path: "/user",
+    name: "user",
+    component: () => import("@/views/UserView"),
+    redirect: "/user/login",
+    children: [
       {
-        path: "delete/:notice_no",
-        name: "noticedelete",
-        component: NoticeDelete,
+        path: "login",
+        name: "login",
+        component: () => import("@/components/user/UserLogin"),
+      },
+      {
+        path: "join",
+        name: "join",
+        component: () => import("@/components/user/UserJoinAgreement"),
+        
+      },
+      {
+        path: "findpassword",
+        name: "findpassword",
+        component: () => import("@/components/user/UserFindPassword.vue"),
+      },
+      {
+        path: "joinform",
+        name: "joinform",
+        component: () => import("@/components/user/UserJoin"),
       },
     ],
+  },
+  {
+    path: "/news",
+    name: "news",
+    component: NewsList,
   },
 ];
 

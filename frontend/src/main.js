@@ -2,7 +2,8 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router/router";
 import store from "./store/store";
-// import vuetify from "./plugins/vuetify";
+import mdiVue from "mdi-vue/v2";
+import * as mdijs from "@mdi/js";
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
@@ -14,9 +15,13 @@ import vuetify from './plugins/vuetify'
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
+
+Vue.use(mdiVue, {
+  icons: mdijs,
+});
+Vue.use(IconsPlugin);
 
 new Vue({
   router,

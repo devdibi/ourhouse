@@ -1,72 +1,74 @@
-<!-- @format -->
-
 <template>
-  <div id="board">
-    <h1>자유 게시판</h1>
+  <div id="news">
+    <h1>뉴스 게시판</h1>
     <table id="list">
       <colgroup>
         <col style="width: 10%" />
         <col style="width: 50%" />
-        <col style="width: 10%" />
         <col style="width: 10%" />
         <col style="width: 20%" />
       </colgroup>
       <thead>
         <tr>
           <th>글번호</th>
-          <th>제목</th>
-          <th>작성자</th>
+          <th>제목 및 요약</th>
           <th>조회수</th>
           <th>작성일자</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="trow" v-for="board in lists" :key="board.boardNo" @click="move(`/board/detail/${board.boardNo}`)" style="cursor: pointer">
-          <td>{{ board.boardNo }}</td>
-          <td>{{ board.title }}</td>
-          <td>{{ board.email }}</td>
-          <td>{{ board.hit }}</td>
-          <td>{{ board.createDate }}</td>
+        <tr class="trow" v-for="article in lists" :key="article.newsNo" @click="moveLink(article.link, article.newsNo)" style="cursor: pointer">
+          <td>{{ article.newsNo }}</td>
+          <td>
+            <div style="text-align: left; font-size: 18px; font-weight: bold">
+              <span v-html="article.title"></span>
+            </div>
+            <div style="text-align: left; margin-left: 5px; color: #939393; font-size: 12px">
+              <span v-html="article.context"></span>
+            </div>
+          </td>
+          <td>{{ article.hit }}</td>
+          <td>{{ article.postDate }}</td>
         </tr>
       </tbody>
     </table>
     <div>
       <!-- 페이지네이션 -->
-      <table id="pagination" style="border-collapse: separate">
+      <table id="pagination">
         <tr>
           <td @click="prev" class="paging">&lt;&lt;</td>
-          <td style="width: 150px; border-color: white">{{ page_no }} 페이지</td>
+          <td style="width: 150px; border: none">{{ page_no }} 페이지</td>
           <td @click="next" class="paging">&gt;&gt;</td>
         </tr>
-        <button class="crud" @click="() => this.$router.push('/board/write')" style="float: right">글 작성</button>
       </table>
+      <!-- SpringSchedule 구현 완료 매일 9시마다 자동으로 실행 예정 -->
+      <!-- <button class="crud" style="float: right" @click="newsUpdate()">불러오기</ㅍbutton> -->
     </div>
   </div>
 </template>
 
 <script>
-import { list } from "@/api/board.js";
+import { list, hit, update } from "@/api/news.js";
 
 export default {
-  name: "BoardList",
+  name: "NewsList",
   components: {},
   data() {
     return {
-      userinfo: "", // 오류메시지 제거용
-      boards: [],
+      userinfo: "",
       lists: [],
+      news: [],
       page_no: 1,
     };
   },
   created() {
-    // 리스트 호출
     list((response) => {
-      this.boards = response.data.boardList;
+      this.news = response.data.newsList;
 
       // 처음 리스트 출력
       for (var p = 0 * 10; p < 10; p++) {
-        if (p == this.boards.length) return;
-        this.lists.push(this.boards[p]);
+        if (p == this.news.length) return;
+        this.lists.push(this.news[p]);
       }
     });
   },
@@ -85,12 +87,12 @@ export default {
 
       // 출력할 페이지 입력
       for (var p = (this.page_no - 1) * 10; p < (this.page_no - 1) * 10 + 10; p++) {
-        this.lists.push(this.boards[p]);
+        this.lists.push(this.news[p]);
       }
     },
     next() {
       // 페이지 계산
-      if (this.page_no >= this.boards.length / 10) {
+      if (this.page_no >= this.news.length / 10) {
         alert("마지막 페이지입니다.");
         return;
       }
@@ -102,20 +104,41 @@ export default {
 
       // 출력할 페이지 입력
       for (var p = (this.page_no - 1) * 10; p < (this.page_no - 1) * 10 + 10; p++) {
-        if (p == this.boards.length) return;
-        this.lists.push(this.boards[p]);
+        if (p == this.news.length) return;
+        this.lists.push(this.news[p]);
       }
     },
     // detail 페이지로 이동
-    move(path) {
-      this.$router.push(path);
+    moveLink(path, newsNo) {
+      window.open(path);
+      hit(newsNo, (response) => {
+        console.log(response);
+      });
+      this.lists[newsNo - 1].hit += 1;
+    },
+    newsUpdate() {
+      update((response) => {
+        console.log(response);
+
+        list((response) => {
+          this.news = response.data.newsList;
+
+          this.lists = [];
+
+          // 처음 리스트 출력
+          for (var p = 0 * 10; p < 10; p++) {
+            if (p == this.news.length) return;
+            this.lists.push(this.news[p]);
+          }
+        });
+      });
     },
   },
 };
 </script>
 
 <style scoped>
-#board {
+#news {
   text-align: center;
   margin: 0 10% 0 10%;
 }
@@ -148,6 +171,7 @@ h1 {
 #pagination {
   display: inline;
   margin: auto;
+  border-collapse: separate;
 }
 
 #pagination td {

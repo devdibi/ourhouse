@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "NoticeView",
+  name: "NewsView",
   components: {},
   data() {
     return {};

@@ -1,6 +1,8 @@
+/** @format */
+
 import { API } from "./index.js";
 
-const api = API()
+const api = API();
 
 function list(success, fail) {
   api.get(`/board/`).then(success).catch(fail);
@@ -36,4 +38,4 @@ function removeComment(commentNo, success, fail) {
   api.delete(`/board/*/comment/${commentNo}`).then(success).catch(fail);
 }
 
-export { list, write, detail, update, remove, addComment, removeComment, loadComment};
+export { list, write, detail, update, remove, addComment, removeComment, loadComment };

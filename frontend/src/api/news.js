@@ -1,9 +1,17 @@
 import { API } from "./index.js";
 
-const api = API()
+const api = API();
 
 function list(success, fail) {
-  api.get(`/notice`).then(success).catch(fail);
+  api.get(`/news/`).then(success).catch(fail);
 }
 
-export { list };
+function hit(newsNo, success, fail) {
+  api.put(`/news/${newsNo}`).then(success).catch(fail);
+}
+
+function update(success, fail) {
+  api.post(`/news/`).then(success).catch(fail);
+}
+
+export { list, hit, update };
