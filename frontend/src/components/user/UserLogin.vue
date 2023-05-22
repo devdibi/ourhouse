@@ -1,30 +1,23 @@
 <template>
-  <div>
-    <form action="submit" id="loginform">
-      <legend id="title">로그인</legend>
-      <input
-        type="email"
-        id="email"
-        class="textbox"
-        v-model="user.email"
-        placeholder="이메일"
-      />
-      <input
-        type="text"
-        id="password"
-        class="textbox"
-        v-model="user.password"
-        placeholder="비밀번호"
-      />
-      <button type="submit" id="loginbutton" class="button">로그인</button>
-      <button id="joinbutton" class="button" @click="join">회원가입</button>
-      <div id="findpassworddiv">
-        비밀번호를 잊으셨나요?
-        <router-link to="/user/findpassword" id="findpassword"
-          >비밀번호 찾기</router-link
-        >
-      </div>
-    </form>
+  <div class="background">
+      <form action="submit" id="loginform">
+          <legend id="title">로그인</legend>
+          <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
+          <input
+              type="text"
+              id="password"
+              class="textbox"
+              v-model="user.password"
+              placeholder="비밀번호"
+          />
+          <input type="button" id="loginbutton" class="button" value="로그인" />
+          <input type="button" id="registerbutton" class="button" value="회원가입" @click="join" />
+
+          <div id="findpassworddiv">
+              비밀번호를 잊으셨나요?
+              <router-link to="/user/findpassword" id="findpassword">비밀번호 찾기</router-link>
+          </div>
+      </form>
   </div>
 </template>
 
@@ -33,18 +26,18 @@ export default {
   name: "userLogin",
   components: {},
   data() {
-    return {
-      user: {
-        email: "",
-        password: "",
-      },
-    };
+      return {
+          user: {
+              email: "",
+              password: "",
+          },
+      };
   },
   created() {},
   methods: {
-    join() {
-      this.$router.push({ name: "join" });
-    },
+      join() {
+          this.$router.push({ name: "join" });
+      },
   },
 };
 </script>
@@ -52,11 +45,6 @@ export default {
 <style scoped>
 * {
   border: none;
-}
-
-.formcontainer{
-  margin: auto;
-  padding: auto;
 }
 
 .textbox {
@@ -102,7 +90,8 @@ export default {
   text-align: center;
   background: #ffffff;
   background-blend-mode: color-dodge;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3),
+      0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
 }
 
@@ -138,6 +127,12 @@ export default {
 
 #loginbutton {
   top: 280px;
+  background: rgba(217, 217, 217, 0.6);
+  color: #939393;
+}
+
+#registerbutton {
+  top: 350px;
   background: rgba(217, 217, 217, 0.6);
   color: #939393;
 }
