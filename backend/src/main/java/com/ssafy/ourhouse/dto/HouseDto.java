@@ -43,6 +43,12 @@ public class HouseDto {
 	@ApiModelProperty(value = "거래 정보를 저장할 리스트")
 	private ArrayList<DealDto> deals;
 
+	@ApiModelProperty(value = "평균 가격")
+	private String priceAvg;
+
+	@ApiModelProperty(value = "평균 면적")
+	private String areaAvg;
+
 	public HouseDto() {
 		super();
 		deals = new ArrayList<DealDto>();

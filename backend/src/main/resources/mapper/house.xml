@@ -26,6 +26,8 @@
 		<result column="lng" property="lng" />
 		<result column="lat" property="lat" />
 		<result column="dong_code" property="dongCode" />
+		<result column="price_avg" property="priceAvg" />
+		<result column="area_avg" property="areaAvg" />
 	</resultMap>
 	
 	<!-- column과 변수명 맞추기 위한 resultMap -->

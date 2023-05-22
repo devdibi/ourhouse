@@ -44,6 +44,8 @@ public class HouseServiceImpl implements HouseService {
 				tmp.setLng(house.getLng());
 				tmp.setName(house.getName());
 				tmp.setRoadAddress(house.getRoadAddress());
+				tmp.setPriceAvg(house.getPriceAvg());
+				tmp.setAreaAvg(house.getAreaAvg());
 				resultList.add(tmp);
 			}
 			int idx = resultList.indexOf(new HouseDto(house.getAptCode()));
