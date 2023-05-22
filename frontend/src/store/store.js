@@ -9,19 +9,19 @@ export default new Vuex.Store({
 	},
 	getters: {
 		getAccessToken(state) {
-			if (state.token == null) {
+			if (state.token === null) {
 				return -1;
 			}
 
 			return state.accessToken;
 		},
 		isLogin(state) {
-			return state.token == null ? false : true;
+			return state.accessToken == null ? false : true;
 		},
 	},
 	mutations: {
 		setToken(state, token) {
-			state.token = token;
+			state.accessToken = token;
 		},
 	},
 	actions: {
