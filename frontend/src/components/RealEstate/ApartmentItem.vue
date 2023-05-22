@@ -58,6 +58,12 @@ export default {
 			lastClick: Number,
 		};
 	},
+	watch: {
+		apartDealData(val) {
+			console.log("watch: ", val);
+			this.isLike = val.houseLike;
+		},
+	},
 	props: {
 		apartDealData: Object,
 		index: Number,
@@ -65,6 +71,13 @@ export default {
 		show: Boolean,
 	},
 	methods: {
+		check() {
+			if (this.index === this.lastClickIndex && this.show) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		likeHouseInfo() {
 			// let http = API();
 			// let apartmentCode = this.apartDealData.aptCode;
@@ -114,6 +127,20 @@ export default {
 					console.log(err);
 				});
 
+			// axios
+			// 	.delete("http://localhost:9999/house/dislike_house", {
+			// 		headers: {
+			// 			Authorization:
+			// 				"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
+			// 		},
+			// 		data: {
+			// 			apartmentCode: apartmentCode,
+			// 		},
+			// 	})
+			// 	.then((res) => {
+			// 		console.log(res);
+			// 	})
+			// 	.catch((err) => console.log(err));
 		},
 		clickLikeBtn() {
 			// console.log(this.isLike);
@@ -132,14 +159,7 @@ export default {
 				lat: this.apartDealData.lat,
 				lng: this.apartDealData.lng,
 			};
-			this.$emit("showDetailWindow", data);
-		},
-		check() {
-			if (this.index === this.lastClickIndex && this.show) {
-				return true;
-			} else {
-				return false;
-			}
+			this.$emit("showDetailWindowEvent", data);
 		},
 	},
 };
