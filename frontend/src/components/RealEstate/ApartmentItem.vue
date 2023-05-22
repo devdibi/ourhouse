@@ -34,12 +34,21 @@
 </template>
 
 <script>
-import { API } from "@/api";
-import axios from "axios";
+import { API } from "@/api/axios-jwt";
+// import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
 	name: "ApartmentItem",
 	components: {},
+	computed: {
+		...mapGetters({
+			token: "getAccessToken",
+		}),
+		flag() {
+			return this.check();
+		},
+	},
 	data() {
 		return {
 			// apartmentName: "반포자이",
@@ -49,6 +58,12 @@ export default {
 			lastClick: Number,
 		};
 	},
+	watch: {
+		apartDealData(val) {
+			console.log("watch: ", val);
+			this.isLike = val.houseLike;
+		},
+	},
 	props: {
 		apartDealData: Object,
 		index: Number,
@@ -56,15 +71,36 @@ export default {
 		show: Boolean,
 	},
 	methods: {
+		check() {
+			if (this.index === this.lastClickIndex && this.show) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		likeHouseInfo() {
+			// let http = API();
+			// let apartmentCode = this.apartDealData.aptCode;
+			// let jwt = {
+			// 	Authorization:
+			// 		"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
+			// };
+			// http
+			// 	.post("/house/like_house", JSON.stringify(apartmentCode), { headers: jwt })
+			// 	.then((res) => {
+			// 		console.log(res);
+			// 	})
+			// 	.catch((err) => {
+			// 		console.log(err);
+			// 	});
+
+			console.log(this.token);
+
 			let http = API();
 			let apartmentCode = this.apartDealData.aptCode;
-			let jwt = {
-				Authorization:
-					"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
-			};
+
 			http
-				.post("/house/like_house", JSON.stringify(apartmentCode), { headers: jwt })
+				.post("/house/like_house", JSON.stringify(apartmentCode))
 				.then((res) => {
 					console.log(res);
 				})
@@ -73,14 +109,13 @@ export default {
 				});
 		},
 		dislikeHouseInfo() {
+			console.log(this.token);
+
+			let http = API();
 			let apartmentCode = this.apartDealData.aptCode;
 
-			axios
-				.delete("http://localhost:9999/house/dislike_house", {
-					headers: {
-						Authorization:
-							"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
-					},
+			http
+				.delete("/house/dislike_house", {
 					data: {
 						apartmentCode: apartmentCode,
 					},
@@ -88,7 +123,24 @@ export default {
 				.then((res) => {
 					console.log(res);
 				})
-				.catch((err) => console.log(err));
+				.catch((err) => {
+					console.log(err);
+				});
+
+			// axios
+			// 	.delete("http://localhost:9999/house/dislike_house", {
+			// 		headers: {
+			// 			Authorization:
+			// 				"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
+			// 		},
+			// 		data: {
+			// 			apartmentCode: apartmentCode,
+			// 		},
+			// 	})
+			// 	.then((res) => {
+			// 		console.log(res);
+			// 	})
+			// 	.catch((err) => console.log(err));
 		},
 		clickLikeBtn() {
 			// console.log(this.isLike);
@@ -107,19 +159,7 @@ export default {
 				lat: this.apartDealData.lat,
 				lng: this.apartDealData.lng,
 			};
-			this.$emit("showDetailWindow", data);
-		},
-		check() {
-			if (this.index === this.lastClickIndex && this.show) {
-				return true;
-			} else {
-				return false;
-			}
-		},
-	},
-	computed: {
-		flag() {
-			return this.check();
+			this.$emit("showDetailWindowEvent", data);
 		},
 	},
 };

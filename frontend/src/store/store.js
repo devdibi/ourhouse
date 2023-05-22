@@ -5,15 +5,16 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		accessToken: String,
+		prefix: "Bearer ",
+		accessToken: null,
 	},
 	getters: {
 		getAccessToken(state) {
-			if (state.token === null) {
+			if (state.accessToken === null) {
 				return -1;
 			}
 
-			return state.accessToken;
+			return state.prefix + state.accessToken;
 		},
 		isLogin(state) {
 			return state.accessToken == null ? false : true;
