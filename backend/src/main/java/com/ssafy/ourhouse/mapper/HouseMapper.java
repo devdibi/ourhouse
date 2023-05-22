@@ -27,7 +27,7 @@ public interface HouseMapper {
 
 	List<DongDto> getDong(String dong) throws SQLException;
 
-	void houseLike(String userEmail, String aptCode)throws SQLException;
+	void houseLike(String userEmail, Long aptCode)throws SQLException;
 
 	void dealLike(String userEmail, String dealCode)throws SQLException;
 

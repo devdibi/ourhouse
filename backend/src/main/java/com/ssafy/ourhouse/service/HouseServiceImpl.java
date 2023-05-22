@@ -18,10 +18,12 @@ import com.ssafy.ourhouse.mapper.HouseMapper;
 public class HouseServiceImpl implements HouseService {
 
 	private HouseMapper houseMapper;
+	private JwtService jwtService;
 
-	public HouseServiceImpl(HouseMapper houseMapper) {
+	public HouseServiceImpl(HouseMapper houseMapper, JwtService jwtService) {
 		super();
 		this.houseMapper = houseMapper;
+		this.jwtService = jwtService;
 	}
 
 	@Override
@@ -30,7 +32,7 @@ public class HouseServiceImpl implements HouseService {
 		// 거래 정보 뽑아오기
 		List<HouseDatabaseDto> houseList = houseMapper.houseSearch(searchCondition);
 		List<HouseDto> resultList = new ArrayList();
-		System.out.println("출력 갯수 : " +houseList.size());
+		System.out.println("출력 갯수 : " + houseList.size());
 		for (HouseDatabaseDto house : houseList) {
 			if (!resultList.contains(new HouseDto(house.getAptCode()))) {
 				HouseDto tmp = new HouseDto();
@@ -65,12 +67,12 @@ public class HouseServiceImpl implements HouseService {
 		}
 
 		List<DealDto> favoriteDeals = houseMapper.dealLikes(searchCondition.getEmail());
-		for(DealDto deal : favoriteDeals) {
+		for (DealDto deal : favoriteDeals) {
 			// 아파트 목록에 관심목록에 있는 아파트가 있을 시
-			if(resultList.contains(new HouseDto(deal.getPrice()))) {
+			if (resultList.contains(new HouseDto(deal.getPrice()))) {
 				int idx = resultList.indexOf(new HouseDto(deal.getPrice()));
-				//거래목록 있는지 확인
-				if(resultList.get(idx).getDeals().contains(deal)) {
+				// 거래목록 있는지 확인
+				if (resultList.get(idx).getDeals().contains(deal)) {
 					int idxDeal = resultList.get(idx).getDeals().indexOf(deal);
 					resultList.get(idx).getDeals().get(idxDeal).setDealLike(true);
 				}
@@ -95,8 +97,10 @@ public class HouseServiceImpl implements HouseService {
 		return houseMapper.getDong(dong);
 	}
 
+	
 	@Override
-	public void houseLike(String userEmail, String aptCode) throws Exception {
+	public void houseLike(Long aptCode, String jwt) throws Exception {
+		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
 		houseMapper.houseLike(userEmail, aptCode);
 	}
 
@@ -104,7 +108,7 @@ public class HouseServiceImpl implements HouseService {
 	public void dealLike(String userEmail, String dealCode) throws Exception {
 		houseMapper.dealLike(userEmail, dealCode);
 	}
-	
+
 	@Override
 	public void houseDislike(String userEmail, String aptCode) throws Exception {
 		houseMapper.houseDislike(userEmail, aptCode);

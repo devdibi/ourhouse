@@ -18,7 +18,7 @@ public interface HouseService {
 
 	List<DongDto> getDong(String dong) throws Exception;
 
-	void houseLike(String userEmail, String aptCode) throws Exception;
+	void houseLike(Long aptCode, String jwt) throws Exception;
 
 	void dealLike(String userEmail, String dealCode) throws Exception;
 	

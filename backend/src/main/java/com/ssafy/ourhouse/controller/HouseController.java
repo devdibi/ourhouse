@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,22 +27,25 @@ import com.ssafy.ourhouse.dto.LikeDto;
 import com.ssafy.ourhouse.dto.SidoDto;
 import com.ssafy.ourhouse.dto.SigunguDto;
 import com.ssafy.ourhouse.service.HouseService;
+import com.ssafy.ourhouse.service.JwtService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = { "*" }, maxAge = 600)
 @RestController
 @RequestMapping("/house")
+@RequiredArgsConstructor
 @Api(value = "HOUSE 컨트롤러 API")
 public class HouseController {
 
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@Autowired
-	private HouseService houseService;
+	private final HouseService houseService;
+//	private final JwtService JwtService;
 
 	@ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.")
 	@GetMapping("/sido")
@@ -117,10 +121,15 @@ public class HouseController {
 	@ApiOperation(value = "아파트 좋아요 설정", notes = "유저가 누른 아파트의 좋아요 설정")
 	@ApiImplicitParam()
 	@PostMapping("/like_house")
-	public ResponseEntity<Map<String, Object>> houseLike(@RequestBody LikeDto likeDto) {
+	public ResponseEntity<Map<String, Object>> houseLike(@RequestBody Long apartmentCode, @RequestHeader("Authorization") String jwt) {
+		
+		logger.info("jwt: {}", jwt);
+		logger.info("apartmentCode: {}", apartmentCode);
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
 		try {
-			houseService.houseLike(likeDto.getEmail(), likeDto.getCode());
+			houseService.houseLike(apartmentCode, jwt);
 			resultMap.put("message", "success");
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 		} catch (Exception e) {
@@ -128,52 +137,54 @@ public class HouseController {
 			resultMap.put("message", "fail");
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
+		
+//		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "거래 좋아요 설정", notes = "유저가 누른 거래의 좋아요 설정")
-	@PostMapping("/like_deal")
-	public ResponseEntity<Map<String, Object>> dealLike(@RequestBody LikeDto likeDto) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			houseService.dealLike(likeDto.getEmail(), likeDto.getCode());
-			resultMap.put("message", "success");
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			resultMap.put("message", "fail");
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
-		}
-	}
-	
-	@ApiOperation(value = "아파트 좋아요 삭제", notes = "유저가 누른 아파트의 좋아요 삭제")
-	@DeleteMapping("/like_house")
-	public ResponseEntity<Map<String, Object>> houseDislike(@RequestBody LikeDto likeDto) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			houseService.houseDislike(likeDto.getEmail(), likeDto.getCode());
-			resultMap.put("message", "success");
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			resultMap.put("message", "fail");
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
-		}
-	}
-
-	@ApiOperation(value = "거래 좋아요 삭제", notes="유저가 누른 거래의 좋아요 삭제")
-	@DeleteMapping("/like_deal")
-	public ResponseEntity<Map<String, Object>> dealDislike (@RequestBody LikeDto likeDto){
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			houseService.dealDislike(likeDto.getEmail(), likeDto.getCode());
-			resultMap.put("message", "success");
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			resultMap.put("message", "fail");
-			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
-		}
-	}
+//	@ApiOperation(value = "거래 좋아요 설정", notes = "유저가 누른 거래의 좋아요 설정")
+//	@PostMapping("/like_deal")
+//	public ResponseEntity<Map<String, Object>> dealLike(@RequestBody LikeDto likeDto) {
+//		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		try {
+//			houseService.dealLike(likeDto.getEmail(), likeDto.getCode());
+//			resultMap.put("message", "success");
+//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.out.println(e.getMessage());
+//			resultMap.put("message", "fail");
+//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+//		}
+//	}
+//	
+//	@ApiOperation(value = "아파트 좋아요 삭제", notes = "유저가 누른 아파트의 좋아요 삭제")
+//	@DeleteMapping("/like_house")
+//	public ResponseEntity<Map<String, Object>> houseDislike(@RequestBody LikeDto likeDto) {
+//		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		try {
+//			houseService.houseDislike(likeDto.getEmail(), likeDto.getCode());
+//			resultMap.put("message", "success");
+//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			resultMap.put("message", "fail");
+//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+//		}
+//	}
+//
+//	@ApiOperation(value = "거래 좋아요 삭제", notes="유저가 누른 거래의 좋아요 삭제")
+//	@DeleteMapping("/like_deal")
+//	public ResponseEntity<Map<String, Object>> dealDislike (@RequestBody LikeDto likeDto){
+//		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		try {
+//			houseService.dealDislike(likeDto.getEmail(), likeDto.getCode());
+//			resultMap.put("message", "success");
+//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			resultMap.put("message", "fail");
+//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+//		}
+//	}
 	
 }

@@ -9,7 +9,13 @@
 		@click="showDetailWindow"
 	>
 		<div class="w-15" style="padding: 10px" @click="clickLikeBtn">
-			<img id="like-img" v-if="!isLike" class="" src="@/assets/icon/empty-star.svg" alt="" />
+			<img
+				id="like-img"
+				v-if="!isLike"
+				class=""
+				src="@/assets/icon/empty-star.svg"
+				@click="likeHouseInfo"
+			/>
 			<img id="like-img" v-if="isLike" class="" src="@/assets/icon/filled-star.svg" alt="" />
 		</div>
 		<div class="" id="apartment-name">{{ apartDealData.name }}</div>
@@ -22,6 +28,8 @@
 </template>
 
 <script>
+import { API } from "@/api";
+
 export default {
 	name: "ApartmentItem",
 	components: {},
@@ -41,6 +49,22 @@ export default {
 		show: Boolean,
 	},
 	methods: {
+		likeHouseInfo() {
+			let http = API();
+			let apartmentCode = this.apartDealData.aptCode;
+			let jwt = {
+				Authorization:
+					"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MTg5MjQsImV4cCI6MTY4NDcyMjUyNH0.YAHGATJo7wLxwGFo53rLl4Sor6Duq8tUlLwoWx8YyFQ",
+			};
+			http
+				.post("/house/like_house", JSON.stringify(apartmentCode), { headers: jwt })
+				.then((res) => {
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
 		clickLikeBtn() {
 			// console.log(this.isLike);
 			this.isLike = !this.isLike;
