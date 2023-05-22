@@ -8,6 +8,7 @@
         class="textbox"
         v-model="user.email"
         placeholder="이메일"
+        @keyup.enter="doLogin"
       />
       <input
         type="password"
@@ -15,6 +16,7 @@
         class="textbox"
         v-model="user.password"
         placeholder="비밀번호"
+        @keyup.enter="doLogin"
       />
       <input
         type="button"
