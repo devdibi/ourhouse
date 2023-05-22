@@ -23,6 +23,11 @@ import NoticeUpdate from "@/components/notice/NoticeUpdate.vue";
 // news
 import NewsList from "@/components/news/NewsList";
 
+// dashboard
+// import LineChart from "@/components/dashboard/LineChart.vue";
+// import MapChart from "@/components/dashboard/MapChart.vue";
+// import PieChart from "@/components/dashboard/PieChart.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -124,6 +129,11 @@ const routes = [
     path: "/news",
     name: "news",
     component: NewsList,
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: () => import("@/views/DashBoard.vue"),
   },
 ];
 

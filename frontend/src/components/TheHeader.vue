@@ -20,10 +20,9 @@
                 <b-dropdown-item href="#">관심 매물</b-dropdown-item>
               </b-dropdown-group>
               <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item href="#">마이 페이지</b-dropdown-item>
+              <b-dropdown-item @click="moveDashBoard()">마이 페이지</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
-
           <!-- 유저부분 Nav -->
           <b-navbar-nav class="ml-auto" v-if="this.userinfo">
             <b-nav-item @click="moveLogin()" link-classes="text-white">로그인</b-nav-item>
@@ -61,6 +60,10 @@ export default {
     },
     moveNews() {
       this.$router.push("/news").catch(() => {});
+    },
+    moveDashBoard() {
+      this.$router.push("/dashboard").catch(() => {});
+      console.log("hello");
     },
   },
 };
