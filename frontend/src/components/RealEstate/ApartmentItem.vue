@@ -16,7 +16,13 @@
 				src="@/assets/icon/empty-star.svg"
 				@click="likeHouseInfo"
 			/>
-			<img id="like-img" v-if="isLike" class="" src="@/assets/icon/filled-star.svg" alt="" />
+			<img
+				id="like-img"
+				v-if="isLike"
+				class=""
+				src="@/assets/icon/filled-star.svg"
+				@click="dislikeHouseInfo"
+			/>
 		</div>
 		<div class="" id="apartment-name">{{ apartDealData.name }}</div>
 		<div class="w-15" style="padding: 10px">
@@ -29,6 +35,7 @@
 
 <script>
 import { API } from "@/api";
+import axios from "axios";
 
 export default {
 	name: "ApartmentItem",
@@ -54,7 +61,7 @@ export default {
 			let apartmentCode = this.apartDealData.aptCode;
 			let jwt = {
 				Authorization:
-					"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MTg5MjQsImV4cCI6MTY4NDcyMjUyNH0.YAHGATJo7wLxwGFo53rLl4Sor6Duq8tUlLwoWx8YyFQ",
+					"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
 			};
 			http
 				.post("/house/like_house", JSON.stringify(apartmentCode), { headers: jwt })
@@ -64,6 +71,24 @@ export default {
 				.catch((err) => {
 					console.log(err);
 				});
+		},
+		dislikeHouseInfo() {
+			let apartmentCode = this.apartDealData.aptCode;
+
+			axios
+				.delete("http://localhost:9999/house/dislike_house", {
+					headers: {
+						Authorization:
+							"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
+					},
+					data: {
+						apartmentCode: apartmentCode,
+					},
+				})
+				.then((res) => {
+					console.log(res);
+				})
+				.catch((err) => console.log(err));
 		},
 		clickLikeBtn() {
 			// console.log(this.isLike);

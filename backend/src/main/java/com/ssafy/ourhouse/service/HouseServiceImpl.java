@@ -97,7 +97,6 @@ public class HouseServiceImpl implements HouseService {
 		return houseMapper.getDong(dong);
 	}
 
-	
 	@Override
 	public void houseLike(Long aptCode, String jwt) throws Exception {
 		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
@@ -105,13 +104,14 @@ public class HouseServiceImpl implements HouseService {
 	}
 
 	@Override
-	public void dealLike(String userEmail, String dealCode) throws Exception {
-		houseMapper.dealLike(userEmail, dealCode);
+	public void houseDislike(Long aptCode, String jwt) throws Exception {
+		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		houseMapper.houseDislike(userEmail, aptCode);
 	}
 
 	@Override
-	public void houseDislike(String userEmail, String aptCode) throws Exception {
-		houseMapper.houseDislike(userEmail, aptCode);
+	public void dealLike(String userEmail, String dealCode) throws Exception {
+		houseMapper.dealLike(userEmail, dealCode);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public interface HouseService {
 
 	void dealLike(String userEmail, String dealCode) throws Exception;
 	
-	void houseDislike(String userEmail, String aptCode) throws Exception;
+	void houseDislike(Long aptCode, String jwt) throws Exception;
 	
 	void dealDislike(String userEmail, String dealCode) throws Exception;
 

@@ -112,7 +112,7 @@
 			(SELECT apt_code FROM house_deal WHERE deal_code = #{dealCode}), now());
 	</insert>
 
-	<delete id="houseDislike" parameterType="String">
+	<delete id="houseDislike" parameterType="Map">
 		DELETE FROM favorite_house
 		WHERE email=#{userEmail} AND apt_code=#{aptCode}
 	</delete>

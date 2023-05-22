@@ -137,10 +137,30 @@ public class HouseController {
 			resultMap.put("message", "fail");
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
+	}
+	
+	@ApiOperation(value = "아파트 좋아요 삭제", notes = "유저가 누른 아파트의 좋아요 삭제")
+	@DeleteMapping("/dislike_house")
+	public ResponseEntity<Map<String, Object>> houseDisLike(@RequestBody Map<String, Long> data, @RequestHeader("Authorization") String jwt) {
+		
+		logger.info("jwt: {}", jwt);
+		logger.info("apartmentCode: {}", data.get("apartmentCode"));
+		Long apartmentCode = data.get("apartmentCode");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			houseService.houseDislike(apartmentCode, jwt);
+			resultMap.put("message", "success");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+		}
 		
 //		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
-
+	
 //	@ApiOperation(value = "거래 좋아요 설정", notes = "유저가 누른 거래의 좋아요 설정")
 //	@PostMapping("/like_deal")
 //	public ResponseEntity<Map<String, Object>> dealLike(@RequestBody LikeDto likeDto) {
@@ -157,20 +177,7 @@ public class HouseController {
 //		}
 //	}
 //	
-//	@ApiOperation(value = "아파트 좋아요 삭제", notes = "유저가 누른 아파트의 좋아요 삭제")
-//	@DeleteMapping("/like_house")
-//	public ResponseEntity<Map<String, Object>> houseDislike(@RequestBody LikeDto likeDto) {
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		try {
-//			houseService.houseDislike(likeDto.getEmail(), likeDto.getCode());
-//			resultMap.put("message", "success");
-//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			resultMap.put("message", "fail");
-//			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
-//		}
-//	}
+
 //
 //	@ApiOperation(value = "거래 좋아요 삭제", notes="유저가 누른 거래의 좋아요 삭제")
 //	@DeleteMapping("/like_deal")

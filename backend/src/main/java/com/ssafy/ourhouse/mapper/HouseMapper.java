@@ -31,7 +31,7 @@ public interface HouseMapper {
 
 	void dealLike(String userEmail, String dealCode)throws SQLException;
 
-	void houseDislike(String userEmail, String aptCode)throws SQLException;
+	void houseDislike(String userEmail, Long aptCode)throws SQLException;
 
 	void dealDislike(String userEmail, String dealCode)throws SQLException;
 
