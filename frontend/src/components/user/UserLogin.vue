@@ -2,27 +2,13 @@
   <div class="background">
     <form action="submit" id="loginform">
       <legend id="title">로그인</legend>
-      <input
-        type="email"
-        id="email"
-        class="textbox"
-        v-model="user.email"
-        placeholder="이메일"
-      />
-      <input
-        type="text"
-        id="password"
-        class="textbox"
-        v-model="user.password"
-        placeholder="비밀번호"
-      />
-      <button type="submit" id="loginbutton" class="button">로그인</button>
-      <button id="joinbutton" class="button" @click="join">회원가입</button>
+      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
+      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호" />
+      <input type="button" id="loginbutton" class="button" value="로그인" />
+      <input type="button" id="registerbutton" class="button" value="회원가입" @click="join" />
       <div id="findpassworddiv">
         비밀번호를 잊으셨나요?
-        <router-link to="/user/findpassword" id="findpassword"
-          >비밀번호 찾기</router-link
-        >
+        <router-link to="/user/findpassword" id="findpassword">비밀번호 찾기</router-link>
       </div>
     </form>
   </div>
@@ -40,7 +26,7 @@ export default {
       },
     };
   },
-  created() {},
+  created() { },
   methods: {
     join() {
       this.$router.push({ name: "join" });
@@ -87,7 +73,10 @@ export default {
 }
 
 #loginform {
-  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
   width: 480px;
   height: 500px;
   display: inline-block;
@@ -131,6 +120,12 @@ export default {
 
 #loginbutton {
   top: 280px;
+  background: rgba(217, 217, 217, 0.6);
+  color: #939393;
+}
+
+#registerbutton {
+  top: 350px;
   background: rgba(217, 217, 217, 0.6);
   color: #939393;
 }
