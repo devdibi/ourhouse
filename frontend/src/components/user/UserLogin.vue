@@ -44,12 +44,12 @@ export default {
 	methods: {
 		...mapActions(["setToken"]),
 		join() {
-			this.$router.push({ name: "join" });
+			this.$router.push({ name: "main" });
 		},
 		async doLogin() {
 			let http = API();
 
-			http
+			await http
 				.post("/user/authenticate", JSON.stringify(this.user))
 				.then(({ data }) => {
 					console.log("서버로부터 받은 Token:", data);
