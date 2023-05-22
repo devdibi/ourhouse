@@ -38,6 +38,7 @@ export default {
 	computed: {
 		...mapGetters({
 			token: "getAccessToken",
+			nextURL: "getPrevURL",
 		}),
 	},
 	methods: {
@@ -51,10 +52,12 @@ export default {
 			http
 				.post("/user/authenticate", JSON.stringify(this.user))
 				.then(({ data }) => {
-					console.log(data);
+					console.log("서버로부터 받은 Token:", data);
 					this.setToken(data);
-					console.log(this.token);
-					console.log("jwt: ", this.$store.state.accessToken);
+					console.log("저장된 Token:", this.token);
+					// console.log("jwt: ", this.$store.state.accessToken);
+
+					this.$router.push(this.nextURL);
 				})
 				.catch((err) => console.log("error:", err));
 		},
