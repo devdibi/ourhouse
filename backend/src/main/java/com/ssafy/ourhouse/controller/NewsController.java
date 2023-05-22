@@ -96,7 +96,7 @@ public class NewsController {
 		NewsDto newsDto = null;
 		try {
 			JSONArray json = NaverSearch.jsonSave();
-			for(int i = 0; i < json.length(); i++) {
+			for(int i = json.length() - 1; i >= 0; i--) {
 				newsDto = new NewsDto();
 				news = json.getJSONObject(i);
 				newsDto.setTitle(news.get("title").toString());

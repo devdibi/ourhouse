@@ -17,7 +17,7 @@
 <select id="getNews" resultMap="newsDto">
 	SELECT news_no, title, context, link, post_date, hit
 	FROM news
-	ORDER BY post_date desc;
+	ORDER BY post_date desc, news_no desc;
 </select>
 
 <!-- 뉴스 기사 조회수 증가 -->
