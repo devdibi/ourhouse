@@ -2,97 +2,35 @@
   <div id="rootDiv">
     <form id="joinform">
       <legend id="title">회원가입</legend>
-      <input
-        type="email"
-        id="email"
-        class="textbox"
-        v-model="user.email"
-        placeholder="이메일"
-      />
-      <input
-        type="password"
-        id="password"
-        class="textbox"
-        v-model="user.password"
-        placeholder="비밀번호"
-      />
-      <input
-        type="password"
-        id="passwordcheck"
-        class="textbox"
-        v-model="passwordcheck"
-        placeholder="비밀번호 확인"
-      />
-      <input
-        type="text"
-        id="name"
-        class="textbox"
-        v-model="user.name"
-        placeholder="이름"
-      />
-      <input
-        type="number"
-        id="age"
-        class="textbox"
-        v-model="user.age"
-        placeholder="나이"
-      />
+      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
+      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호" />
+      <input type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="비밀번호 확인" />
+      <input type="text" id="name" class="textbox" v-model="user.name" placeholder="이름" />
+      <input type="number" id="age" class="textbox" v-model="user.age" placeholder="나이" />
 
       <b-form-group id="genderbtn">
-        <b-form-radio-group
-          id="gender"
-          class="gender"
-          v-model="user.gender"
-          :options="genderOptions"
-          buttons
-        ></b-form-radio-group>
+        <b-form-radio-group id="gender" class="gender" v-model="user.gender" :options="genderOptions"
+          buttons></b-form-radio-group>
       </b-form-group>
       <div id="likearea">관심지역(선택)</div>
       <div>
-        <select
-          name="likeareasSido"
-          id="likeareasSido"
-          class="likeareas sido"
-          @change="selectSido('like')"
-          v-model="likeSidoCode"
-        >
+        <select name="likeareasSido" id="likeareasSido" class="likeareas sido" @change="selectSido('like')"
+          v-model="likeSidoCode">
           <option value="">시도 선택</option>
-          <option
-            v-for="(item, index) in likeSidos"
-            :key="index"
-            :value="item.sidoCode"
-          >
+          <option v-for="(item, index) in likeSidos" :key="index" :value="item.sidoCode">
             {{ item.name }}
           </option>
         </select>
-        <select
-          name="likeareasGungu"
-          id="likeareasGungu"
-          class="likeareas sigungu"
-          @change="selectSigungu('like')"
-          v-model="likeSigunguCode"
-        >
+        <select name="likeareasGungu" id="likeareasGungu" class="likeareas sigungu" @change="selectSigungu('like')"
+          v-model="likeSigunguCode">
           <option value="">군구 선택</option>
-          <option
-            v-for="(item, index) in likeSigungus"
-            :key="index"
-            :value="item.sigunguCode"
-          >
+          <option v-for="(item, index) in likeSigungus" :key="index" :value="item.sigunguCode">
             {{ item.name }}
           </option>
         </select>
-        <select
-          name="likeareasDong"
-          id="likeareasDong"
-          class="likeareas dong"
-          v-model="likeDongCode"
-        >
+        <select name="likeareasDong" id="likeareasDong" class="likeareas dong" v-model="likeDongCode">
           <option value="">동 선택</option>
-          <option
-            v-for="(item, index) in likeDongs"
-            :key="index"
-            :value="item.dongCode"
-          >
+          <option v-for="(item, index) in likeDongs" :key="index" :value="item.dongCode">
             {{ item.name }}
           </option>
         </select>
@@ -100,51 +38,24 @@
 
       <div id="dwellarea">거주지역(선택)</div>
       <div>
-        <select
-          name="dwellareasSido"
-          id="dwellareasSido"
-          class="dwellareas sido"
-          @change="selectSido('dwell')"
-          v-model="dwellSidoCode"
-        >
+        <select name="dwellareasSido" id="dwellareasSido" class="dwellareas sido" @change="selectSido('dwell')"
+          v-model="dwellSidoCode">
           <option value="">시도 선택</option>
-          <option
-            v-for="(item, index) in dwellSidos"
-            :key="index"
-            :value="item.sidoCode"
-          >
+          <option v-for="(item, index) in dwellSidos" :key="index" :value="item.sidoCode">
             {{ item.name }}
           </option>
         </select>
-        <select
-          name="dwellareasGungu"
-          id="dwellareasGungu"
-          class="dwellareas sigungu"
-          @change="selectSigungu('dwell')"
-          v-model="dwellSigunguCode"
-        >
+        <select name="dwellareasGungu" id="dwellareasGungu" class="dwellareas sigungu" @change="selectSigungu('dwell')"
+          v-model="dwellSigunguCode">
           <option value="">군구 선택</option>
-          <option
-            v-for="(item, index) in dwellSigungus"
-            :key="index"
-            :value="item.sigunguCode"
-          >
+          <option v-for="(item, index) in dwellSigungus" :key="index" :value="item.sigunguCode">
             {{ item.name }}
           </option>
         </select>
 
-        <select
-          name="dwellareasDong"
-          id="dwellareasDong"
-          class="dwellareas dong"
-          v-model="dwellDongCode"
-        >
+        <select name="dwellareasDong" id="dwellareasDong" class="dwellareas dong" v-model="dwellDongCode">
           <option value="">동 선택</option>
-          <option
-            v-for="(item, index) in dwellDongs"
-            :key="index"
-            :value="item.dongCode"
-          >
+          <option v-for="(item, index) in dwellDongs" :key="index" :value="item.dongCode">
             {{ item.name }}
           </option>
         </select>
@@ -351,8 +262,10 @@ export default {
 }
 
 #joinform {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   position: absolute;
-  margin: auto;
   width: 480px;
   height: 775px;
   display: inline-block;
@@ -443,6 +356,7 @@ export default {
 .dong {
   left: 308px;
 }
+
 #joinbutton {
   top: 655px;
   background: rgba(217, 217, 217, 0.6);

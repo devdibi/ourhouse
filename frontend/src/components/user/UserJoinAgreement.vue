@@ -5,24 +5,11 @@
         <div class="title">
           개인정보 수집 이용 동의 <span class="sub">필수</span>
         </div>
-
         <div>
-          <b-form-textarea
-            id="textarea1"
-            v-model="text1"
-            rows="3"
-            max-rows="6"
-          ></b-form-textarea>
-
+          <b-form-textarea id="textarea1" v-model="text1" rows="3" max-rows="6"></b-form-textarea>
           <pre class="mt-3 mb-0">{{ text1 }}</pre>
         </div>
-
-        <b-form-checkbox
-          id="checkbox1"
-          v-model="status1"
-          value="동의함"
-          unchecked-value="동의하지 않음"
-        >
+        <b-form-checkbox id="checkbox1" v-model="status1" value="동의함" unchecked-value="동의하지 않음">
           {{ status1 }}
         </b-form-checkbox>
       </div>
@@ -31,34 +18,17 @@
           마케팅 정보 수신 동의 <span class="sub">선택</span>
         </div>
         <div>
-          <b-form-textarea
-            id="textarea2"
-            v-model="text2"
-            rows="3"
-            max-rows="6"
-          ></b-form-textarea>
-
+          <b-form-textarea id="textarea2" v-model="text2" rows="3" max-rows="6"></b-form-textarea>
           <pre class="mt-3 mb-0">{{ text2 }}</pre>
         </div>
-        <b-form-checkbox
-          id="checkbox2"
-          v-model="status2"
-          value="동의함"
-          unchecked-value="동의하지 않음"
-        >
+        <b-form-checkbox id="checkbox2" v-model="status2" value="동의함" unchecked-value="동의하지 않음">
           {{ status2 }}
         </b-form-checkbox>
-        <b-form-checkbox
-          id="checkbox3"
-          v-model="status3"
-          value="동의함"
-          unchecked-value="동의하지 않음"
-          @change="checkAll()"
-        >
+        <b-form-checkbox id="checkbox3" v-model="status3" value="동의함" unchecked-value="동의하지 않음" @change="checkAll()">
           {{ status3 }}
         </b-form-checkbox>
-        <button class="button" @click="previous">이전</button>
-        <button class="button" @click="next">다음</button>
+        <input type="button" value="이전" class="button" @click="previous">
+        <input type="button" value="다음" class="button" @click="next">
       </div>
     </div>
   </div>
@@ -77,15 +47,19 @@ export default {
       text2: "마케팅 정보 동의 임시 텍스트",
     };
   },
-  created() {},
+  created() { },
   methods: {
     checkAll() {
       this.status1 = "동의함";
       this.status2 = "동의함";
       console.log(this.status1);
     },
-    previous() {},
-    next() {
+    previous(e) {
+      e.preventDefault();
+      this.$router.go(-1);
+    },
+    next(e) {
+      e.preventDefault();
       if (this.status1 != "동의함") {
         alert("개인정보 수집 이용 동의가 필요합니다.");
       } else {
@@ -106,8 +80,10 @@ export default {
 }
 
 #box {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   position: absolute;
-  margin: auto;
   width: 800px;
   height: 600px;
   display: inline-block;

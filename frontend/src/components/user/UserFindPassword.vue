@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <div id="loginform">
+    <div id="inputcontainer">
       <legend id="title">비밀번호 재발급</legend>
       <input
         type="email"
@@ -104,8 +104,11 @@ export default {
   line-height: 22px;
 }
 
-#loginform {
-  position: relative;
+#inputcontainer {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
   width: 480px;
   height: 450px;
   display: inline-block;

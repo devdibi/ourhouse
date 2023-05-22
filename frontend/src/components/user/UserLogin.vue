@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div>
     <form action="submit" id="loginform">
       <legend id="title">로그인</legend>
       <input
@@ -54,6 +54,11 @@ export default {
   border: none;
 }
 
+.formcontainer{
+  margin: auto;
+  padding: auto;
+}
+
 .textbox {
   position: absolute;
   left: 60px;
@@ -87,15 +92,17 @@ export default {
 }
 
 #loginform {
-  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
   width: 480px;
   height: 500px;
   display: inline-block;
   text-align: center;
   background: #ffffff;
   background-blend-mode: color-dodge;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3),
-    0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
 }
 
