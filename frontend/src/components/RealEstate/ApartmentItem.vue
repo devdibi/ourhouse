@@ -35,7 +35,7 @@
 
 <script>
 import { API } from "@/api/axios-jwt";
-import axios from "axios";
+// import axios from "axios";
 import { mapGetters } from "vuex";
 
 export default {
@@ -96,14 +96,13 @@ export default {
 				});
 		},
 		dislikeHouseInfo() {
+			console.log(this.token);
+
+			let http = API();
 			let apartmentCode = this.apartDealData.aptCode;
 
-			axios
-				.delete("http://localhost:9999/house/dislike_house", {
-					headers: {
-						Authorization:
-							"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
-					},
+			http
+				.delete("/house/dislike_house", {
 					data: {
 						apartmentCode: apartmentCode,
 					},
@@ -111,7 +110,10 @@ export default {
 				.then((res) => {
 					console.log(res);
 				})
-				.catch((err) => console.log(err));
+				.catch((err) => {
+					console.log(err);
+				});
+
 		},
 		clickLikeBtn() {
 			// console.log(this.isLike);
