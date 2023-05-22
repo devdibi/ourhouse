@@ -42,7 +42,7 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
