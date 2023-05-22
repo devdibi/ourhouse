@@ -147,5 +147,26 @@ public class UserController {
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	@ApiOperation(value="이메일 중복 체크", notes="해당 이메일과 동일한 이메일이 있을 시 fail/ 없을 시 success 반환")
+	@GetMapping("/emailCheck")
+	public ResponseEntity<Map<String, Object>> emailCheck(@RequestParam String userEmail){
+		logger.debug("유저 이메일({})이 존재하는지 확인", userEmail);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			String name = userService.compareName(userEmail);
+			System.out.println(name);
+			if(name==null || name.equals("")) {
+				resultMap.put("message", SUCCESS);
+			}else {
+				resultMap.put("message", FAIL);				
+			}
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);			
+		}catch(Exception e){
+			e.printStackTrace();
+			resultMap.put("message", FAIL);
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		}
+	}
 
 }
