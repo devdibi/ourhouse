@@ -26,6 +26,8 @@
 		<result column="lng" property="lng" />
 		<result column="lat" property="lat" />
 		<result column="dong_code" property="dongCode" />
+		<result column="price_avg" property="priceAvg" />
+		<result column="area_avg" property="areaAvg" />
 	</resultMap>
 	
 	<!-- column과 변수명 맞추기 위한 resultMap -->
@@ -106,7 +108,7 @@
 		VALUES (#{userEmail}, #{aptCode}, NOW())
 	</insert>
 
-	<insert id="dealLike" parameterType="String">
+	<insert id="dealLike" parameterType="Map">
 		INSERT INTO favorite_deal (email, deal_code, apt_code, created_at)
 		VALUES (#{userEmail}, #{dealCode},
 			(SELECT apt_code FROM house_deal WHERE deal_code = #{dealCode}), now());
@@ -117,7 +119,7 @@
 		WHERE email=#{userEmail} AND apt_code=#{aptCode}
 	</delete>
 
-	<delete id="dealDislike" parameterType="String">
+	<delete id="dealDislike" parameterType="Map">
 		DELETE FROM favorite_deal
 		WHERE email=#{userEmail} AND deal_code=#{dealCode}
 	</delete>

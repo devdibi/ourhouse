@@ -36,7 +36,7 @@
 <script>
 import { API } from "@/api/axios-jwt";
 // import axios from "axios";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
 	name: "ApartmentItem",
@@ -71,6 +71,7 @@ export default {
 		show: Boolean,
 	},
 	methods: {
+		...mapActions(["setNextURL"]),
 		check() {
 			if (this.index === this.lastClickIndex && this.show) {
 				return true;
@@ -79,22 +80,17 @@ export default {
 			}
 		},
 		likeHouseInfo() {
-			// let http = API();
-			// let apartmentCode = this.apartDealData.aptCode;
-			// let jwt = {
-			// 	Authorization:
-			// 		"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
-			// };
-			// http
-			// 	.post("/house/like_house", JSON.stringify(apartmentCode), { headers: jwt })
-			// 	.then((res) => {
-			// 		console.log(res);
-			// 	})
-			// 	.catch((err) => {
-			// 		console.log(err);
-			// 	});
-
 			console.log(this.token);
+			if (this.token === -1) {
+				console.log("=== Access Token이 없음 ===");
+				this.setNextURL("/land");
+				console.log(this.$store.state.prevURL);
+
+				alert("로그인 하셈");
+				this.$router.push("/user/login");
+
+				return;
+			}
 
 			let http = API();
 			let apartmentCode = this.apartDealData.aptCode;

@@ -44,6 +44,8 @@ public class HouseServiceImpl implements HouseService {
 				tmp.setLng(house.getLng());
 				tmp.setName(house.getName());
 				tmp.setRoadAddress(house.getRoadAddress());
+				tmp.setPriceAvg(house.getPriceAvg());
+				tmp.setAreaAvg(house.getAreaAvg());
 				resultList.add(tmp);
 			}
 			int idx = resultList.indexOf(new HouseDto(house.getAptCode()));
@@ -99,24 +101,25 @@ public class HouseServiceImpl implements HouseService {
 
 	@Override
 	public void houseLike(Long aptCode, String jwt) throws Exception {
-		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
-		houseMapper.houseLike(userEmail, aptCode);
+		houseMapper.houseLike(getEmailFromJwtToken(jwt), aptCode);
 	}
 
 	@Override
 	public void houseDislike(Long aptCode, String jwt) throws Exception {
-		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
-		houseMapper.houseDislike(userEmail, aptCode);
+		houseMapper.houseDislike(getEmailFromJwtToken(jwt), aptCode);
 	}
 
 	@Override
-	public void dealLike(String userEmail, String dealCode) throws Exception {
-		houseMapper.dealLike(userEmail, dealCode);
+	public void dealLike(Long dealCode, String jwt) throws Exception {
+		houseMapper.dealLike(getEmailFromJwtToken(jwt), dealCode);
 	}
 
 	@Override
-	public void dealDislike(String userEmail, String dealCode) throws Exception {
-		houseMapper.dealDislike(userEmail, dealCode);
+	public void dealDislike(Long dealCode, String jwt) throws Exception {
+		houseMapper.dealDislike(getEmailFromJwtToken(jwt), dealCode);
 	}
-
+	
+	private String getEmailFromJwtToken(String jwt) {
+		return jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+	}
 }
