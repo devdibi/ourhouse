@@ -29,10 +29,10 @@ public class UserDto {
 	private int ageGroup;
 	
 	@ApiModelProperty(value = "거주지역 동코드")
-	private int dwellArea;
+	private String dwellArea;
 
 	@ApiModelProperty(value = "관심지역 동코드")
-	private int favoriteArea;
+	private String favoriteArea;
 
 	@ApiModelProperty(value = "상태. 0:비활성, 1:활성")
 	private int status;

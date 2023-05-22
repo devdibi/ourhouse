@@ -23,4 +23,6 @@ public interface UserMapper {
 	
 	void randomPassword(Map<String, String> map) throws SQLException;
 
+	String compareName(String userEmail) throws SQLException;
+
 }

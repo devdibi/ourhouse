@@ -5,8 +5,24 @@
 <mapper namespace="com.ssafy.ourhouse.mapper.UserMapper">
 
 	<insert id="registerUser" parameterType="userDto">
-		INSERT INTO User (email, password, name, gender, age, age_group, join_date)
-		VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW())
+		<choose>
+			<when test="(dwellArea == null or dwellArea == '') and (favoriteArea == null or favoriteArea == '')">
+				INSERT INTO User (email, password, name, gender, age, age_group, join_date)
+				VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW())
+			</when>
+			<when test="dwellArea == null or dwellArea == ''">
+				INSERT INTO User (email, password, name, gender, age, age_group, favorite_area, join_date)
+				VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, #{favoriteArea}, NOW())
+			</when>
+			<when test="favoriteArea == null or favoriteArea == ''">
+				INSERT INTO User (email, password, name, gender, age, age_group, dwell_area, join_date)
+				VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, #{dwellArea}, NOW())
+			</when>
+			<otherwise>
+				INSERT INTO User (email, password, name, gender, age, age_group, favorite_area, dwell_area, join_date)
+				VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, #{favoriteArea}, #{dwellArea}, NOW())
+			</otherwise>
+		</choose>
 	</insert>
 	
 	<select id="loginUser" parameterType="map" resultType="userDto">
@@ -36,8 +52,14 @@
 	
 	<update id="randomPassword" parameterType="map">
 		UPDATE USER
-)		SET password = #{password}
+		SET password = #{password}
 		WHERE email = #{email}
 	</update>
+	
+	<select id="compareName" parameterType="String" resultType="String">
+		SELECT name
+		FROM user
+		WHERE email = #{email}
+	</select>
 	
 </mapper>
