@@ -13,18 +13,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public interface UserService extends UserDetailsService {
 
 	@Override
-    UserDto loadUserByUsername(String username) throws UsernameNotFoundException;
+	UserDto loadUserByUsername(String username) throws UsernameNotFoundException;
 
 	void registerUser(UserDto userDto) throws Exception;
 
-    UserDto loginUser(Map<String, String> map) throws Exception;
+	UserDto loginUser(Map<String, String> map) throws Exception;
 
-    //	UserDto searchByUserId(String userId) throws Exception;
-    void updatePassword(Map<String, String> map) throws Exception;
+//	UserDto searchByUserId(String userId) throws Exception;
+	void updatePassword(Map<String, String> map) throws Exception;
 
-    Boolean deleteUser(String email) throws Exception;
+	Boolean deleteUser(String email) throws Exception;
 
-    List<UserDto> loadAllUsers() throws Exception;
+	List<UserDto> loadAllUsers() throws Exception;
 
-    void randomPassword(Map<String, String> map) throws Exception;
+	void randomPassword(Map<String, String> map) throws Exception;
+
+	String compareName(String userEmail) throws Exception;
 }
