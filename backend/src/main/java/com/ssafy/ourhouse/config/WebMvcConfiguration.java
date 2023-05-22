@@ -12,15 +12,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //@MapperScan(basePackages = { "com.ssafy.ourhouse.mapper" })
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-
-		registry.addMapping("/**").allowedOrigins("*")
-				.allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
-						HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
-						HttpMethod.PATCH.name())
-				.maxAge(1800);
-	}
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//
+//		registry.addMapping("/**").allowedOrigins("*")
+//				.allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
+//						HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
+//						HttpMethod.PATCH.name())
+//				.allowCredentials(false).maxAge(1800);
+//	}
 
 //	Swagger UI 실행시 404처리
 //	Swagger2 일경우
