@@ -26,27 +26,27 @@ import { API } from "@/api";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-	name: "userLogin",
-	components: {},
-	data() {
-		return {
-			user: {
-				email: "",
-				password: "",
-			},
+  name: "userLogin",
+  components: {},
+  data() {
+    return {
+      user: {
+        email: "",
+        password: "",
+      },
       style: {
         //기본: 회색
         background: "rgba(217, 217, 217, 0.6)",
         color: "#939393",
       },
-		};
-	},
-	computed: {
-		...mapGetters({
-			token: "getAccessToken",
-			nextURL: "getPrevURL",
-		}),
-	},
+    };
+  },
+  computed: {
+    ...mapGetters({
+      token: "getAccessToken",
+      nextURL: "getPrevURL",
+    }),
+  },
   watch: {
     user: {
       handler: function () {
@@ -63,28 +63,27 @@ export default {
       deep: true,
     },
   },
-	methods: {
-		...mapActions(["setToken"]),
-		join() {
-			this.$router.push({ name: "main" });
-		},
-		async doLogin() {
-			let http = API();
+  methods: {
+    ...mapActions(["setToken"]),
+    join() {
+      this.$router.push({ name: "main" });
+    },
+    async doLogin() {
+      let http = API();
 
-			await http
-				.post("/user/authenticate", JSON.stringify(this.user))
-				.then(({ data }) => {
-					console.log("서버로부터 받은 Token:", data);
-					this.setToken(data);
-					console.log("저장된 Token:", this.token);
-					// console.log("jwt: ", this.$store.state.accessToken);
+      await http
+        .post("/user/authenticate", JSON.stringify(this.user))
+        .then(({ data }) => {
+          console.log("서버로부터 받은 Token:", data);
+          this.setToken(data);
+          console.log("저장된 Token:", this.token);
+          // console.log("jwt: ", this.$store.state.accessToken);
 
-					this.$router.push(this.nextURL);
-				})
-				.catch((err) => console.log("error:", err));
-		},
-	},
->>>>>>> real-estate-jwt
+          this.$router.push(this.nextURL);
+        })
+        .catch((err) => console.log("error:", err));
+    },
+  },
 };
 </script>
 
