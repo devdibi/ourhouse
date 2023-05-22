@@ -21,7 +21,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="trow" v-for="board in lists" :key="board.boardNo" @click="move(`/board/detail/${board.boardNo}`)" style="cursor: pointer">
+        <tr
+          class="trow"
+          v-for="board in lists"
+          :key="board.boardNo"
+          @click="move(`/board/detail/${board.boardNo}`)"
+          style="cursor: pointer"
+        >
           <td>{{ board.boardNo }}</td>
           <td>{{ board.title }}</td>
           <td>{{ board.email }}</td>
@@ -60,15 +66,21 @@ export default {
   },
   created() {
     // 리스트 호출
-    list((response) => {
-      this.boards = response.data.boardList;
+    list(
+      (response) => {
+        this.boards = response.data.boardList;
 
-      // 처음 리스트 출력
-      for (var p = 0 * 10; p < 10; p++) {
-        if (p == this.boards.length) return;
-        this.lists.push(this.boards[p]);
+        // 처음 리스트 출력
+        for (var p = 0 * 10; p < 10; p++) {
+          if (p == this.boards.length) return;
+          this.lists.push(this.boards[p]);
+        }
+      },
+      (err) => {
+        console.log(err);
+        // TODO: alert창 띄우고, main page로 보내기
       }
-    });
+    );
   },
   methods: {
     prev() {
