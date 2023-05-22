@@ -16,24 +16,98 @@
 			<div class="p-2 w-25 flex-fill">층</div>
 			<div class="p-2 w-25 flex-fill">{{ deal.floor }}층</div>
 		</div>
+		<!-- dealLike -->
 		<div class="p-1 square">
-			<img src="@/assets/icon/empty-star.svg" alt="" class="w-100" />
+			<img
+				src="@/assets/icon/filled-star.svg"
+				v-if="starFlag"
+				class="w-100"
+				@click="dislikeDealInfo"
+			/>
+			<img src="@/assets/icon/empty-star.svg" v-else class="w-100" @click="likeDealInfo" />
 		</div>
 	</div>
 </template>
 
 <script>
+import { API } from "@/api/axios-jwt";
+import { mapActions, mapGetters } from "vuex";
+
 export default {
 	data() {
-		return {};
+		return {
+			starFlag: this.deal.dealLike,
+		};
 	},
-	props: {
-		deal: Object,
+	watch: {
+		deal(val) {
+			// console.log(val.dealLike);
+			this.starFlag = val.dealLike;
+		},
 	},
 	computed: {
 		price() {
 			return this.deal.price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
+		...mapGetters({
+			token: "getAccessToken",
+		}),
+		flag() {
+			return this.check();
+		},
+	},
+	methods: {
+		...mapActions(["setNextURL"]),
+		likeDealInfo() {
+			console.log("=== likeDealInfo ===");
+
+			if (this.token === -1) {
+				console.log("=== Access Token이 없음 ===");
+				this.setNextURL("/land");
+				console.log(this.$store.state.prevURL);
+
+				alert("로그인 하셈");
+				this.$router.push("/user/login");
+
+				return;
+			}
+
+			let http = API();
+			let dealCode = this.deal.dealCode;
+
+			http
+				.post("/house/like_deal", JSON.stringify(dealCode))
+				.then((res) => {
+					this.starFlag = true;
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		dislikeDealInfo() {
+			console.log("=== dislikeDealInfo ===");
+
+			let http = API();
+			let dealCode = this.deal.dealCode;
+
+			http
+				.delete("/house/dislike_house", {
+					data: {
+						dealCode: dealCode,
+					},
+				})
+				.then((res) => {
+					this.starFlag = false;
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+	},
+	props: {
+		deal: Object,
 	},
 };
 </script>
