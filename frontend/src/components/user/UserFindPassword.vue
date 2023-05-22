@@ -141,13 +141,13 @@ export default {
 }
 
 #submitbutton {
-  top: 280px;
+  top: 300px;
   background: rgba(217, 217, 217, 0.6);
   color: #939393;
 }
 
 #submitbutton:hover {
-  background: #cccccc;
-  color: #4b4b4b;
+  background: #6960d5;
+  color: #ffffff;
 }
 </style>

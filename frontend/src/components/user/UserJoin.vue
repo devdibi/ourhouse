@@ -1,6 +1,6 @@
 <template>
   <div id="rootDiv">
-    <form id="joinform">
+    <div id="joinform">
       <legend id="title">회원가입</legend>
       <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
       <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호" />
@@ -63,12 +63,12 @@
       <button id="joinbutton" class="button" @click="clickJoin()">
         회원가입
       </button>
-    </form>
+    </div>
   </div>
 </template>
 
 <script>
-import { getSido, getSigungu, getDong, register } from "@/api/user";
+import { getSido, getSigungu, getDong, register, emailCheck } from "@/api/user";
 
 export default {
   name: "userJoin",
@@ -200,6 +200,20 @@ export default {
         alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         return;
       }
+
+      console.log("아이디 중복 체크")
+      //아이디 중복 체크
+      emailCheck(this.user.email, ({ data }) => {
+        if (data.message == "fail") {
+          alert("이미 사용중인 이메일입니다.");
+          return;
+        }
+      },
+        () => { 
+          console.log("실패");
+          return;
+        });
+
       //회원 등록 진행
       this.user.dwellArea = this.dwellDongCode;
       this.user.favoriteArea = this.likeDongCode;

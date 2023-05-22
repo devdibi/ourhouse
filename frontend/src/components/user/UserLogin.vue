@@ -1,23 +1,16 @@
 <template>
   <div class="background">
-      <form action="submit" id="loginform">
-          <legend id="title">로그인</legend>
-          <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
-          <input
-              type="text"
-              id="password"
-              class="textbox"
-              v-model="user.password"
-              placeholder="비밀번호"
-          />
-          <input type="button" id="loginbutton" class="button" value="로그인" />
-          <input type="button" id="registerbutton" class="button" value="회원가입" @click="join" />
-
-          <div id="findpassworddiv">
-              비밀번호를 잊으셨나요?
-              <router-link to="/user/findpassword" id="findpassword">비밀번호 찾기</router-link>
-          </div>
-      </form>
+    <form action="submit" id="loginform">
+      <legend id="title">로그인</legend>
+      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
+      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호" />
+      <input type="button" id="loginbutton" class="button" value="로그인" />
+      <input type="button" id="registerbutton" class="button" value="회원가입" @click="join" />
+      <div id="findpassworddiv">
+        비밀번호를 잊으셨나요?
+        <router-link to="/user/findpassword" id="findpassword">비밀번호 찾기</router-link>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -26,18 +19,18 @@ export default {
   name: "userLogin",
   components: {},
   data() {
-      return {
-          user: {
-              email: "",
-              password: "",
-          },
-      };
-  },
-  created() {},
-  methods: {
-      join() {
-          this.$router.push({ name: "join" });
+    return {
+      user: {
+        email: "",
+        password: "",
       },
+    };
+  },
+  created() { },
+  methods: {
+    join() {
+      this.$router.push({ name: "join" });
+    },
   },
 };
 </script>
@@ -91,7 +84,7 @@ export default {
   background: #ffffff;
   background-blend-mode: color-dodge;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3),
-      0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
 }
 
