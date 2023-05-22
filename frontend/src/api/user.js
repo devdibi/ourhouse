@@ -1,4 +1,5 @@
-import { API } from "./index.js";
+import { API } from "./index.js"; 3
+import store from '@/store/store.js';
 
 const api = API();
 
@@ -38,4 +39,10 @@ function emailCheck(userEmail, success, fail) {
     .catch(fail);
 }
 
-export { getSido, getSigungu, getDong, register, randomPassword, emailCheck };
+async function getUserInfo(success, fail) {
+  api.defaults.headers["accessToken"] = store.state.prefix + store.state.accessToken;
+  console.log(store.state.prefix + store.state.accessToken)
+  await api.get(`/user/getUserInfo`).then(success).catch(fail);
+}
+
+export { getSido, getSigungu, getDong, register, randomPassword, emailCheck, getUserInfo };

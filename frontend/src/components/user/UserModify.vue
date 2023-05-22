@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { getSido, getSigungu, getDong } from "@/api/user";
+import { getSido, getSigungu, getDong, getUserInfo } from "@/api/user";
 
 export default {
   name: "userJoin",
@@ -76,15 +76,15 @@ export default {
   data() {
     return {
       passwordcheck: "",
-      nowDwellArea: "현재 거주지역",
-      nowFavofiteArea:"현재 관심지역",
+      nowDwellArea: "",
+      nowFavofiteArea: "",
       user: {
-        email: "email",
+        email: "",
         password: "",
-        name: "이름",
+        name: "",
         age: "",
-        gender: "1",
-        dwellArea: "4575025035",
+        gender: "",
+        dwellArea: "",
         favoriteArea: "",
       },
       likeSidos: [],
@@ -124,8 +124,11 @@ export default {
     );
 
     console.log("사용자 정보 얻기")
-
+    getUserInfo(({ data }) => { console.log(data); }, (e) => {
+      console.log(e);
+    })
     //사용자 정보 얻어오기 - 이메일, 이름, 나이, 성별, 관심지역(이름), 거주지역(이름)
+
   },
   methods: {
     //시도 선택시 시군구 얻어오기
