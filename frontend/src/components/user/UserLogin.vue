@@ -43,18 +43,19 @@ export default {
 	methods: {
 		...mapActions(["setToken"]),
 		join() {
-			this.$router.push({ name: "join" });
+			this.$router.push({ name: "main" });
 		},
 		async doLogin() {
 			let http = API();
 
-			http
+			await http
 				.post("/user/authenticate", JSON.stringify(this.user))
 				.then(({ data }) => {
 					console.log(data);
 					this.setToken(data);
 					console.log(this.token);
 					console.log("jwt: ", this.$store.state.accessToken);
+					this.$router.push({name : 'home'});
 				})
 				.catch((err) => console.log("error:", err));
 		},

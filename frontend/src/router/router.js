@@ -107,7 +107,6 @@ const routes = [
         path: "join",
         name: "join",
         component: () => import("@/components/user/UserJoinAgreement"),
-        
       },
       {
         path: "findpassword",
@@ -118,6 +117,11 @@ const routes = [
         path: "joinform",
         name: "joinform",
         component: () => import("@/components/user/UserJoin"),
+      },
+      {
+        path: "modify",
+        name: "modify",
+        component: () => import("@/components/user/UserModify"),
       },
     ],
   },

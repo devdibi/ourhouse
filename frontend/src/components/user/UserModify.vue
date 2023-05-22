@@ -1,10 +1,10 @@
 <template>
   <div id="rootDiv">
     <div id="joinform">
-      <legend id="title">회원가입</legend>
-      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
-      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호" />
-      <input type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="비밀번호 확인" />
+      <legend id="title">개인정보 조회 및 수정</legend>
+      <input type="email" id="email" class="textbox" v-model="user.email" readonly />
+      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호 수정" />
+      <input type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="수정할 비밀번호 확인" />
       <input type="text" id="name" class="textbox" v-model="user.name" placeholder="이름" />
       <input type="number" id="age" class="textbox" v-model="user.age" placeholder="나이" />
 
@@ -12,7 +12,7 @@
         <b-form-radio-group id="gender" class="gender" v-model="user.gender" :options="genderOptions"
           buttons></b-form-radio-group>
       </b-form-group>
-      <div id="likearea">관심지역(선택)</div>
+      <div id="likearea">관심지역 {{ nowFavofiteArea }}</div>
       <div>
         <select name="likeareasSido" id="likeareasSido" class="likeareas sido" @change="selectSido('like')"
           v-model="likeSidoCode">
@@ -36,7 +36,7 @@
         </select>
       </div>
 
-      <div id="dwellarea">거주지역(선택)</div>
+      <div id="dwellarea">거주지역 {{ nowDwellArea }}</div>
       <div>
         <select name="dwellareasSido" id="dwellareasSido" class="dwellareas sido" @change="selectSido('dwell')"
           v-model="dwellSidoCode">
@@ -60,15 +60,15 @@
           </option>
         </select>
       </div>
-      <button id="joinbutton" class="button" @click="clickJoin()">
-        회원가입
+      <button id="joinbutton" class="button" @click="clickModify()">
+        회원 정보 수정
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import { getSido, getSigungu, getDong, register, emailCheck } from "@/api/user";
+import { getSido, getSigungu, getDong } from "@/api/user";
 
 export default {
   name: "userJoin",
@@ -76,13 +76,15 @@ export default {
   data() {
     return {
       passwordcheck: "",
+      nowDwellArea: "현재 거주지역",
+      nowFavofiteArea:"현재 관심지역",
       user: {
-        email: "",
+        email: "email",
         password: "",
-        name: "",
+        name: "이름",
         age: "",
-        gender: "",
-        dwellArea: "",
+        gender: "1",
+        dwellArea: "4575025035",
         favoriteArea: "",
       },
       likeSidos: [],
@@ -105,6 +107,7 @@ export default {
     };
   },
   created() {
+    //시도 정보 얻어오기
     getSido(
       ({ data }) => {
         console.log("시도 얻어오기");
@@ -119,6 +122,10 @@ export default {
         console.log(error);
       }
     );
+
+    console.log("사용자 정보 얻기")
+
+    //사용자 정보 얻어오기 - 이메일, 이름, 나이, 성별, 관심지역(이름), 거주지역(이름)
   },
   methods: {
     //시도 선택시 시군구 얻어오기
@@ -183,56 +190,17 @@ export default {
       }
     },
 
-    //회원가입 버튼 누를 시 이벤트
-    clickJoin() {
-      if (
-        this.user.age == "" ||
-        this.user.password == "" ||
-        this.user.name == "" ||
-        this.passwordcheck == "" ||
-        this.user.email == "" ||
-        this.user.gender == ""
-      ) {
-        alert("빈 칸 없이 입력해주세요!");
-        return;
-      }
+    //회원 정보 수정 버튼 누를 시 이벤트
+    clickModify() {
       if (this.user.password != this.passwordcheck) {
         alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         return;
       }
 
-      console.log("아이디 중복 체크")
-      //아이디 중복 체크
-      emailCheck(this.user.email, ({ data }) => {
-        if (data.message == "fail") {
-          alert("이미 사용중인 이메일입니다.");
-          return;
-        }
-      },
-        () => { 
-          console.log("실패");
-          return;
-        });
-
-      //회원 등록 진행
+      //회원 정보 수정 진행
       this.user.dwellArea = this.dwellDongCode;
       this.user.favoriteArea = this.likeDongCode;
-      console.log(this.user);
-      register(
-        this.user,
-        ({ data }) => {
-          console.log(data);
-          if (data == "success") {
-            console.log("회원가입 성공");
-            this.$router.push({ path: "login" });
-          } else {
-            console.log("실패");
-          }
-        },
-        () => {
-          console.log("실패");
-        }
-      );
+      //회원 정보 전달 후 업데이트
     },
   },
 };

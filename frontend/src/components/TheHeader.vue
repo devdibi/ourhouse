@@ -14,7 +14,7 @@
             <b-nav-item link-classes="text-white" @click="moveNews()">부동산 뉴스</b-nav-item>
 
             <!-- 매매 좋아요 Nav -->
-            <b-nav-item-dropdown text="내 목록" toggle-class="text-white" v-if="this.userinfo">
+            <b-nav-item-dropdown text="내 목록" toggle-class="text-white" v-if="this.$store.getters.isLogin">
               <b-dropdown-group id="dropdown-group-1" header="부동산">
                 <b-dropdown-item href="#">관심 단지</b-dropdown-item>
                 <b-dropdown-item href="#">관심 매물</b-dropdown-item>
@@ -25,7 +25,11 @@
           </b-navbar-nav>
 
           <!-- 유저부분 Nav -->
-          <b-navbar-nav class="ml-auto" v-if="this.userinfo">
+          <b-navbar-nav class="ml-auto" v-if="this.$store.getters.isLogin">
+            <b-nav-item @click="logout()" link-classes="text-white">로그아웃</b-nav-item>
+            
+          </b-navbar-nav>
+          <b-navbar-nav class="ml-auto" v-else>
             <b-nav-item @click="moveLogin()" link-classes="text-white">로그인</b-nav-item>
             <b-nav-item @click="moveJoin()" link-classes="text-white">회원 가입</b-nav-item>
           </b-navbar-nav>
@@ -36,6 +40,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "HeaderView",
   components: {},
@@ -47,6 +52,7 @@ export default {
   },
   created() {},
   methods: {
+    ...mapActions(["setToken"]),
     moveNotice() {
       this.$router.push("/notice").catch(() => {});
     },
@@ -62,6 +68,10 @@ export default {
     moveNews() {
       this.$router.push("/news").catch(() => {});
     },
+    logout() { 
+      this.setToken(null);
+      console.log("로그아웃 완료");
+    }
   },
 };
 </script>
