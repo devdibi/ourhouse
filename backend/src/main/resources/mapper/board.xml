@@ -25,9 +25,14 @@
 
 <!-- 자유게시판 리스트 로드 -->
 <select id="getBoards" resultMap="boardDto">
-	SELECT board_no, title, content, hit, create_at, update_at, email
+	SELECT board_no, title, content, hit, update_at, email, 
+	CASE
+    WHEN TIMEDIFF(NOW(), create_at) < '01:00:00' THEN CONCAT(MINUTE(TIMEDIFF(NOW(), create_at)), '분 전')
+	WHEN TIMEDIFF(NOW(), create_at) < '24:00:00' THEN CONCAT(HOUR(TIMEDIFF(NOW(), create_at)), '시간 전')
+    ELSE DATE_FORMAT(create_at, '%Y-%m-%d')
+    END AS create_at
 	FROM board
-	ORDER BY board_no DESC
+	ORDER BY board_no DESC;
 </select>
 
 <!-- 게시글을 작성 -->
