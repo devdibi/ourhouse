@@ -48,6 +48,7 @@ public class SecurityConfiguration {
 
 				// JWT 인증없이, 접근 가능한 URL
 				.authorizeHttpRequests().antMatchers(
+						"/public/**",
 						"/notice/**",
 						"/board/**",
 						"/news/**",

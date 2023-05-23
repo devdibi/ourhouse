@@ -14,9 +14,11 @@ export default {
     return {
       map: Object,
       marker: Object,
+      markers: [],
       tmp: 1,
       markerslocations: [],
       clickMarker: null,
+      circle: new kakao.maps.Circle({}),
     };
   },
   props: {
@@ -162,7 +164,11 @@ export default {
       // this.map = new kakao.maps.Map(container, options);
       // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
       var bounds = new kakao.maps.LatLngBounds();
-
+      let b;
+      for (b = 0; b < this.markers.length; b++) {
+        this.markers[b].setMap(null);
+      }
+      this.markers = [];
       if (bus != -1) {
         let imageSrc = require("@/assets/icon/bus.png"), // 마커이미지의 주소입니다
           imageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
@@ -172,14 +178,16 @@ export default {
         for (i = 0; i < bus.length; i++) {
           // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
           let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-            markerPosition = new kakao.maps.LatLng(bus[i].gpslati, bus[i].gpslong); // 마커가 표시될 위치입니다
+            markerPosition = new kakao.maps.LatLng(bus[i].gpslati - 0.00015, bus[i].gpslong + 0.0001); // 마커가 표시될 위치입니다
 
           // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
           this.marker = new kakao.maps.Marker({
             position: markerPosition,
             image: markerImage, // 마커이미지 설정
           });
-          this.marker.setMap(this.map);
+
+          this.markers.push(this.marker);
+          this.markers[i].setMap(this.map);
 
           // LatLngBounds 객체에 좌표를 추가합니다
           bounds.extend(new kakao.maps.LatLng(bus[i].gpslati, bus[i].gpslong));
@@ -218,6 +226,27 @@ export default {
 
       // 마커가 지도 위에 표시되도록 설정합니다
       this.clickMarker.setMap(this.map);
+
+      // ** 원 표시 **
+      var centerPosition = new kakao.maps.LatLng(this.location.lat, this.location.lng); // 원의 중심좌표 입니다
+
+      if (this.circle != null) {
+        this.circle.setMap(null);
+      }
+      // 원 객체를 생성합니다
+      this.circle = new kakao.maps.Circle({
+        center: centerPosition, // 원의 중심좌표입니다
+        radius: 500, // 원의 반지름입니다 m 단위 이며 선 객체를 이용해서 얻어옵니다
+        strokeWeight: 1, // 선의 두께입니다
+        strokeColor: "#00a0e9", // 선의 색깔입니다
+        strokeOpacity: 0.1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+        strokeStyle: "solid", // 선의 스타일입니다
+        fillColor: "#00a0e9", // 채우기 색깔입니다
+        fillOpacity: 0.2, // 채우기 불투명도입니다
+      });
+
+      // 원을 지도에 표시합니다
+      this.circle.setMap(this.map);
     },
     initMap() {
       var container = document.getElementById("map");
