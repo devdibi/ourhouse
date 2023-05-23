@@ -68,37 +68,4 @@
 		WHERE email = #{email}
 	</select>
 	
-	<select id="getUserInfo" parameterType="String" resultType="userDto">
-		SELECT email, name, gender, age, dwell_area dwellArea, favorite_area favoriteArea
-		FROM user
-		WHERE email = #{email};
-	</select>
-	
-	<select id="getSidoName" parameterType="String" resultType="String">
-		SELECT name
-		FROM sido
-		WHERE sido_code = #{sido}
-	</select>
-	
-	<select id="getSigunguName" parameterType="String" resultType="String">
-		SELECT name
-		FROM sigungu
-		WHERE sigungu_code = #{sigungu}
-	</select>
-	
-	<select id="getDongName" parameterType="String" resultType="String">
-		SELECT name
-		FROM dong
-		WHERE dong_code = #{dong}
-	</select>
-	
-	<update id="updateUserInfo" parameterType="userDto">
-		UPDATE USER
-		SET name = #{name}, age = #{age}, gender = #{gender}, dwell_area = #{dwellArea}, favorite_area = #{favoriteArea}
-		<if test="password == null or password ==''">
-		, password = #{password}
-		</if>
-		WHERE email = #{email}
-	</update>
-	
 </mapper>

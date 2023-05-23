@@ -45,7 +45,7 @@ public class HouseController {
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	private final HouseService houseService;
-//	private final JwtService JwtService;
+	private final JwtService JwtService;
 
 	@ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.")
 	@GetMapping("/sido")
@@ -102,10 +102,12 @@ public class HouseController {
 
 	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력")
 	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition) {
+	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition,@RequestHeader("Authorization") String jwt) {
 		System.out.println("house 출력");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<HouseDto> houseList = new ArrayList<HouseDto>();
+		String userEmail = JwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		searchCondition.setEmail(userEmail);
 		try {
 			houseList = houseService.houseSearch(searchCondition);
 		} catch (Exception e) {
