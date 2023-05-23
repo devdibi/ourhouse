@@ -36,30 +36,14 @@
         <!-- 기본 검색 -->
         <h3>|</h3>
         <!-- 상세 검색 -->
-        <ApartmentItemOptionDateVue
-          optionName="날짜"
-          :isOpen="isOpen[0]"
-          @changeDetailOption="changeDetailOption"
-          @toggleOptionWindow="changeWindow(0)"
-        />
-        <ApartmentItemOption
-          optionName="가격대"
-          :isOpen="isOpen[1]"
-          @changeDetailOption="changeDetailOption"
-          @toggleOptionWindow="changeWindow(1)"
-        />
-        <ApartmentItemOption
-          optionName="면적"
-          :isOpen="isOpen[2]"
-          @changeDetailOption="changeDetailOption"
-          @toggleOptionWindow="changeWindow(2)"
-        />
-        <ApartmentItemOption
-          optionName="층수"
-          :isOpen="isOpen[3]"
-          @changeDetailOption="changeDetailOption"
-          @toggleOptionWindow="changeWindow(3)"
-        />
+        <ApartmentItemOptionDateVue optionName="날짜" :isOpen="isOpen[0]" @changeDetailOption="changeDetailOption"
+          @toggleOptionWindow="changeWindow(0)" />
+        <ApartmentItemOption optionName="가격대" :isOpen="isOpen[1]" @changeDetailOption="changeDetailOption"
+          @toggleOptionWindow="changeWindow(1)" />
+        <ApartmentItemOption optionName="면적" :isOpen="isOpen[2]" @changeDetailOption="changeDetailOption"
+          @toggleOptionWindow="changeWindow(2)" />
+        <ApartmentItemOption optionName="층수" :isOpen="isOpen[3]" @changeDetailOption="changeDetailOption"
+          @toggleOptionWindow="changeWindow(3)" />
         <!-- 상세 검색 -->
       </div>
       <!-- 상세 검색 Container -->
@@ -69,24 +53,14 @@
         <!-- 검색 결과 -->
         <div id="result">
           <h3 v-if="resultIsEmpty" class="text-center mt-3">검색 결과가 없습니다.</h3>
-          <ApartmentItem
-            v-else
-            v-for="(apartDealData, index) in dealData"
-            :key="index"
-            :apartDealData="apartDealData"
-            :index="index"
-            :lastClickIndex="showDetailWindowIdx"
-            :show="showDetailWindow"
-            @showDetailWindowEvent="eventShowDetailWindow"
-          />
+          <ApartmentItem v-else v-for="(apartDealData, index) in dealData" :key="index" :apartDealData="apartDealData"
+            :index="index" :lastClickIndex="showDetailWindowIdx" :show="showDetailWindow"
+            @showDetailWindowEvent="eventShowDetailWindow" />
         </div>
         <!-- 검색 결과 -->
         <!-- 검색 결과 상세 페이지 -->
-        <ApartmentItemDetail
-          v-show="showDetailWindow"
-          :showDetailWindowIdx="showDetailWindowIdx"
-          :showDetailWindowData="showDetailWindowData"
-        />
+        <ApartmentItemDetail v-show="showDetailWindow" :showDetailWindowIdx="showDetailWindowIdx"
+          :showDetailWindowData="showDetailWindowData" />
 
         <!-- 검색 결과 상세 페이지 -->
       </div>
@@ -110,100 +84,130 @@ import ApartmentItemOption from "@/components/RealEstate/ApartmentItemOption.vue
 import ApartmentItemOptionDateVue from "@/components/RealEstate/ApartmentItemOptionDate.vue";
 
 export default {
-	components: {
-		KakaoMap,
-		ApartmentItem,
-		ApartmentItemDetail,
-		// TheHeader,
-		// TheFooter,
-		ApartmentItemOption,
-		ApartmentItemOptionDateVue,
-	},
-	data() {
-		return {
-			// 검색 결과가 있는지
-			resultIsEmpty: true,
-			// 기본 검색
-			selectSido: String,
-			sidoList: Array,
-			selectSigungu: String,
-			sigunguList: Array,
-			selectDong: String,
-			dongList: Array,
-			// 아파트 위치
-			location: {
-				lat: 33.450701,
-				lng: 126.570667,
-			},
-			lastOptionIndex: -1,
-			isOpen: [false, false, false, false],
-			showDetailWindow: false,
-			showDetailWindowIdx: -1,
-			showDetailWindowData: Object,
-			areaOptionPopUpFlag: false,
-			// 검색 결과 데이터
-			dealData: Array,
-		};
-	},
-	watch: {
-		selectSido(sido) {
-			let config = {
-				method: "get", // 기본값
-				baseURL: "http://localhost:9999/house/sigungu",
-				params: {
-					sido,
-				},
-			};
-			axios(config)
-				.then(({ data }) => {
-					// console.log(data.sidoList);
-					this.sigunguList = data.sidoList;
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		},
-		selectSigungu(sigungu) {
-			console.log(sigungu);
-			let config = {
-				method: "get", // 기본값
-				baseURL: "http://localhost:9999/house/dong",
-				params: {
-					sigungu,
-				},
-			};
-			axios(config)
-				.then(({ data }) => {
-					console.log(data.sidoList);
-					this.dongList = data.dongList;
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		},
-		selectDong(dongCode) {
-			let http = API();
-			let searchCondition = {
-				dongCode : dongCode,
-			}
-			http.post("/house/", searchCondition)
-			.then(({ data }) => {
-					if (data.data.length === 0) {
-						this.resultIsEmpty = true;
-					} else {
-						this.showDetailWindow = false;
-						console.log(data.data);
-						this.resultIsEmpty = false;
-						this.dealData = data.data;
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		},
-	},
-	created() {
-		// let tmp = [];
+  components: {
+    KakaoMap,
+    ApartmentItem,
+    ApartmentItemDetail,
+    // TheHeader,
+    // TheFooter,
+    ApartmentItemOption,
+    ApartmentItemOptionDateVue,
+  },
+  data() {
+    return {
+      // 검색 결과가 있는지
+      resultIsEmpty: true,
+      // 기본 검색
+      selectSido: String,
+      sidoList: Array,
+      selectSigungu: String,
+      sigunguList: Array,
+      selectDong: String,
+      dongList: Array,
+      // 아파트 위치
+      location: {
+        lat: 33.450701,
+        lng: 126.570667,
+      },
+      lastOptionIndex: -1,
+      isOpen: [false, false, false, false],
+      showDetailWindow: false,
+      showDetailWindowIdx: -1,
+      showDetailWindowData: Object,
+      areaOptionPopUpFlag: false,
+      // 검색 결과 데이터
+      dealData: Array,
+    };
+  },
+  watch: {
+    selectSido(sido) {
+      let config = {
+        method: "get", // 기본값
+        baseURL: "http://localhost:9999/house/sigungu",
+        params: {
+          sido,
+        },
+      };
+      axios(config)
+        .then(({ data }) => {
+          // console.log(data.sidoList);
+          this.sigunguList = data.sidoList;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    selectSigungu(sigungu) {
+      console.log(sigungu);
+      let config = {
+        method: "get", // 기본값
+        baseURL: "http://localhost:9999/house/dong",
+        params: {
+          sigungu,
+        },
+      };
+      axios(config)
+        .then(({ data }) => {
+          console.log(data.sidoList);
+          this.dongList = data.dongList;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    selectDong(dongCode) {
+      let searchCondition = {
+        dongCode: dongCode,
+        //나머지 정보 추가 가능
+      }
+      //로그인 했을 시
+      if (this.$store.getters.isLogin) {
+        let http = API();
+        http.post("/house/user", searchCondition)
+          .then(({ data }) => {
+            console.log(data);
+            if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      //로그인 안 했을 시
+      else {
+        console.log("로그인 안 했을 시")
+        let config = {
+          method: "post",
+          baseURL: "http://localhost:9999/house/",
+          data: {
+            ...searchCondition
+          },
+        };
+        axios(config)
+          .then(({ data }) => {
+            if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+  },
+  created() {
+    // let tmp = [];
 
     let config = {
       method: "get", // 기본값
@@ -270,6 +274,7 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+
 #close-detail {
   position: absolute;
   /* left: 966px; */
@@ -284,6 +289,7 @@ export default {
   background-color: red;
   z-index: 2500;
 }
+
 #detail {
   position: absolute;
   top: 0;
@@ -294,6 +300,7 @@ export default {
   width: 560px;
   background: white;
 }
+
 #result {
   position: absolute;
   top: 0;
@@ -308,12 +315,14 @@ export default {
   border-bottom: none;
   overflow-y: auto;
 }
+
 #wrap-map {
   position: relative;
   background: purple;
   height: calc(100% - 56px);
   /* margin: 5px; */
 }
+
 #header {
   height: 50px;
   width: 100%;
