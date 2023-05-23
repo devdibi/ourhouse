@@ -182,18 +182,12 @@ export default {
 				});
 		},
 		selectDong(dongCode) {
-			let config = {
-				method: "post",
-				baseURL: "http://localhost:9999/house/",
-				data: {
-					dongCode,
-					// email: "",
-					// month: 1,
-					// year: 2015,
-				},
-			};
-			axios(config)
-				.then(({ data }) => {
+			let http = API();
+			let searchCondition = {
+				dongCode : dongCode,
+			}
+			http.post("/house/", searchCondition)
+			.then(({ data }) => {
 					if (data.data.length === 0) {
 						this.resultIsEmpty = true;
 					} else {

@@ -60,7 +60,7 @@
           </option>
         </select>
       </div>
-      <button id="joinbutton" class="button" @click="clickModify">
+      <button id="joinbutton" class="button" @click="clickModify()">
         회원 정보 수정
       </button>
     </div>
@@ -87,7 +87,6 @@ export default {
         dwellArea: "",
         favoriteArea: "",
       },
-
       likeSidos: [],
       likeSidoCode: "",
       likeSigungus: [],
@@ -132,6 +131,8 @@ export default {
       this.user.name = data.name;
       this.user.age = data.age;
       this.user.gender = data.gender;
+      this.user.dwellArea = data.dwellArea;
+      this.user.favoriteArea = data.favoriteArea;
       this.nowDwellArea = data.dwellAreaName;
       this.nowFavofiteArea = data.favoriteAreaName;
     }, (e) => {
@@ -205,7 +206,6 @@ export default {
 
     //회원 정보 수정 버튼 누를 시 이벤트
     clickModify() {
-      console.log("회원 정보 수정");
       if (this.user.password != this.passwordcheck) {
         alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         return;
@@ -214,7 +214,7 @@ export default {
       //회원 정보 수정 진행
       this.user.dwellArea = this.dwellDongCode;
       this.user.favoriteArea = this.likeDongCode;
-
+      //회원 정보 전달 후 업데이트
       updateUserInfo(this.user, ({ data }) => { console.log(data) }, () => { });
     },
   },

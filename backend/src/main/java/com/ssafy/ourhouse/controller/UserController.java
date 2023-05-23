@@ -227,4 +227,40 @@ public class UserController {
 		}
 	}
 
+	
+	@ApiOperation(value = "마이페이지 출력을 위한 유저 정보 반환", notes="성공/실패 메세지와 함께 현재 로그인한 사용자 정보 반환")
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<Map<String, Object>> getUserInfo(@RequestHeader("Authorization") String jwt){
+		System.out.println("jwt: " + jwt);
+		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		logger.debug("유저 정보 반환, email : {}", userEmail);
+		Map<String, Object> resultMap = null;
+		try {
+			resultMap = userService.getUserInfo(userEmail);
+			resultMap.put("message", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			resultMap = new HashMap<String, Object>();
+			resultMap.put("message", FAIL);
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		}
+	}
+	
+	@ApiOperation(value = "유저 정보 수정", notes="성공/실패 메세지 반환")
+	@PutMapping("/updateUserInfo")
+	public ResponseEntity<Map<String, Object>> updateUserInfo(@RequestHeader("Authorization") String jwt, @RequestBody UserDto user){
+		logger.debug("회원 정보 수정, email : {}", user.getEmail());
+		System.out.println(user);
+		Map<String, Object> resultMap = null;
+		try {
+			userService.updateUserInfo(user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(user);
+		return null;
+	}
+
 }

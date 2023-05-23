@@ -4,6 +4,7 @@
     <div>이메일</div>
     <div>관심지역</div>
     <div>거주지역</div>
+    <router-link to="user/modify">회원정보 수정</router-link>
     <hr />
     <div>대시보드</div>
     <div>회원정보 수정</div>

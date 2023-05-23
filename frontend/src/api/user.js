@@ -1,5 +1,4 @@
 // import { API } from "./index.js";
-3;
 import { API } from "@/api/axios-jwt";
 
 const api = API();

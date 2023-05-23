@@ -93,4 +93,51 @@ public class UserServiceImpl implements UserService {
 	public List<UserDto> loadAllUsers() throws Exception {
 		return userMapper.loadAllUsers();
 	}
+	
+	@Override
+	public Map<String, Object> getUserInfo(String email) throws Exception{
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		UserDto user = userMapper.getUserInfo(email);
+		System.out.println(user);
+		// 빈칸이 아닐 시
+		String dwellArea = user.getDwellArea();
+		if (dwellArea != null && !dwellArea.equals("")) {
+			String sido = userMapper.getSidoName(dwellArea.substring(0, 2));
+			String sigungu = userMapper.getSigunguName(dwellArea.substring(0, 5));
+			String dong = userMapper.getDongName(dwellArea);
+			resultMap.put("dwellAreaName", sido + " " + sigungu + " " + dong);
+			resultMap.put("dwellArea", dwellArea);
+		}
+		else {
+			resultMap.put("dwellArea", "");
+			resultMap.put("dwellAreaName","");
+		}
+		String favoriteArea = user.getFavoriteArea();
+		if (favoriteArea != null && !favoriteArea.equals("")) {
+			String sido = userMapper.getSidoName(favoriteArea.substring(0, 2));
+			String sigungu = userMapper.getSigunguName(favoriteArea.substring(0, 5));
+			String dong = userMapper.getDongName(favoriteArea);
+			resultMap.put("favoriteAreaName", sido + " " + sigungu + " " + dong);
+			resultMap.put("favoriteArea", favoriteArea);
+		}
+		else {
+			resultMap.put("favoriteArea", "");
+			resultMap.put("favoriteAreaName", "");
+		}
+		resultMap.put("name", user.getName());
+		resultMap.put("email", user.getEmail());
+		resultMap.put("gender", user.getGender());
+		resultMap.put("age", user.getAge());
+		return resultMap;
+	}
+
+	@Override
+	public void updateUserInfo(UserDto user) throws Exception {
+		if(user.getPassword() != null && !user.getPassword().equals("")) {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		user.setAgeGroup(user.getAge()/10);
+		userMapper.updateUserInfo(user);
+	}
+
 }
