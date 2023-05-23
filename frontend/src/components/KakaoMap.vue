@@ -200,7 +200,7 @@ export default {
 
       // 지도 중심을 이동 시킵니다
       this.map.setCenter(moveLatLon);
-      this.map.setLevel(2);
+      this.map.setLevel(3);
 
       let imageSrc = require("@/assets/icon/smarker.png"), // 마커이미지의 주소입니다
         imageSize = new kakao.maps.Size(70, 70), // 마커이미지의 크기입니다
