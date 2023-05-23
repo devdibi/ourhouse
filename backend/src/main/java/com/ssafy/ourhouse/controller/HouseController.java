@@ -102,15 +102,34 @@ public class HouseController {
 		}
 	}
 
-	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력")
-	@PostMapping("/")
+	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력 - 유저일 때")
+	@PostMapping("/user")
 	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition,@RequestHeader("Authorization") String jwt) {
-		System.out.println("house 출력");
+		System.out.println("house 출력 - 유저");
 		System.out.println(searchCondition);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<HouseDto> houseList = new ArrayList<HouseDto>();
 		String userEmail = JwtService.extractUserEmail(jwt.replace("Bearer ", ""));
 		searchCondition.setEmail(userEmail);
+		try {
+			houseList = houseService.houseSearch(searchCondition);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		}
+		resultMap.put("data", houseList);
+		resultMap.put("message", "success");
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력 - 유저가 아닐 때")
+	@PostMapping("/")
+	public ResponseEntity<Map<String, Object>> houseSearchNotUser(@RequestBody HouseSearchConditionDto searchCondition) {
+		System.out.println("house 출력 - 유저 아님");
+		System.out.println(searchCondition);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<HouseDto> houseList = new ArrayList<HouseDto>();
 		try {
 			houseList = houseService.houseSearch(searchCondition);
 		} catch (Exception e) {

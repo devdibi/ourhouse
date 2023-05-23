@@ -1,5 +1,6 @@
 package com.ssafy.ourhouse.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
 import com.ssafy.ourhouse.service.UserService;
 
@@ -252,15 +254,35 @@ public class UserController {
 	public ResponseEntity<Map<String, Object>> updateUserInfo(@RequestHeader("Authorization") String jwt, @RequestBody UserDto user){
 		logger.debug("회원 정보 수정, email : {}", user.getEmail());
 		System.out.println(user);
-		Map<String, Object> resultMap = null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			userService.updateUserInfo(user);
+			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resultMap.put("message", FAIL);
 		}
 		System.out.println(user);
-		return null;
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "유저의 관심 단지 출력", notes="유저의 관심 단지 리스트로 출력")
+	@GetMapping("/getFavoriteHouses")
+	public ResponseEntity<Map<String, Object>> getFavoriteHouses(@RequestHeader("Authorization") String jwt){
+		logger.debug("관심 단지 출력");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<HouseDto> houses = null;
+		try {
+			houses = userService.getFavoriteDeals(jwt);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("list", houses);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("list", houses);
+			resultMap.put("message", FAIL);
+		}
+		System.out.println(houses);
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 
 }

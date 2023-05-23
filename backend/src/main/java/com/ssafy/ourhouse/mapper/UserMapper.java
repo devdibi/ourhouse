@@ -7,6 +7,7 @@ import java.util.Map;
 import com.ssafy.ourhouse.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
 
 @Mapper
@@ -37,5 +38,7 @@ public interface UserMapper {
 	String getDongName(String substring) throws SQLException;
 
 	void updateUserInfo(UserDto user) throws SQLException;
+
+	List<HouseDto> getFavoriteDeals(String email) throws SQLException;
 
 }

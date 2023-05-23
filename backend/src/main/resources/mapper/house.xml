@@ -43,7 +43,7 @@
 		resultMap="houseDBDto">
 		SELECT *
 		FROM house_deal LEFT JOIN house_info USING (apt_code)
-		WHERE dong_code = #{dongCode}
+		WHERE house_info.dong_code = #{dongCode}
 		<if test="year != null and year != 0">
           AND year = #{year}
       	</if> 

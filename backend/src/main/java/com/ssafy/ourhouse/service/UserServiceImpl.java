@@ -1,6 +1,7 @@
 package com.ssafy.ourhouse.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
 import com.ssafy.ourhouse.mapper.UserMapper;
 
@@ -24,15 +26,18 @@ public class UserServiceImpl implements UserService {
 	private final UserMapper userMapper;
 	private final MailSender mailSender;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtService jwtService;
 
 	public UserServiceImpl(
 			UserMapper userMapper,
 			MailSender mailSender,
-			@Lazy PasswordEncoder passwordEncoder
+			@Lazy PasswordEncoder passwordEncoder,
+			JwtService jwtService
 	) {
 		this.userMapper = userMapper;
 		this.mailSender = mailSender;
 		this.passwordEncoder = passwordEncoder;
+		this.jwtService = jwtService;
 	}
 
 	@Override
@@ -138,6 +143,12 @@ public class UserServiceImpl implements UserService {
 		}
 		user.setAgeGroup(user.getAge()/10);
 		userMapper.updateUserInfo(user);
+	}
+
+	@Override
+	public List<HouseDto> getFavoriteDeals(String jwt) throws Exception {
+		String email = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		return userMapper.getFavoriteDeals(email);
 	}
 
 }
