@@ -12,13 +12,13 @@ import com.ssafy.ourhouse.dto.UserDto;
 @Mapper
 public interface UserMapper {
 
-    UserDto findUserByEmail(String email) throws SQLException;
+	UserDto findUserByEmail(String email) throws SQLException;
 
     void registerUser(UserDto userDto) throws SQLException;
 
-    UserDto loginUser(Map<String, String> map) throws SQLException;
+//    UserDto loginUser(Map<String, String> map) throws SQLException;
 
-    void updatePassword(Map<String, String> map) throws SQLException;
+//    void updatePassword(Map<String, String> map) throws SQLException;
 
     Boolean deleteUser(String email) throws SQLException;
 
@@ -27,5 +27,15 @@ public interface UserMapper {
     void randomPassword(Map<String, String> map) throws SQLException;
 
 	String compareName(String userEmail) throws SQLException;
+
+	UserDto getUserInfo(String email) throws SQLException;
+
+	String getSidoName(String substring) throws SQLException;
+	
+	String getSigunguName(String substring) throws SQLException;
+	
+	String getDongName(String substring) throws SQLException;
+
+	void updateUserInfo(UserDto user) throws SQLException;
 
 }

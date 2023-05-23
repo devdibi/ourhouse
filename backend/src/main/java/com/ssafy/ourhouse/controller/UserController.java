@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -72,27 +73,27 @@ public class UserController {
         return new ResponseEntity<>(jwtToken, HttpStatus.OK);
     }
 
-    // TODO: JWT 사용할 예정이기에, 나중에 제거하기!
-    @ApiOperation(value = "로그인", notes = "로그인을 위해 아이디와 비밀번호 입력, 성공시 userDto 반환, 실패 시 null 값의 userDto 반환", response = Map.class)
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto user) {
-        logger.debug("login");
-        Map<String, String> map = new HashMap<>();
-        map.put("password", user.getPassword());
-        map.put("email", user.getEmail());
-        UserDto userDto = null;
-        HttpStatus status = HttpStatus.ACCEPTED;
-        try {
-            userDto = userService.loginUser(map);
-            String jwtToken = jwtService.generateToken(userDto);
-
-            return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("로그인 실패 : {}", e);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return new ResponseEntity<String>("에러 발생", HttpStatus.NO_CONTENT);
-    }
+//    // TODO: JWT 사용할 예정이기에, 나중에 제거하기!
+//    @ApiOperation(value = "로그인", notes = "로그인을 위해 아이디와 비밀번호 입력, 성공시 userDto 반환, 실패 시 null 값의 userDto 반환", response = Map.class)
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody UserDto user) {
+//        logger.debug("login");
+//        Map<String, String> map = new HashMap<>();
+//        map.put("password", user.getPassword());
+//        map.put("email", user.getEmail());
+//        UserDto userDto = null;
+//        HttpStatus status = HttpStatus.ACCEPTED;
+//        try {
+//            userDto = userService.loginUser(map);
+//            String jwtToken = jwtService.generateToken(userDto);
+//
+//            return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
+//        } catch (Exception e) {
+//            logger.error("로그인 실패 : {}", e);
+//            status = HttpStatus.INTERNAL_SERVER_ERROR;
+//        }
+//        return new ResponseEntity<String>("에러 발생", HttpStatus.NO_CONTENT);
+//    }
 
     @ApiOperation(value = "회원가입", notes = "회원 가입 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
     @PostMapping("/register")
@@ -132,25 +133,20 @@ public class UserController {
         }
     }
 
-    //관심지역 출력
-
-    //관심 거래 출력
-
-    // 쓴 게시글 출력
-	@ApiOperation(value = "비밀번호 업데이트", notes="사용자가 원하는 비밀번호로 업데이트")
-	@PutMapping("/updatePassword")
-	public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> map) {
-		logger.debug("updatePassword info : {}", map);
-		try {
-			userService.updatePassword(map);
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
-		}
-	}
-	
-	@ApiOperation(value="유저 삭제", notes="해당 이메일의 유저를 삭제, 삭제 성공 여부에 따라 success, fail 문자열 반환", response=String.class)
+//	@ApiOperation(value = "비밀번호 업데이트", notes="사용자가 원하는 비밀번호로 업데이트")
+//	@PutMapping("/updatePassword")
+//	public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> map) {
+//		logger.debug("updatePassword info : {}", map);
+//		try {
+//			userService.updatePassword(map);
+//			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+//		}
+//	}
+//	
+	@ApiOperation(value="유저 삭제", notes="해당 이메일의 유저를 삭제(논리적), 삭제 성공 여부에 따라 success, fail 문자열 반환", response=String.class)
 	@DeleteMapping("/{email}")
 	public ResponseEntity<String> deleteUser (@PathVariable("email")  @ApiParam(value = "삭제할 유저의 이메일", required = true)String userEmail) throws Exception{
 		logger.debug("deleteUser " + userEmail);
@@ -229,5 +225,39 @@ public class UserController {
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 		}
 	}
+	
+	@ApiOperation(value = "마이페이지 출력을 위한 유저 정보 반환", notes="성공/실패 메세지와 함께 현재 로그인한 사용자 정보 반환")
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<Map<String, Object>> getUserInfo(@RequestHeader("Authorization") String jwt){
+		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		logger.debug("유저 정보 반환, email : {}", userEmail);
+		Map<String, Object> resultMap = null;
+		try {
+			resultMap = userService.getUserInfo(userEmail);
+			resultMap.put("message", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			resultMap = new HashMap<String, Object>();
+			resultMap.put("message", FAIL);
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		}
+	}
+	
+	@ApiOperation(value = "유저 정보 수정", notes="성공/실패 메세지 반환")
+	@PutMapping("/updateUserInfo")
+	public ResponseEntity<Map<String, Object>> updateUserInfo(@RequestHeader("Authorization") String jwt, @RequestBody UserDto user){
+		logger.debug("회원 정보 수정, email : {}", user.getEmail());
+		Map<String, Object> resultMap = null;
+		try {
+			userService.updateUserInfo(user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(user);
+		return null;
+	}
+	
 
 }
