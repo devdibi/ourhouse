@@ -1,91 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+
 <mapper namespace="com.ssafy.ourhouse.mapper.BoardMapper">
 
-<resultMap type="boardDto" id="boardDto">
-	<result column="board_no" property="boardNo" />
-	<result column="title" property="title"/>
-	<result column="content" property="content" />
-	<result column="hit" property="hit"/>
-	<result column="create_at" property="createDate" />
-	<result column="update_at" property="updateDate" />
-	<result column="email" property="email" />
-</resultMap>
+	<resultMap type="boardDto" id="boardDto">
+		<result column="board_no" property="boardNo" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="hit" property="hit" />
+		<result column="create_at" property="createDate" />
+		<result column="update_at" property="updateDate" />
+		<result column="email" property="email" />
+	</resultMap>
 
-<resultMap type="commentDto" id="commentDto">
-	<result column="comment_no" property="commentNo"/>
-	<result column="board_no" property="boardNo"/>
-	<result column="comment" property="comment"/>
-	<result column="email" property="email"/>
-	<result column="create_at" property="createDate"/>
-	<result column="comment_id" property="commentId"/>
-</resultMap>
+	<resultMap type="commentDto" id="commentDto">
+		<result column="comment_no" property="commentNo" />
+		<result column="board_no" property="boardNo" />
+		<result column="comment" property="comment" />
+		<result column="email" property="email" />
+		<result column="create_at" property="createDate" />
+		<result column="comment_id" property="commentId" />
+	</resultMap>
 
-<!-- 자유게시판 리스트 로드 -->
-<select id="getBoards" resultMap="boardDto">
-	SELECT board_no, title, content, hit, update_at, email, 
-	CASE
-    WHEN TIMEDIFF(NOW(), create_at) < '01:00:00' THEN CONCAT(MINUTE(TIMEDIFF(NOW(), create_at)), '분 전')
-	WHEN TIMEDIFF(NOW(), create_at) < '24:00:00' THEN CONCAT(HOUR(TIMEDIFF(NOW(), create_at)), '시간 전')
-    ELSE DATE_FORMAT(create_at, '%Y-%m-%d')
-    END AS create_at
-	FROM board
-	ORDER BY board_no DESC;
-</select>
+	<!-- 자유게시판 리스트 로드 -->
+	<select id="getBoards" resultMap="boardDto">
+		SELECT board_no, title, content, hit, update_at, email,
+		CASE
+		WHEN HOUR(TIMEDIFF(NOW(), create_at)) <![CDATA[ <= ]]> 1 THEN
+			CONCAT(MINUTE(TIMEDIFF(NOW(), create_at)), '분 전')
+		WHEN HOUR(TIMEDIFF(NOW(), create_at)) <![CDATA[ <= ]]> 24 THEN
+			CONCAT(HOUR(TIMEDIFF(NOW(), create_at)), '시간 전')
+		ELSE DATE_FORMAT(create_at, '%Y-%m-%d')
+		END AS create_at
+		FROM board
+		ORDER BY board_no DESC;
+	</select>
 
-<!-- 게시글을 작성 -->
-<insert id="writeBoard" parameterType="boardDto">
-	INSERT INTO board (title, content, email)
-	VALUES (#{title}, #{content}, #{email})
-</insert>
+	<!-- 게시글을 작성 -->
+	<insert id="writeBoard" parameterType="boardDto">
+		INSERT INTO board (title, content, email)
+		VALUES (#{title}, #{content}, #{email})
+	</insert>
 
-<!-- 게시글 조회 -->
-<select id="getBoard" resultMap="boardDto">
-	SELECT board_no, title, content, hit, create_at, update_at, email
-	FROM board
-	WHERE board_no = #{boardNo}
-</select>
+	<!-- 게시글 조회 -->
+	<select id="getBoard" resultMap="boardDto">
+		SELECT board_no, title, content, hit, create_at, update_at, email
+		FROM board
+		WHERE board_no = #{boardNo}
+	</select>
 
-<!-- 댓글 조회 -->
-<select id="getComment" resultMap="commentDto">
-	SELECT comment_no, board_no, comment, email, create_at
-	FROM comment
-	WHERE board_no = #{boardNo}
-</select>
+	<!-- 댓글 조회 -->
+	<select id="getComment" resultMap="commentDto">
+		SELECT comment_no, board_no, comment, email, create_at
+		FROM comment
+		WHERE board_no = #{boardNo}
+	</select>
 
-<!-- 게시글 수정 -->
-<update id="updateBoard" parameterType="boardDto">
-	UPDATE board 
-	SET title = #{boardDto.title}, content=#{boardDto.content}, update_at = NOW() 
-	WHERE board_no = #{boardNo}
-</update>
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="boardDto">
+		UPDATE board
+		SET title = #{boardDto.title}, content=#{boardDto.content}, update_at =
+		NOW()
+		WHERE board_no = #{boardNo}
+	</update>
 
-<!-- 게시글 삭제 -->
-<delete id="deleteBoard" parameterType="int">
-	DELETE FROM board
-	WHERE board_no = #{boardNo}
-</delete>
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM board
+		WHERE board_no = #{boardNo}
+	</delete>
 
-<!-- 조회수 추가 -->
-<update id="updateHit" parameterType="int">
-	UPDATE board
-	SET hit = hit+1
-	WHERE board_no = #{boardNo}
-</update>
+	<!-- 조회수 추가 -->
+	<update id="updateHit" parameterType="int">
+		UPDATE board
+		SET hit = hit+1
+		WHERE board_no = #{boardNo}
+	</update>
 
-<!-- 댓글 작성 -->
-<insert id="writeComment" parameterType="commentDto">
-	INSERT INTO comment (board_no, comment, email)
-	VALUES (#{boardNo}, #{comment}, #{email})
-</insert>
+	<!-- 댓글 작성 -->
+	<insert id="writeComment" parameterType="commentDto">
+		INSERT INTO comment (board_no, comment, email)
+		VALUES (#{boardNo}, #{comment}, #{email})
+	</insert>
 
-<!-- 댓글 삭제 -->
-<delete id="deleteComment" parameterType="int">
-	DELETE FROM comment
-	where comment_no = #{commentNo}
-</delete>
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="int">
+		DELETE FROM comment
+		where comment_no = #{commentNo}
+	</delete>
 
 
 
