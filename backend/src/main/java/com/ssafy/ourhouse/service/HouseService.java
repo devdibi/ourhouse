@@ -20,10 +20,10 @@ public interface HouseService {
 
 	void houseLike(Long aptCode, String jwt) throws Exception;
 
-	void dealLike(String userEmail, String dealCode) throws Exception;
+	void dealLike(Long dealCode, String jwt) throws Exception;
 	
 	void houseDislike(Long aptCode, String jwt) throws Exception;
 	
-	void dealDislike(String userEmail, String dealCode) throws Exception;
+	void dealDislike(Long dealCode, String jwt) throws Exception;
 
 }

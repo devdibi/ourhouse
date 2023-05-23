@@ -37,7 +37,15 @@ export default {
   },
   watch: {
     picker(date) {
+      console.log(`=== Date Option ===`);
       console.log(date);
+
+      let option = {
+        optionName: "날짜",
+        value: date,
+      };
+
+      this.$emit("changeDetailOption", option);
     },
   },
 };

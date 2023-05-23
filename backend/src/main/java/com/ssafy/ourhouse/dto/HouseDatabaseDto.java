@@ -53,6 +53,12 @@ public class HouseDatabaseDto {
 	@ApiModelProperty(value = "동 코드")
 	private String dongCode;
 
+	@ApiModelProperty(value = "평균 가격")
+	private String priceAvg;
+
+	@ApiModelProperty(value = "평균 면적")
+	private String areaAvg;
+
 	@Override
 	public String toString() {
 		return "HouseDatabaseDto [aptCode=" + aptCode + ", dealCode=" + dealCode + ", price=" + price + ", year=" + year

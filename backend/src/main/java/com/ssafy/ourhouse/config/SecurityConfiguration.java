@@ -46,7 +46,10 @@ public class SecurityConfiguration {
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
+				// JWT 인증없이, 접근 가능한 URL
 				.authorizeHttpRequests().antMatchers(
+						"/board/**",
+						"/news/**",
 						// 토큰 발급 URL
 						"/user/**",
 						// House

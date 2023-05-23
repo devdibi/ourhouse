@@ -29,10 +29,10 @@ public interface HouseMapper {
 
 	void houseLike(String userEmail, Long aptCode)throws SQLException;
 
-	void dealLike(String userEmail, String dealCode)throws SQLException;
+	void dealLike(String userEmail, Long dealCode)throws SQLException;
 
 	void houseDislike(String userEmail, Long aptCode)throws SQLException;
 
-	void dealDislike(String userEmail, String dealCode)throws SQLException;
+	void dealDislike(String userEmail, Long dealCode)throws SQLException;
 
 }

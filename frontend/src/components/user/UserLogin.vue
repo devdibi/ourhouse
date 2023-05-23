@@ -2,14 +2,7 @@
   <div class="background">
     <form action="submit" id="loginform">
       <legend id="title">로그인</legend>
-      <input
-        type="email"
-        id="email"
-        class="textbox"
-        v-model="user.email"
-        placeholder="이메일"
-        @keyup.enter="doLogin"
-      />
+      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" @keyup.enter="doLogin" />
       <input
         type="password"
         id="password"
@@ -18,26 +11,11 @@
         placeholder="비밀번호"
         @keyup.enter="doLogin"
       />
-      <input
-        type="button"
-        id="loginbutton"
-        class="button"
-        value="로그인"
-        :style="style"
-        @click="doLogin"
-      />
-      <input
-        type="button"
-        id="registerbutton"
-        class="button"
-        value="회원가입"
-        @click="join"
-      />
+      <input type="button" id="loginbutton" class="button" value="로그인" :style="style" @click="doLogin" />
+      <input type="button" id="registerbutton" class="button" value="회원가입" @click="join" />
       <div id="findpassworddiv">
         비밀번호를 잊으셨나요?
-        <router-link to="/user/findpassword" id="findpassword"
-          >비밀번호 찾기</router-link
-        >
+        <router-link to="/user/findpassword" id="findpassword">비밀번호 찾기</router-link>
       </div>
     </form>
   </div>
@@ -66,6 +44,7 @@ export default {
   computed: {
     ...mapGetters({
       token: "getAccessToken",
+      nextURL: "getPrevURL",
     }),
   },
   watch: {
@@ -83,23 +62,23 @@ export default {
       deep: true,
     },
   },
-
   methods: {
     ...mapActions(["setToken"]),
     join() {
-      this.$router.push({ name: "join" });
+      this.$router.push({ name: "main" });
     },
     async doLogin() {
       let http = API();
-      console.log(this.user);
+
       await http
         .post("/user/authenticate", JSON.stringify(this.user))
         .then(({ data }) => {
-          console.log(data);
+          console.log("서버로부터 받은 Token:", data);
           this.setToken(data);
-          console.log(this.token);
-          console.log("jwt: ", this.$store.state.accessToken);
-          this.$router.push({ name: "main" });
+          console.log("저장된 Token:", this.token);
+          // console.log("jwt: ", this.$store.state.accessToken);
+
+          this.$router.push(this.nextURL);
         })
         .catch((err) => console.log("error:", err));
     },
@@ -155,8 +134,7 @@ export default {
   text-align: center;
   background: #ffffff;
   background-blend-mode: color-dodge;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3),
-    0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
 }
 

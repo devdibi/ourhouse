@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.ssafy.ourhouse.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -19,23 +17,21 @@ import org.springframework.stereotype.Service;
 import com.ssafy.ourhouse.dto.UserDto;
 import com.ssafy.ourhouse.mapper.UserMapper;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
-	private UserMapper userMapper;
-	private MailSender mailSender;
+	private final UserMapper userMapper;
+	private final MailSender mailSender;
 	private final PasswordEncoder passwordEncoder;
 
-	public UserServiceImpl(UserMapper userMapper, MailSender mailSender, PasswordEncoder passwordEncoder) {
-		super();
+	public UserServiceImpl(
+			UserMapper userMapper,
+			MailSender mailSender,
+			@Lazy PasswordEncoder passwordEncoder
+	) {
 		this.userMapper = userMapper;
 		this.mailSender = mailSender;
-		this.passwordEncoder = passwordEncoder;
-	}
-
-	@Autowired
-	public UserServiceImpl(UserMapper userMapper, @Lazy PasswordEncoder passwordEncoder) {
-		this.userMapper = userMapper;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -69,7 +65,7 @@ public class UserServiceImpl implements UserService {
 		// 이메일로 전송
 		// 이메일 세팅
 		SimpleMailMessage smm = new SimpleMailMessage();
-		MailSender sender;
+//		MailSender sender;
 		smm.setFrom("ourhouseproject2023@gmail.com");
 		smm.setTo(map.get("email"));
 		smm.setSubject("새 비밀번호가 전송되었습니다.");
