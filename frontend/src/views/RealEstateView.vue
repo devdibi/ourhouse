@@ -76,6 +76,9 @@
 					@changeDetailOption="changeDetailOption"
 					@toggleOptionWindow="changeWindow(3)"
 				/>
+				<div>
+					<button class="btn btn-primary ml-2" @click="getBusStopInfo">test</button>
+				</div>
 				<!-- 상세 검색 -->
 			</div>
 			<!-- 상세 검색 Container -->
@@ -257,6 +260,9 @@ export default {
 			});
 	},
 	methods: {
+		getBusStopInfo() {
+			console.log("=== 버스 정류장 정보 불러오기 ===");
+		},
 		changeDetailOption(option) {
 			console.log("=== RealEstateView ===");
 			console.log(option);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.ourhouse.dto.BusStopDto;
 import com.ssafy.ourhouse.dto.DealDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
@@ -35,4 +36,5 @@ public interface HouseMapper {
 
 	void dealDislike(String userEmail, Long dealCode)throws SQLException;
 
+	List<BusStopDto> getNearByBusStop() throws Exception;
 }

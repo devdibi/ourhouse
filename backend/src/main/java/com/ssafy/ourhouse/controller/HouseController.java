@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.ourhouse.dto.BusStopDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
@@ -205,5 +206,10 @@ public class HouseController {
 			resultMap.put("message", "fail");
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
+	}
+	
+	@PostMapping
+	public List<BusStopDto> getBusStations() throws Exception {
+		return houseService.getBusStation();
 	}
 }

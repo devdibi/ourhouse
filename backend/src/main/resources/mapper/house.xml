@@ -123,5 +123,9 @@
 		DELETE FROM favorite_deal
 		WHERE email=#{userEmail} AND deal_code=#{dealCode}
 	</delete>
+	
+	<select id="getNearByBusStop" resultType="busStopDto">
+		select * from busstop;
+	</select>
 
 </mapper>
