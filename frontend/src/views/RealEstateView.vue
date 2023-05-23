@@ -207,6 +207,7 @@ export default {
 				baseURL: "http://localhost:9999/house/",
 				data: {
 					dongCode,
+					minFloor: 10,
 					// email: "",
 					// month: 1,
 					// year: 2015,
