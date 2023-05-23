@@ -88,19 +88,19 @@
 
 	<select id="getSido" resultType="sidoDto">
 		SELECT sido_code sidoCode, name
-		FROM sido;
+		FROM sido order by name asc;
 	</select>
 
 	<select id="getSigungu" parameterType="String" resultType="sigunguDto">
 		SELECT sido_code sidoCode, sigungu_code sigunguCode, name
 		FROM sigungu
-		WHERE sido_code = #{sido};
+		WHERE sido_code = #{sido} order by name asc;
 	</select>
 
 	<select id="getDong" parameterType="String" resultMap="dongDtoMap">
 		SELECT dong_code, sigungu_code, name, sido_code
 		FROM dong
-		WHERE sigungu_code = #{sigungu};
+		WHERE sigungu_code = #{sigungu} order by name asc;
 	</select>
 
 	<insert id="houseLike" parameterType="Map">
