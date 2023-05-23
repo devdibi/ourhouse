@@ -13,6 +13,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.ourhouse.domain.Role;
 import com.ssafy.ourhouse.dto.UserDto;
 import com.ssafy.ourhouse.mapper.UserMapper;
 
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void registerUser(UserDto userDto) throws Exception {
 		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		userDto.setRole(Role.USER);
 		userMapper.registerUser(userDto);
 	}
 

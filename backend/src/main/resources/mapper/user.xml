@@ -13,8 +13,8 @@
 	<insert id="registerUser" parameterType="userDto">
 		<choose>
 			<when test="(dwellArea == null or dwellArea == '') and (favoriteArea == null or favoriteArea == '')">
-				INSERT INTO User (email, password, name, gender, age, age_group, join_date)
-				VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW())
+				INSERT INTO User (email, password, name, gender, age, age_group, join_date, role)
+				VALUES (#{email}, #{password}, #{name}, #{gender}, #{age}, #{ageGroup}, NOW(), #{role})
 			</when>
 			<when test="dwellArea == null or dwellArea == ''">
 				INSERT INTO User (email, password, name, gender, age, age_group, favorite_area, join_date)
