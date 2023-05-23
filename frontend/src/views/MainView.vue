@@ -49,6 +49,10 @@
 				></v-select>
 			</div>
 		</div>
+		<div id="icon-navbar">
+			<!-- 공지사항, 자유게시판, 부동산뉴스 -->
+		</div>
+		<div id="main-stats-box"></div>
 	</div>
 </template>
 
@@ -173,5 +177,17 @@ export default {
 	left: 50%;
 	transform: translate(-50%, 0);
 	display: flex;
+}
+
+#icon-navbar {
+	width: 100%;
+	height: 250px;
+	border: 1px black solid;
+}
+
+#main-stats-box {
+	width: 100%;
+	height: 400px;
+	border: 1px black solid;
 }
 </style>
