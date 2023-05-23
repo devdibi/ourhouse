@@ -15,6 +15,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
 import com.ssafy.ourhouse.mapper.UserMapper;
@@ -146,7 +147,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<HouseDto> getFavoriteDeals(String jwt) throws Exception {
+	public List<HouseDto> getFavoriteHouses(String jwt) throws Exception {
+		String email = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		return userMapper.getFavoriteHouses(email);
+	}
+
+	@Override
+	public List<HouseDatabaseDto> getFavoriteDeals(String jwt) throws Exception {
 		String email = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
 		return userMapper.getFavoriteDeals(email);
 	}

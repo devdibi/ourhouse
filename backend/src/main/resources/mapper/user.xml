@@ -101,9 +101,17 @@
 		WHERE email = #{email}
 	</update>
 	
-	<select id="getFavoriteDeals" parameterType="String" resultType="houseDto">
+	<select id="getFavoriteHouses" parameterType="String" resultType="houseDto">
 		SELECT apt_code aptCode, build_year buildYear, name, jibun_address jibunAddress, road_address roadAddress, lng, lat, dong_code dongCode
 		FROM favorite_house LEFT JOIN house_info USING (apt_code)
+		WHERE email = #{email};
+	</select>
+	
+	<select id="getFavoriteDeals" parameterType="String" resultType="houseDatabaseDto">
+		SELECT favorite_deal.deal_code dealCode, price, year, month, day, area, floor, favorite_deal.apt_code aptCode, 
+		build_year buildYear, name, jibun_address jibunAddress, road_address roadAddress, lng, lat, house_deal.dong_code
+		FROM favorite_deal LEFT JOIN house_deal ON favorite_deal.deal_code = house_deal.deal_code
+		LEFT JOIN house_info ON favorite_deal.apt_code = house_info.apt_code
 		WHERE email = #{email};
 	</select>
 	
