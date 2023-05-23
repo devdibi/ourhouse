@@ -1,24 +1,39 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <LineChartGenerator :options="options" :data="chartData" style="height: 300px" />
   </div>
 </template>
 <script>
 import { Line as LineChartGenerator } from "vue-chartjs";
-
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement } from "chart.js";
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement);
 export default {
   name: "LineChart",
   components: { LineChartGenerator },
+  props: {
+    year: {
+      type: Array,
+    },
+    average: {
+      type: Array,
+    },
+    dong: {
+      type: String,
+    },
+  },
   data() {
     return {
-      region: "",
-      value: [40, 0, 10, 40, 39, 80, 100, 70],
       chartData: {
-        labels: ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-        datasets: [],
+        labels: this.year,
+        datasets: [
+          {
+            label: this.dong + "의 연도별 평균 거래가격 추세",
+            data: this.average,
+            backgroundColor: "rgba(148, 76, 249, 0.7)",
+            borderColor: "#d9d9d9",
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -26,14 +41,7 @@ export default {
       },
     };
   },
-  created() {
-    this.region = "화북동";
-    this.chartData.datasets.push({
-      label: this.region + "의 연도별 평균 거래가격 추세",
-      backgroundColor: "#f87979",
-      data: this.value,
-    });
-  },
+  created() {},
   methods: {},
 };
 </script>

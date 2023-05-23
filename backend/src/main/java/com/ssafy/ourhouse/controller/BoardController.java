@@ -111,7 +111,6 @@ public class BoardController {
 	@ApiOperation(value="자유게시판에 글을 작성해보아요")
 	@PostMapping("/")
 	public ResponseEntity<String> writeBoard(@RequestBody BoardDto boardDto){
-		boardDto.setEmail(jwtService.extractUserEmail(boardDto.getEmail()));
 		logger.debug("boardDto info: {}", boardDto);
 		try {
 			boardService.writeBoard(boardDto);

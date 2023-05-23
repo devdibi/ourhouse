@@ -71,8 +71,8 @@ public class NewsController {
 	
 	// hit 추가
 	@ApiOperation(value="뉴스 조회수 추가")
-	@PutMapping("/")
-	public ResponseEntity<String> updateBoard(int newsNo){
+	@PutMapping("/{newsNo}")
+	public ResponseEntity<String> updateBoard(@PathVariable int newsNo){
 		logger.info("뉴스 조회수 추가");
 		try {
 			newsService.updateHit(newsNo);

@@ -42,6 +42,7 @@ export default {
     // 게시글 작성
     boardwrite() {
       // 더미데이터(유저 추가후 수정 필요)
+      // 토큰 값으로 전송
       this.board.email = "test";
 
       // axios 게시글 작성
