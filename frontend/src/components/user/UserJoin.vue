@@ -231,8 +231,9 @@ export default {
           return;
         }
       },
-        () => { 
-          console.log("실패");
+        (e) => { 
+          console.log("아이디 중복 확인 실패");
+          console.log(e);
           return;
         });
 
