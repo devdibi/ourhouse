@@ -238,6 +238,7 @@ export default {
         });
 
       //회원 등록 진행
+      console.log("회원 등록 진행")
       this.user.dwellArea = this.dwellDongCode;
       this.user.favoriteArea = this.likeDongCode;
       console.log(this.user);

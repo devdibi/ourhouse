@@ -104,6 +104,7 @@ public class HouseController {
 	@PostMapping("/")
 	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition,@RequestHeader("Authorization") String jwt) {
 		System.out.println("house 출력");
+		System.out.println(searchCondition);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<HouseDto> houseList = new ArrayList<HouseDto>();
 		String userEmail = JwtService.extractUserEmail(jwt.replace("Bearer ", ""));

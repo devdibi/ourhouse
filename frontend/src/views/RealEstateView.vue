@@ -118,6 +118,7 @@
 
 <script>
 import axios from "axios";
+import { API } from "@/api/axios-jwt";
 import KakaoMap from "@/components/KakaoMap.vue";
 import ApartmentItem from "@/components/RealEstate/ApartmentItem.vue";
 import ApartmentItemDetail from "@/components/RealEstate/ApartmentItemDetail.vue";
@@ -196,18 +197,13 @@ export default {
 				});
 		},
 		selectDong(dongCode) {
-			let config = {
-				method: "post",
-				baseURL: "http://localhost:9999/house/",
-				data: {
-					dongCode,
-					// email: "",
-					// month: 1,
-					// year: 2015,
-				},
-			};
-			axios(config)
+			let http = API();
+			let searchCondition = {
+				dongCode : dongCode,
+			}
+			http.post("/house/", searchCondition)
 				.then(({ data }) => {
+					console.log(data);
 					if (data.data.length === 0) {
 						this.resultIsEmpty = true;
 					} else {
@@ -220,6 +216,30 @@ export default {
 				.catch((err) => {
 					console.log(err);
 				});
+			// let config = {
+			// 	method: "post",
+			// 	baseURL: "http://localhost:9999/house/",
+			// 	data: {
+			// 		dongCode,
+			// 		// email: "",
+			// 		// month: 1,
+			// 		// year: 2015,
+			// 	},
+			// };
+			// axios(config)
+			// 	.then(({ data }) => {
+			// 		if (data.data.length === 0) {
+			// 			this.resultIsEmpty = true;
+			// 		} else {
+			// 			this.showDetailWindow = false;
+			// 			console.log(data.data);
+			// 			this.resultIsEmpty = false;
+			// 			this.dealData = data.data;
+			// 		}
+			// 	})
+			// 	.catch((err) => {
+			// 		console.log(err);
+			// 	});
 		},
 	},
 	created() {

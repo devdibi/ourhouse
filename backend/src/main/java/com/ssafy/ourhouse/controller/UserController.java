@@ -104,9 +104,8 @@ public class UserController {
         logger.debug("userDto info : {}", userDto);
         try {
             userService.registerUser(userDto);
-            String jwtToken = jwtService.generateToken(userDto);
-
-            return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
+//            String jwtToken = jwtService.generateToken(userDto);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
@@ -133,23 +132,18 @@ public class UserController {
         }
     }
 
-    //관심지역 출력
-
-    //관심 거래 출력
-
-    // 쓴 게시글 출력
-	@ApiOperation(value = "비밀번호 업데이트", notes="사용자가 원하는 비밀번호로 업데이트")
-	@PutMapping("/updatePassword")
-	public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> map) {
-		logger.debug("updatePassword info : {}", map);
-		try {
-			userService.updatePassword(map);
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
-		}
-	}
+//	@ApiOperation(value = "비밀번호 업데이트", notes="사용자가 원하는 비밀번호로 업데이트")
+//	@PutMapping("/updatePassword")
+//	public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> map) {
+//		logger.debug("updatePassword info : {}", map);
+//		try {
+//			userService.updatePassword(map);
+//			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+//		}
+//	}
 	
 	@ApiOperation(value="유저 삭제", notes="해당 이메일의 유저를 삭제, 삭제 성공 여부에 따라 success, fail 문자열 반환", response=String.class)
 	@DeleteMapping("/{email}")
@@ -220,7 +214,9 @@ public class UserController {
 			System.out.println(name);
 			if(name==null || name.equals("")) {
 				resultMap.put("message", SUCCESS);
+				logger.debug("존재하지 않음");
 			}else {
+				logger.debug("존재함");
 				resultMap.put("message", FAIL);				
 			}
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);			
