@@ -75,9 +75,8 @@ export default {
         if (this.user.email == "" || this.user.password == "") {
           this.style.background = "rgba(217, 217, 217, 0.6)";
           this.style.color = "#939393";
-        } else {
+        } else {  //칸 다 채워짐 - 보라
           this.style.background = "#6960d5";
-          //칸 다 채워짐
           this.style.color = "#ffffff";
         }
       },

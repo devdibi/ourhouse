@@ -37,7 +37,7 @@
           </b-form-checkbox>
         </div>
         <input type="button" id="previousbtn" value="이전" class="button" @click="previous">
-        <input type="button" id="nextbtn" value="다음" class="button" @click="next">
+        <input type="button" id="nextbtn" value="다음" class="button" @click="next" :style="style">
       </div>
     </div>
   </div>
@@ -54,9 +54,28 @@ export default {
       status3: "전체 동의",
       text1: "정보 동의 임시 텍스트",
       text2: "마케팅 정보 동의 임시 텍스트",
+      style: {
+        //기본: 회색
+        background: "rgba(217, 217, 217, 0.6)",
+        color: "#939393",
+      },
     };
   },
   created() { },
+  watch: {
+    status1: {
+      handler: function () {
+        //빈칸 있을 때 - 회색
+        if (this.status1 == "동의하지 않음") {
+          this.style.background = "rgba(217, 217, 217, 0.6)";
+          this.style.color = "#939393";
+        } else {  //동의됨 - 보라
+          this.style.background = "#6960d5";
+          this.style.color = "#ffffff";
+        }
+      },
+    },
+  },
   methods: {
     checkAll() {
       this.status1 = "동의함";
