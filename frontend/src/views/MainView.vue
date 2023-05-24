@@ -18,79 +18,37 @@
 		</div>
 		<!-- 공지사항, 자유게시판, 부동산뉴스 시작-->
 		<div id="icon-navbar">
-			<router-link to="/notice/list">
-				<div>
+			<div class="iconContainer">
+				<router-link to="/notice/list">
 					<img src="@/assets/icon/notice_icon.png" alt="공지 게시판" id="noticeIcon">
-					<label for="noticeIcon">공지사항</label>
-					<p>공지사항 바로가기</p>
-				</div>
-			</router-link>
-			<router-link to="/board/list">
-				<div>
+					<p>공지사항</p>
+				</router-link>
+			</div>
+			<div class="iconContainer">
+				<router-link to="/board/list">
 					<img src="@/assets/icon/board_icon.png" alt="자유 게시판" id="boardIcon">
-					<p>자유 게시판 바로가기</p>
-				</div>
-			</router-link>
-			<router-link to="/news">
-				<div>
+					<p>자유 게시판</p>
+				</router-link>
+			</div>
+			<div class="iconContainer">
+				<router-link to="/news">
 					<img src="@/assets/icon/news_icon.png" alt="뉴스" id="newsIcon">
-					<p>뉴스 바로가기</p>
-				</div>
-			</router-link>
+					<p>뉴스</p>
+				</router-link>
+			</div>
 		</div>
 		<!-- 좋아요 많은 아파트, 좋아요 많은 거래 상위 5개 출력 -->
 		<div id="main-stats-box">
 			<!-- 아파트 랭킹 출력 -->
 			<div id="aptContainer">
-				<h3>인기 아파트 Top 5</h3>
-				<table>
-					<caption>인기 아파트 Top 5</caption>
-					<thead>
-						<th>랭킹</th>
-						<th>주소</th>
-						<th>아파트 이름</th>
-						<th>평균 면적</th>
-						<th>평균 가격</th>
-						<th>좋아요 수</th>
-					</thead>
-					<tbody>
-						<tr v-for="(apt, index) in topApts" v-bind:key="apt">
-						<td>{{index+1}}</td>
-						<td>{{apt.sidoName}} {{apt.gugunName}} {{apt.jibunAddress}}</td>
-						<td>{{ apt.aptName }}</td>
-						<td>{{ apt.areaAvg }}m2</td>
-						<td>{{ apt.priceAvg }}(만원)</td>
-						<td>{{ apt.likeNums }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<h3 id="aptTitle">아파트 랭킹 Top 5</h3>
+				<b-table :items="topApts"></b-table>
 			</div>
-		</div>
-		<div id="dealContianer">
 			<!-- 거래 랭킹 출력 -->
-			<table>
-				<caption>인기 거래 Top 5</caption>
-					<thead>
-						<th>랭킹</th>
-						<th>주소</th>
-						<th>아파트 이름</th>
-						<th>층수</th>
-						<th>면적</th>
-						<th>가격</th>
-						<th>좋아요 수</th>
-					</thead>
-					<tbody>
-						<tr v-for="(deal, index) in topDeals" v-bind:key="deal">
-						<td>{{index+1}}</td>
-						<td>{{deal.sidoName}} {{deal.gugunName}} {{deal.jibunAddress}}</td>
-						<td>{{ deal.aptName }}</td>
-						<td>{{ deal.floor }}층</td>
-						<td>{{ deal.area }}m2</td>
-						<td>{{ deal.price }}(만원)</td>
-						<td>{{ deal.likeNums }}</td>
-						</tr>
-					</tbody>
-				</table>
+			<div id="dealContainer">
+				<h3 id="dealTitle">거래 랭킹 Top 5</h3>
+				<b-table :items="topDeals"></b-table>
+			</div>
 		</div>
 	</div>
 </template>
@@ -127,20 +85,30 @@ export default {
 				console.log(err);
 			});
 
+		//아파트 랭킹 불러오기
 		config = {
 			method: "get",
 			baseURL: "http://localhost:9999/house/topapt",
 		}
 		axios(config)
 			.then(({ data }) => {
-				if (data.message == "success") { 
-					this.topApts = data.houses;
-					console.log(this.topApts);
+				if (data.message == "success") {
+					for (var i = 0; i < 5; i++){
+						var tmpApt = {
+							"순위":i+1,
+							"주소": data.houses[i].sidoName + data.houses[i].gugunName + data.houses[i].jibunAddress,
+							"아파트 이름": data.houses[i].aptName,
+							"평균 가격":data.houses[i].priceAvg + " 만원",
+							"평균 면적": data.houses[i].areaAvg + "m2",
+							"좋아요 수": data.houses[i].likeNums
+						}
+						this.topApts.push(tmpApt);
+					}
 				}
 			})
 			.catch((err) => {
 				console.log(err)
-			});			
+			});
 
 		config = {
 			method: "get",
@@ -148,14 +116,24 @@ export default {
 		}
 		axios(config)
 			.then(({ data }) => {
-				if (data.message == "success") { 
-					this.topDeals = data.deals;
-					console.log(this.topDeals);
+				if (data.message == "success") {
+					for (var i = 0; i < 5; i++){
+						var tmpDeal = {
+							"순위":i+1,
+							"주소": data.deals[i].sidoName + data.deals[i].gugunName + data.deals[i].jibunAddress,
+							"아파트 이름": data.deals[i].aptName,
+							"층":data.deals[i].floor,
+							"가격":data.deals[i].price + " 만원",
+							"면적": data.deals[i].area + "m2",
+							"좋아요 수": data.deals[i].likeNums
+						}
+						this.topDeals.push(tmpDeal);
+					}
 				}
 			})
 			.catch((err) => {
 				console.log(err)
-			});		
+			});
 
 	},
 	methods: {},
@@ -209,6 +187,7 @@ export default {
 * {
 	font-family: 'Noto Sans';
 	font-style: normal;
+	color: #929292;;
 }
 
 a {
@@ -268,21 +247,50 @@ a:hover {
 
 #icon-navbar {
 	width: 100%;
+	max-width: 1000px;
 	height: 250px;
-	/* border: 1px black solid; */
+	margin: auto;
+	padding-top: 50px;
 }
 
-#main-stats-box {
-	width: 100%;
-	height: 400px;
-	/* border: 1px black solid; */
+.iconContainer {
+	float: left;
+	width: 33%;
+	margin-top: 50px; 
+	margin-bottom: 50px;
 }
 
 #newsIcon,
 #noticeIcon,
 #boardIcon {
 	display: inline-flex;
-	position: inherit;
-	width: 10%;
+	width: auto;
+	max-width: 160px;
+	margin: auto;
+  justify-content: center;
+  align-items: center;
+	padding-bottom: 20px;
 }
+
+#main-stats-box {
+	width: 100%;
+}
+
+#aptContainer, 
+#dealContainer{
+	display: inline-flex;
+	margin: auto;
+	margin-bottom: 50px;
+}
+
+#aptTable, #dealTable{
+	text-align: center;
+	padding: 20px;
+}
+
+#dealTitle, #aptTitle{
+	color: #6a60d5ad;
+	font-weight:bold;
+}
+
 </style>
