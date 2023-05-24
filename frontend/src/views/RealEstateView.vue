@@ -105,6 +105,7 @@
 					v-show="showDetailWindow"
 					:showDetailWindowIdx="showDetailWindowIdx"
 					:showDetailWindowData="showDetailWindowData"
+					@sortEvent="sortEvent"
 				/>
 
 				<!-- 이미지 마커 표시 -->
@@ -291,6 +292,18 @@ export default {
 			});
 	},
 	methods: {
+		sortEvent() {
+			// this.showDetailWindowData.deals.sort(function (o1, o2) {
+			// 	return o1.area - o2.area;
+			// });
+			this.showDetailWindowData.deals.sort(function (o1, o2) {
+				if (o1.year === o2.year) {
+					return -(o1.month - o2.month);
+				}
+
+				return -(o1.year - o2.year);
+			});
+		},
 		markerClick(option) {
 			this.clickOption = option;
 			console.log(this.clickOption);
