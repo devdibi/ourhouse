@@ -1,5 +1,5 @@
-import { API } from "./index.js"; 3
-import store from '@/store/store.js';
+// import { API } from "./index.js";
+import { API } from "@/api/axios-jwt";
 
 const api = API();
 
@@ -39,10 +39,31 @@ function emailCheck(userEmail, success, fail) {
     .catch(fail);
 }
 
-async function getUserInfo(success, fail) {
-  api.defaults.headers["accessToken"] = store.state.prefix + store.state.accessToken;
-  console.log(store.state.prefix + store.state.accessToken)
-  await api.get(`/user/getUserInfo`).then(success).catch(fail);
+function getUserInfo(success, fail) {
+  api.get(`/user/getUserInfo`).then(success).catch(fail);
 }
 
-export { getSido, getSigungu, getDong, register, randomPassword, emailCheck, getUserInfo };
+async function updateUserInfo(user, success, fail) {
+  await api.put(`/user/updateUserInfo`, JSON.stringify(user)).then(success).catch(fail);
+}
+
+function getFavoriteDeals(success, fail) {
+  api.get(`/user/getFavoriteDeals`).then(success).catch(fail);
+}
+
+function getFavoriteHouses(success, fail) {
+  api.get(`/user/getFavoriteHouses`).then(success).catch(fail);
+}
+
+export {
+  getSido,
+  getSigungu,
+  getDong,
+  register,
+  randomPassword,
+  emailCheck,
+  getUserInfo,
+  updateUserInfo,
+  getFavoriteDeals,
+  getFavoriteHouses,
+};

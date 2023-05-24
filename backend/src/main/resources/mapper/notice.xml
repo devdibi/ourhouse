@@ -16,11 +16,22 @@
 
 
 
-<!-- 자유게시판 리스트 로드 -->
+<!-- 공지사항 리스트 로드 -->
 <select id="getNotices" resultMap="noticeDto">
-	SELECT notice_no, title, content, hit, create_at, update_at, email
+	SELECT notice_no, title, content, hit, update_at, email,
+	CASE
+		WHEN HOUR(TIMEDIFF(NOW(), create_at)) <![CDATA[ <= ]]> 1 THEN
+			CONCAT(MINUTE(TIMEDIFF(NOW(), create_at)), '분 전')
+		WHEN HOUR(TIMEDIFF(NOW(), create_at)) <![CDATA[ <= ]]> 24 THEN
+			CONCAT(HOUR(TIMEDIFF(NOW(), create_at)), '시간 전')
+		ELSE DATE_FORMAT(create_at, '%Y-%m-%d')
+		END AS create_at
 	FROM notice
 	ORDER BY notice_no DESC
+
+	<!-- SELECT notice_no, title, content, hit, update_at, email, create_at
+	FROM notice
+	ORDER BY notice_no DESC -->
 </select>
 
 <!-- 게시글을 작성 -->

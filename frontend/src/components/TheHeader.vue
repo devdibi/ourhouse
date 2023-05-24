@@ -16,8 +16,8 @@
             <!-- 매매 좋아요 Nav -->
             <b-nav-item-dropdown text="내 목록" toggle-class="text-white" v-if="this.$store.getters.isLogin">
               <b-dropdown-group id="dropdown-group-1" header="부동산">
-                <b-dropdown-item href="#">관심 단지</b-dropdown-item>
-                <b-dropdown-item href="#">관심 매물</b-dropdown-item>
+                <b-dropdown-item @click="moveLikeApt()">관심 단지</b-dropdown-item>
+                <b-dropdown-item @click="moveLikeDeal()">관심 매물</b-dropdown-item>
               </b-dropdown-group>
               <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item @click="moveDashBoard()">마이 페이지</b-dropdown-item>
@@ -65,6 +65,12 @@ export default {
     },
     moveNews() {
       this.$router.push("/news").catch(() => {});
+    },
+    moveLikeApt() { 
+      this.$router.push("/user/likeapt").catch(() => {});
+    },
+    moveLikeDeal() { 
+      this.$router.push("/user/likedeal").catch(() => {});
     },
     logout() {
       this.setToken(null);

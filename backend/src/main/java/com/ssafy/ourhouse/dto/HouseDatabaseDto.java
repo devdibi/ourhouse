@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @ApiModel(value = "HouseDatabaseDto : DB에서 거래 정보를 받아올 때 쓰는 Dto", 
-	description = "DB에서 house_info와 house_deal을 join해 한꺼번에 받아올 때 쓰는 Dto, 서비스단까지만 쓰임")
+	description = "DB에서 house_info와 house_deal을 join해 한꺼번에 받아올 때 쓰는 Dto")
 public class HouseDatabaseDto {
 
 	@ApiModelProperty(value = "아파트 코드")

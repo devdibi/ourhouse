@@ -128,6 +128,16 @@ const routes = [
         name: "modify",
         component: () => import("@/components/user/UserModify"),
       },
+      {
+        path: "likeapt",
+        name: "likeapt",
+        component: () => import("@/components/user/UserLikeApt"),
+      },
+      {
+        path: "likedeal",
+        name: "likedeal",
+        component: () => import("@/components/user/UserLikeDeal"),
+      },
     ],
   },
   {
@@ -139,6 +149,11 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: () => import("@/views/DashBoard.vue"),
+  },
+  {
+    path: "/admin",
+    name: "admin",
+    component: () => import("@/views/AdminView.vue"),
   },
 ];
 

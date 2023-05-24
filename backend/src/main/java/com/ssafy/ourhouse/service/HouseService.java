@@ -2,6 +2,9 @@ package com.ssafy.ourhouse.service;
 
 import java.util.List;
 
+import com.ssafy.ourhouse.dto.AptInfoDto;
+import com.ssafy.ourhouse.dto.BusStopDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
@@ -25,5 +28,11 @@ public interface HouseService {
 	void houseDislike(Long aptCode, String jwt) throws Exception;
 	
 	void dealDislike(Long dealCode, String jwt) throws Exception;
+	
+	List<BusStopDto> getBusStation() throws Exception;
+	
+	List<DealInfoDto> getTop5Deals() throws Exception;
+
+	List<AptInfoDto> getTop5Apts() throws Exception;
 
 }

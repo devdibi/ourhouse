@@ -2,11 +2,11 @@
   <div id="rootDiv">
     <div id="joinform">
       <legend id="title">회원가입</legend>
-      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" />
-      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호" />
-      <input type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="비밀번호 확인" />
-      <input type="text" id="name" class="textbox" v-model="user.name" placeholder="이름" />
-      <input type="number" id="age" class="textbox" v-model="user.age" placeholder="나이" />
+      <input type="email" id="email" class="textbox" v-model="user.email" placeholder="이메일" @keyup.enter="clickJoin" />
+      <input type="password" id="password" class="textbox" v-model="user.password" placeholder="비밀번호" @keyup.enter="clickJoin"/>
+      <input type="password" id="passwordcheck" class="textbox" v-model="passwordcheck" placeholder="비밀번호 확인" @keyup.enter="clickJoin"/>
+      <input type="text" id="name" class="textbox" v-model="user.name" placeholder="이름" @keyup.enter="clickJoin"/>
+      <input type="number" id="age" class="textbox" v-model="user.age" placeholder="나이" @keyup.enter="clickJoin"/>
 
       <b-form-group id="genderbtn">
         <b-form-radio-group id="gender" class="gender" v-model="user.gender" :options="genderOptions"
@@ -60,7 +60,7 @@
           </option>
         </select>
       </div>
-      <button id="joinbutton" class="button" @click="clickJoin()">
+      <button id="joinbutton" class="button" @click="clickJoin()" :style="style">
         회원가입
       </button>
     </div>
@@ -85,6 +85,7 @@ export default {
         dwellArea: "",
         favoriteArea: "",
       },
+
       likeSidos: [],
       likeSidoCode: "",
       likeSigungus: [],
@@ -102,6 +103,11 @@ export default {
         { text: "남", value: "1" },
         { text: "녀", value: "2" },
       ],
+      style: {
+        //기본: 회색
+        background: "rgba(217, 217, 217, 0.6)",
+        color: "#939393",
+      },
     };
   },
   created() {
@@ -119,6 +125,22 @@ export default {
         console.log(error);
       }
     );
+  },
+  watch: {
+    user: {
+      handler: function () {
+        //빈칸 있을 때 - 회색
+        if (this.user.email == "" || this.user.password == "" || this.passwordcheck == "" || this.user.name == "" ||
+        this.user.age == "" || this.user.gender == "") {
+          this.style.background = "rgba(217, 217, 217, 0.6)";
+          this.style.color = "#939393";
+        } else {  //칸 다 채워짐 - 보라
+          this.style.background = "#6960d5";
+          this.style.color = "#ffffff";
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     //시도 선택시 시군구 얻어오기
@@ -209,12 +231,14 @@ export default {
           return;
         }
       },
-        () => { 
-          console.log("실패");
+        (e) => { 
+          console.log("아이디 중복 확인 실패");
+          console.log(e);
           return;
         });
 
       //회원 등록 진행
+      console.log("회원 등록 진행")
       this.user.dwellArea = this.dwellDongCode;
       this.user.favoriteArea = this.likeDongCode;
       console.log(this.user);

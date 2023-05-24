@@ -1,5 +1,10 @@
 package com.ssafy.ourhouse.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.ourhouse.api.BusAPI;
+import com.ssafy.ourhouse.dto.AptInfoDto;
+import com.ssafy.ourhouse.dto.BusStopDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
@@ -44,9 +53,10 @@ import lombok.RequiredArgsConstructor;
 public class HouseController {
 
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
-
+	private final BusAPI busAPI;
+	
 	private final HouseService houseService;
-//	private final JwtService JwtService;
+	private final JwtService JwtService;
 
 	@ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.")
 	@GetMapping("/sido")
@@ -102,10 +112,32 @@ public class HouseController {
 		}
 	}
 
-	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력")
+	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력 - 유저일 때")
+	@PostMapping("/user")
+	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition,@RequestHeader("Authorization") String jwt) {
+		System.out.println("house 출력 - 유저");
+		System.out.println(searchCondition);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<HouseDto> houseList = new ArrayList<HouseDto>();
+		String userEmail = JwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		searchCondition.setEmail(userEmail);
+		try {
+			houseList = houseService.houseSearch(searchCondition);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		}
+		resultMap.put("data", houseList);
+		resultMap.put("message", "success");
+		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력 - 유저가 아닐 때")
 	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition) {
-		System.out.println("house 출력");
+	public ResponseEntity<Map<String, Object>> houseSearchNotUser(@RequestBody HouseSearchConditionDto searchCondition) {
+		System.out.println("house 출력 - 유저 아님");
+		System.out.println(searchCondition);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<HouseDto> houseList = new ArrayList<HouseDto>();
 		try {
@@ -162,8 +194,6 @@ public class HouseController {
 			resultMap.put("message", "fail");
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
-
-//		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "거래 좋아요 설정", notes = "유저가 누른 거래의 좋아요 설정")
@@ -206,4 +236,72 @@ public class HouseController {
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	@PostMapping(value = "/bus", produces = "application/json; charset=utf8")
+	public String getBusStations(@RequestBody Map<String, String> data) throws Exception {
+//		System.out.println("=======================");
+//		System.out.println(data.get("lat"));
+//		System.out.println(data.get("lng"));
+		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getCrdntPrxmtSttnList"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=jxxl3rLm%2FskTLPONvQj6KXkjSZlpHSCuH8JPt9ueN49v0P0hU68Wew6dcM2ihtRP%2BQsUHpOGexuUVwl9XyOwBw%3D%3D"); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("_type","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
+        urlBuilder.append("&" + URLEncoder.encode("gpsLati","UTF-8") + "=" + URLEncoder.encode(data.get("lat"), "UTF-8")); /*WGS84 위도 좌표*/
+        urlBuilder.append("&" + URLEncoder.encode("gpsLong","UTF-8") + "=" + URLEncoder.encode(data.get("lng"), "UTF-8")); /*WGS84 경도 좌표*/
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        System.out.println("Response code: " + conn.getResponseCode());
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        rd.close();
+        conn.disconnect();
+        System.out.println(sb.toString());
+        return sb.toString();
+	}
+	
+	@ApiOperation(value = "좋아요 많은 아파트 5개", notes = "좋아요가 많은 아파트 상위 5개를 뽑음")
+	@GetMapping("/topapt")
+	public ResponseEntity<Map<String, Object>> getTopApts() {
+		logger.info("아파트 랭킹 5 출력");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			List<AptInfoDto> list = houseService.getTop5Apts();
+			resultMap.put("houses", list);
+			resultMap.put("message", "success");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@ApiOperation(value = "좋아요 많은 거래 5개", notes = "좋아요가 많은 거래 상위 5개를 뽑음")
+	@GetMapping("/topdeal")
+	public ResponseEntity<Map<String, Object>> getTopDeals() {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			List<DealInfoDto> list = houseService.getTop5Deals();
+			resultMap.put("deals", list);
+			resultMap.put("message", "success");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+		}
+	}
+	
 }

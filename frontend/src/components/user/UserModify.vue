@@ -29,7 +29,7 @@
           </option>
         </select>
         <select name="likeareasDong" id="likeareasDong" class="likeareas dong" v-model="likeDongCode">
-          <option value="">동 선택</option>
+          <option value="-1">동 선택</option>
           <option v-for="(item, index) in likeDongs" :key="index" :value="item.dongCode">
             {{ item.name }}
           </option>
@@ -54,7 +54,7 @@
         </select>
 
         <select name="dwellareasDong" id="dwellareasDong" class="dwellareas dong" v-model="dwellDongCode">
-          <option value="">동 선택</option>
+          <option value="-1">동 선택</option>
           <option v-for="(item, index) in dwellDongs" :key="index" :value="item.dongCode">
             {{ item.name }}
           </option>
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { getSido, getSigungu, getDong, getUserInfo } from "@/api/user";
+import { getSido, getSigungu, getDong, getUserInfo, updateUserInfo } from "@/api/user";
 
 export default {
   name: "userJoin",
@@ -92,13 +92,13 @@ export default {
       likeSigungus: [],
       likeSigunguCode: "",
       likeDongs: [],
-      likeDongCode: "",
+      likeDongCode: "-1",
       dwellSidos: [],
       dwellSidoCode: "",
       dwellSigungus: [],
       dwellSigunguCode: "",
       dwellDongs: [],
-      dwellDongCode: "",
+      dwellDongCode: "-1",
 
       genderOptions: [
         { text: "남", value: "1" },
@@ -124,10 +124,22 @@ export default {
     );
 
     console.log("사용자 정보 얻기")
-    getUserInfo(({ data }) => { console.log(data); }, (e) => {
+    getUserInfo(({ data }) => {
+      console.log(data);
+      //사용자 정보 설정
+      this.user.email = data.email;
+      this.user.name = data.name;
+      this.user.age = data.age;
+      this.user.gender = data.gender;
+      this.user.dwellArea = data.dwellArea;
+      this.user.favoriteArea = data.favoriteArea;
+      this.nowDwellArea = data.dwellAreaName;
+      this.nowFavofiteArea = data.favoriteAreaName;
+      console.log(this.user);
+    }, (e) => {
+      console.log("axios error");
       console.log(e);
     })
-    //사용자 정보 얻어오기 - 이메일, 이름, 나이, 성별, 관심지역(이름), 거주지역(이름)
 
   },
   methods: {
@@ -148,8 +160,8 @@ export default {
         );
       }
       if (status == "dwell") {
-        this.dwellSigunguCode = "";
-        this.dwellDongCode = "";
+        this.dwellSigunguCode = "-1";
+        this.dwellDongCode = "-1";
         getSigungu(
           this.dwellSidoCode,
           ({ data }) => {
@@ -194,16 +206,23 @@ export default {
     },
 
     //회원 정보 수정 버튼 누를 시 이벤트
-    clickModify() {
+    async clickModify() {
       if (this.user.password != this.passwordcheck) {
         alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         return;
       }
 
       //회원 정보 수정 진행
-      this.user.dwellArea = this.dwellDongCode;
-      this.user.favoriteArea = this.likeDongCode;
+      if (this.dwellDongCode != "-1") {
+        this.user.dwellArea = this.dwellDongCode;
+      }
+      if (this.likeDongCode != "-1") { 
+        this.user.favoriteArea = this.likeDongCode;
+      }
       //회원 정보 전달 후 업데이트
+      await updateUserInfo(this.user, ({ data }) => { console.log(data) }, () => { });
+
+      this.$router.push({name:'dashboard'})
     },
   },
 };

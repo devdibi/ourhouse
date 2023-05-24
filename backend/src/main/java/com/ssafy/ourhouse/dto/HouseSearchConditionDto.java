@@ -39,5 +39,12 @@ public class HouseSearchConditionDto {
 	
 	@ApiModelProperty(value = "아파트의 면적(최댓값)")
 	private int maxArea;
+
+	@Override
+	public String toString() {
+		return "HouseSearchConditionDto [dongCode=" + dongCode + ", email=" + email + ", year=" + year + ", month="
+				+ month + ", minPrice=" + minPrice + ", maxPrice=" + maxPrice + ", minFloor=" + minFloor + ", maxFloor="
+				+ maxFloor + ", minArea=" + minArea + ", maxArea=" + maxArea + "]";
+	}
 	
 }

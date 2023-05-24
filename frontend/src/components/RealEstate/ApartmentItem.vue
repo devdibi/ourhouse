@@ -122,21 +122,6 @@ export default {
 				.catch((err) => {
 					console.log(err);
 				});
-
-			// axios
-			// 	.delete("http://localhost:9999/house/dislike_house", {
-			// 		headers: {
-			// 			Authorization:
-			// 				"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBzc2FmeS5jb20iLCJpYXQiOjE2ODQ3MzAyOTQsImV4cCI6MTY4NDczMzg5NH0.ht8KBJ4R6zSkWVkkIHKovLQrfMwEaX7FdznmymvhWZk",
-			// 		},
-			// 		data: {
-			// 			apartmentCode: apartmentCode,
-			// 		},
-			// 	})
-			// 	.then((res) => {
-			// 		console.log(res);
-			// 	})
-			// 	.catch((err) => console.log(err));
 		},
 		clickLikeBtn() {
 			// console.log(this.isLike);

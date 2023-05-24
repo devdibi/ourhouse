@@ -1,6 +1,8 @@
 package com.ssafy.ourhouse.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,25 +16,34 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ourhouse.domain.Role;
+import com.ssafy.ourhouse.dto.AptInfoDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
+import com.ssafy.ourhouse.dto.HouseDatabaseDto;
+import com.ssafy.ourhouse.dto.HouseDto;
+// import com.ssafy.ourhouse.dto.HouseDatabaseDto;
+// import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
+import com.ssafy.ourhouse.dto.UserListDto;
 import com.ssafy.ourhouse.mapper.UserMapper;
 
-@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
 	private final UserMapper userMapper;
 	private final MailSender mailSender;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtService jwtService;
 
 	public UserServiceImpl(
 			UserMapper userMapper,
 			MailSender mailSender,
-			@Lazy PasswordEncoder passwordEncoder
+			@Lazy PasswordEncoder passwordEncoder,
+			JwtService jwtService
 	) {
 		this.userMapper = userMapper;
 		this.mailSender = mailSender;
 		this.passwordEncoder = passwordEncoder;
+		this.jwtService = jwtService;
 	}
 
 	@Override
@@ -51,11 +62,11 @@ public class UserServiceImpl implements UserService {
 		userDto.setRole(Role.USER);
 		userMapper.registerUser(userDto);
 	}
-
-	@Override
-	public UserDto loginUser(Map<String, String> map) throws Exception {
-		return userMapper.loginUser(map);
-	}
+//
+//	@Override
+//	public UserDto loginUser(Map<String, String> map) throws Exception {
+//		return userMapper.loginUser(map);
+//	}
 
 	@Override
 	public void randomPassword(Map<String, String> map) throws Exception {
@@ -80,10 +91,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.compareName(userEmail);
 	}
 
-	@Override
-	public void updatePassword(Map<String, String> map) throws Exception {
-		userMapper.updatePassword(map);
-	}
+//	@Override
+//	public void updatePassword(Map<String, String> map) throws Exception {
+//		userMapper.updatePassword(map);
+//	}
 
 	@Override
 	public Boolean deleteUser(String email) throws Exception {
@@ -91,7 +102,66 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDto> loadAllUsers() throws Exception {
+	public List<UserListDto> loadAllUsers() throws Exception {
 		return userMapper.loadAllUsers();
 	}
+	
+	@Override
+	public Map<String, Object> getUserInfo(String email) throws Exception{
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		UserDto user = userMapper.getUserInfo(email);
+		System.out.println(user);
+		// 빈칸이 아닐 시
+		String dwellArea = user.getDwellArea();
+		if (dwellArea != null && !dwellArea.equals("")) {
+			String sido = userMapper.getSidoName(dwellArea.substring(0, 2));
+			String sigungu = userMapper.getSigunguName(dwellArea.substring(0, 5));
+			String dong = userMapper.getDongName(dwellArea);
+			resultMap.put("dwellAreaName", sido + " " + sigungu + " " + dong);
+			resultMap.put("dwellArea", dwellArea);
+		}
+		else {
+			resultMap.put("dwellArea", "");
+			resultMap.put("dwellAreaName","");
+		}
+		String favoriteArea = user.getFavoriteArea();
+		if (favoriteArea != null && !favoriteArea.equals("")) {
+			String sido = userMapper.getSidoName(favoriteArea.substring(0, 2));
+			String sigungu = userMapper.getSigunguName(favoriteArea.substring(0, 5));
+			String dong = userMapper.getDongName(favoriteArea);
+			resultMap.put("favoriteAreaName", sido + " " + sigungu + " " + dong);
+			resultMap.put("favoriteArea", favoriteArea);
+		}
+		else {
+			resultMap.put("favoriteArea", "");
+			resultMap.put("favoriteAreaName", "");
+		}
+		resultMap.put("name", user.getName());
+		resultMap.put("email", user.getEmail());
+		resultMap.put("gender", user.getGender());
+		resultMap.put("age", user.getAge());
+		return resultMap;
+	}
+
+	@Override
+	public void updateUserInfo(UserDto user) throws Exception {
+		if(user.getPassword() != null && !user.getPassword().equals("")) {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		user.setAgeGroup(user.getAge()/10);
+		userMapper.updateUserInfo(user);
+	}
+
+	@Override
+	public List<AptInfoDto> getFavoriteHouses(String jwt) throws Exception {
+		String email = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		return userMapper.getFavoriteHouses(email);
+	}
+
+	@Override
+	public List<DealInfoDto> getFavoriteDeals(String jwt) throws Exception {
+		String email = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		return userMapper.getFavoriteDeals(email);
+	}
+
 }

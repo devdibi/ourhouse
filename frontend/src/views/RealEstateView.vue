@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <content id="content">
-      <!-- 상세 검색 Container -->
-      <div id="search-bar">
-        <div style="min-width: 100px" class="text-center">
-          <h3 class="m-0 mr-3 ml-3">검색</h3>
-        </div>
+	<div>
+		<content id="content">
+			<!-- 상세 검색 Container -->
+			<div id="search-bar">
+				<div style="min-width: 100px" class="text-center">
+					<h3 class="m-0 mr-3 ml-3">검색</h3>
+				</div>
 
-        <!-- 기본 검색 -->
-        <!-- <button class="btn btn-primary m-2">시도 선택</button>
+				<!-- 기본 검색 -->
+				<!-- <button class="btn btn-primary m-2">시도 선택</button>
 				<button class="btn btn-primary m-2">구군 선택</button>
 				<button class="btn btn-primary m-2">동 선택</button> -->
         <div class="location-option-container">
@@ -88,17 +88,18 @@
           :showDetailWindowData="showDetailWindowData"
         />
 
-        <!-- 검색 결과 상세 페이지 -->
-      </div>
-      <!-- 카카오 지도 -->
-    </content>
-    <!-- <TheFooter /> -->
-    <!-- <div id="footer"></div> -->
-  </div>
+				<!-- 검색 결과 상세 페이지 -->
+			</div>
+			<!-- 카카오 지도 -->
+		</content>
+		<!-- <TheFooter /> -->
+		<!-- <div id="footer"></div> -->
+	</div>
 </template>
 
 <script>
 import axios from "axios";
+import { API } from "@/api/axios-jwt";
 import KakaoMap from "@/components/KakaoMap.vue";
 import ApartmentItem from "@/components/RealEstate/ApartmentItem.vue";
 import ApartmentItemDetail from "@/components/RealEstate/ApartmentItemDetail.vue";
@@ -182,182 +183,270 @@ export default {
         });
     },
     selectDong(dongCode) {
-      let config = {
-        method: "post",
-        baseURL: "http://localhost:9999/house/",
-        data: {
-          dongCode,
-          // email: "",
-          // month: 1,
-          // year: 2015,
-        },
-      };
-      axios(config)
-        .then(({ data }) => {
-          if (data.data.length === 0) {
-            this.resultIsEmpty = true;
-          } else {
-            this.showDetailWindow = false;
-            console.log(data.data);
-            this.resultIsEmpty = false;
-            this.dealData = data.data;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      let searchCondition = {
+        dongCode: dongCode,
+        //나머지 정보 추가 가능
+      }
+      //로그인 했을 시
+      if (this.$store.getters.isLogin) {
+        let http = API();
+        http.post("/house/user", searchCondition)
+          .then(({ data }) => {
+            console.log(data);
+            if (data.data.length == null) { 
+              this.resultIsEmpty = true;
+            }
+            else if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      //로그인 안 했을 시
+      else {
+        console.log("로그인 안 했을 시")
+        let config = {
+          method: "post",
+          baseURL: "http://localhost:9999/house/",
+          data: {
+            ...searchCondition
+          },
+        };
+        axios(config)
+          .then(({ data }) => {
+            if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
   created() {
-    // let tmp = [];
-
-    let config = {
-      method: "get", // 기본값
-      baseURL: "http://localhost:9999/house/sido",
-    };
-    axios(config)
-      .then(({ data }) => {
-        console.log(data);
-        this.sidoList = data.sidoList;
-        // data.sidoList.forEach((element) => {
-        // 	tmp.push({ text: element.name, value: element.sidoCode });
-        // });
-        // console.log(tmp);
-        // tmp.unshift({ text: "시도 검색", value: null, disabled: true });
-        // this.sidoList = tmp;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-  methods: {
-    changeDetailOption(option) {
-      console.log("=== RealEstateView ===");
-      console.log(option);
-    },
-    /**
-     * 상세 옵션 열고 닫기 함수
-     */
-    changeWindow(index) {
-      if (this.lastOptionIndex === index) {
-        this.$set(this.isOpen, index, !this.isOpen[index]);
-      } else {
-        this.$set(this.isOpen, this.lastOptionIndex, false);
-        this.$set(this.isOpen, index, !this.isOpen[index]);
-        this.lastOptionIndex = index;
+    //메인 화면에서 동 입력으로 넘어왔을 시, 바로 출력
+    if(this.$route.params.dongCode != null){
+      console.log(this.$route.params.dongCode);
+      let searchCondition = {
+        dongCode: this.$route.params.dongCode,
       }
-    },
-    /**
-     * 아파트 거래 정보 창 열고 닫기 함수
-     */
-    eventShowDetailWindow(data) {
-      // console.log(data);
-
-      this.location.lat = data.lat;
-      this.location.lng = data.lng;
-
-      let index = data.id;
-      if (this.showDetailWindowIdx === index) {
-        this.showDetailWindow = !this.showDetailWindow;
-      } else {
-        this.showDetailWindow = true;
-        this.showDetailWindowIdx = index;
-        this.showDetailWindowData = this.dealData[index];
-        // console.log("Aa", this.showDetailWindowData);
+      //로그인 했을 시
+      if (this.$store.getters.isLogin) {
+        let http = API();
+        http.post("/house/user", searchCondition)
+          .then(({ data }) => {
+            console.log(data);
+            if (data.data.length == null) { 
+              this.resultIsEmpty = true;
+            }
+            else if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
-    },
-  },
+      //로그인 안 했을 시
+      else {
+        console.log("로그인 안 했을 시")
+        let config = {
+          method: "post",
+          baseURL: "http://localhost:9999/house/",
+          data: {
+            ...searchCondition
+          },
+        };
+        axios(config)
+          .then(({ data }) => {
+            if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+
+		let config = {
+			method: "get", // 기본값
+			baseURL: "http://localhost:9999/house/sido",
+		};
+		axios(config)
+			.then(({ data }) => {
+				console.log(data);
+				this.sidoList = data.sidoList;
+				// data.sidoList.forEach((element) => {
+				// 	tmp.push({ text: element.name, value: element.sidoCode });
+				// });
+				// console.log(tmp);
+				// tmp.unshift({ text: "시도 검색", value: null, disabled: true });
+				// this.sidoList = tmp;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	},
+	methods: {
+		getBusStopInfo() {
+			console.log("=== 버스 정류장 정보 불러오기 ===");
+		},
+		changeDetailOption(option) {
+			console.log("=== RealEstateView ===");
+			console.log(option);
+		},
+		/**
+		 * 상세 옵션 열고 닫기 함수
+		 */
+		changeWindow(index) {
+			if (this.lastOptionIndex === index) {
+				this.$set(this.isOpen, index, !this.isOpen[index]);
+			} else {
+				this.$set(this.isOpen, this.lastOptionIndex, false);
+				this.$set(this.isOpen, index, !this.isOpen[index]);
+				this.lastOptionIndex = index;
+			}
+		},
+		/**
+		 * 아파트 거래 정보 창 열고 닫기 함수
+		 */
+		eventShowDetailWindow(data) {
+			// console.log(data);
+
+			this.location.lat = data.lat;
+			this.location.lng = data.lng;
+
+			let index = data.id;
+			if (this.showDetailWindowIdx === index) {
+				this.showDetailWindow = !this.showDetailWindow;
+			} else {
+				this.showDetailWindow = true;
+				this.showDetailWindowIdx = index;
+				this.showDetailWindowData = this.dealData[index];
+				// console.log("Aa", this.showDetailWindowData);
+			}
+		},
+	},
 };
 </script>
 
 <style scoped>
 .location-option-container {
-  min-width: 500px;
-  display: flex;
-  justify-content: space-between;
+	min-width: 500px;
+	display: flex;
+	justify-content: space-between;
 }
+
 #close-detail {
-  position: absolute;
-  /* left: 966px; */
-  right: -42px;
-  top: 20px;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(0, 0, 0, 0.16);
-  border-left: 0;
-  border-top-right-radius: 1px;
-  border-bottom-right-radius: 1px;
-  background-color: red;
-  z-index: 2500;
+	position: absolute;
+	/* left: 966px; */
+	right: -42px;
+	top: 20px;
+	width: 42px;
+	height: 42px;
+	border: 1px solid rgba(0, 0, 0, 0.16);
+	border-left: 0;
+	border-top-right-radius: 1px;
+	border-bottom-right-radius: 1px;
+	background-color: red;
+	z-index: 2500;
 }
+
 #detail {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-  left: 406px;
-  width: 560px;
-  background: white;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	left: 406px;
+	width: 560px;
+	background: white;
 }
+
 #result {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 400px;
-  background: #fef7ff;
-  /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
-  z-index: 200;
-  border: 1px black solid;
-  border-top: none;
-  border-bottom: none;
-  overflow-y: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 400px;
+	background: #fef7ff;
+	/* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
+	z-index: 200;
+	border: 1px black solid;
+	border-top: none;
+	border-bottom: none;
+	overflow-y: auto;
 }
+
 #wrap-map {
-  position: relative;
-  background: purple;
-  height: calc(100% - 56px);
-  /* margin: 5px; */
+	position: relative;
+	background: purple;
+	height: calc(100% - 56px);
+	/* margin: 5px; */
 }
+
 #header {
-  height: 50px;
-  width: 100%;
-  background: black;
-  position: relative;
-  z-index: 1;
-  top: 0;
-  display: block;
+	height: 50px;
+	width: 100%;
+	background: black;
+	position: relative;
+	z-index: 1;
+	top: 0;
+	display: block;
 }
 
 #nav-bar {
-  padding: 0px;
-  height: 50px;
-  width: 100%;
-  background: blueviolet;
-  position: relative;
-  /* z-index: 1; */
-  top: 0;
+	padding: 0px;
+	height: 50px;
+	width: 100%;
+	background: blueviolet;
+	position: relative;
+	/* z-index: 1; */
+	top: 0;
 }
 
 #content {
-  height: calc(100% - 106px);
-  width: 100%;
-  background: #ccc;
-  position: absolute;
-  z-index: 0;
+	height: calc(100% - 106px);
+	width: 100%;
+	background: #ccc;
+	position: absolute;
+	z-index: 0;
 }
 
 #search-bar {
-  position: relative;
-  /* background: #0cf; */
-  background: #ffffff;
-  /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
-  z-index: 5;
-  height: 56px;
-  border: 1px black solid;
-  display: flex;
-  align-items: center;
+	position: relative;
+	/* background: #0cf; */
+	background: #ffffff;
+	/* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
+	z-index: 5;
+	height: 56px;
+	border: 1px black solid;
+	display: flex;
+	align-items: center;
 }
 
 /* #search-bar button {
@@ -373,11 +462,11 @@ export default {
 } */
 
 .pop-up {
-  width: 200px;
-  height: 500px;
-  background: burlywood;
-  position: absolute;
-  top: 50px;
-  left: 0;
+	width: 200px;
+	height: 500px;
+	background: burlywood;
+	position: absolute;
+	top: 50px;
+	left: 0;
 }
 </style>

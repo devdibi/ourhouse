@@ -5,7 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.ourhouse.dto.AptInfoDto;
+import com.ssafy.ourhouse.dto.BusStopDto;
 import com.ssafy.ourhouse.dto.DealDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseDto;
@@ -121,5 +124,21 @@ public class HouseServiceImpl implements HouseService {
 	
 	private String getEmailFromJwtToken(String jwt) {
 		return jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+	}
+
+	@Override
+	public List<BusStopDto> getBusStation() throws Exception {
+		// TODO Auto-generated method stub
+		return houseMapper.getNearByBusStop();
+	}
+
+	@Override
+	public List<DealInfoDto> getTop5Deals() throws Exception {
+		return houseMapper.getTop5Deals();
+	}
+
+	@Override
+	public List<AptInfoDto> getTop5Apts() throws Exception {
+		return houseMapper.getTop5Apts();
 	}
 }
