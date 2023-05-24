@@ -174,7 +174,6 @@ export default {
       showDetailWindowIdx: -1,
       showDetailWindowData: Object,
       // 검색 결과 데이터
-      dealData: Array,
       dealData: [],
 
       busClick: false,

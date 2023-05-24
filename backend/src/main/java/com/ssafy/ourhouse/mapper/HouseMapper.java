@@ -43,16 +43,13 @@ public interface HouseMapper {
 
 	List<BusStopDto> getNearByBusStop() throws Exception;
 	
-<<<<<<< HEAD
 	List<DealInfoDto> getTop5Deals() throws Exception;
 
 	List<AptInfoDto> getTop5Apts() throws Exception;
 	
-=======
 	List<CommercialDto> getNearByCommercial(Map<String, Double> map) throws Exception;
 	
 	List<MedicalDto> getNearByMedical(Map<String, Double> map) throws Exception;
 	
 	List<MedicalDto> getNearByHospital(Map<String, Double> map) throws Exception;
->>>>>>> kakao-map
 }

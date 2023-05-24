@@ -137,7 +137,6 @@ public class HouseServiceImpl implements HouseService {
 	}
 
 	@Override
-<<<<<<< HEAD
 	public List<DealInfoDto> getTop5Deals() throws Exception {
 		return houseMapper.getTop5Deals();
 	}
@@ -145,7 +144,8 @@ public class HouseServiceImpl implements HouseService {
 	@Override
 	public List<AptInfoDto> getTop5Apts() throws Exception {
 		return houseMapper.getTop5Apts();
-=======
+	}
+
 	public List<CommercialDto> getNearByCommercial(double lat, double lng) throws Exception {
 
 		double offset = 0.0035;
@@ -200,6 +200,5 @@ public class HouseServiceImpl implements HouseService {
 		map.put("maxLng", maxlng);
 
 		return houseMapper.getNearByHospital(map);
->>>>>>> kakao-map
 	}
 }

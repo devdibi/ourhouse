@@ -2,7 +2,7 @@
   <div style="width: 100%; height: 1100px; display: flex; margin-top: 30px">
     <!-- 좌측 메뉴 영역 -->
     <div style="margin-left: 20px; width: 300px; height: 100%">
-      <the-menu></the-menu>
+      <the-menu :user="user"></the-menu>
     </div>
     <!-- 중간 그래프 영역 -->
     <div style="display: block; padding: 0; height: 100%" v-if="loaded">
@@ -23,7 +23,15 @@
           select count(deal_code) from house_deal where dong_code = "" group by month 
         -->
       <div class="content-area" id="amount" style="padding: 0px; margin-bottom: 20px; margin-top: 20px">
-        <bar-chart class="chart-area" :year="bar_year" :year_data="bar_year_data" :month="bar_month" :month_data="bar_month_data" :dong="dong" v-if="loaded"></bar-chart>
+        <bar-chart
+          class="chart-area"
+          :year="bar_year"
+          :year_data="bar_year_data"
+          :month="bar_month"
+          :month_data="bar_month_data"
+          :dong="dong"
+          v-if="loaded"
+        ></bar-chart>
       </div>
 
       <!-- Pie Chart 스위칭 가능하도록 -->
@@ -35,8 +43,17 @@
           [select count(*) from search s left join user u on s.email = u.eamil where group by u.gender ] 
         -->
       <div class="content-area" id="pie" style="padding: 0px; margin-top: 20px">
-        <pie-chart class="chart-area" v-if="loaded && this.age.length != 0" :age="age" :age_data="age_data" :gender="gender" :gender_data="gender_data"></pie-chart>
-        <div style="width: 100%; height: 250px; text-align: center; vertical-align: middle" v-else>정보가 없습니다.</div>
+        <pie-chart
+          class="chart-area"
+          v-if="loaded && this.age.length != 0"
+          :age="age"
+          :age_data="age_data"
+          :gender="gender"
+          :gender_data="gender_data"
+        ></pie-chart>
+        <div style="width: 100%; height: 250px; text-align: center; vertical-align: middle" v-else>
+          정보가 없습니다.
+        </div>
       </div>
 
       <!-- 우측 하단 -->
@@ -49,7 +66,14 @@
           단, 지도의 중심은 관심지역 -->
       <!-- polygon을 이용하여 event 생성 => dongcode 전달로 지도검색 수행 -->
       <div class="content-area" id="map" style="padding: 0">
-        <map-chart class="chart-area" v-if="loaded" :areas="map_data" :dong="dong" :c_lng="c_lng" :c_lat="c_lat"></map-chart>
+        <map-chart
+          class="chart-area"
+          v-if="loaded"
+          :areas="map_data"
+          :dong="dong"
+          :c_lng="c_lng"
+          :c_lat="c_lat"
+        ></map-chart>
       </div>
     </div>
   </div>
@@ -63,6 +87,7 @@ import PieChart from "@/components/dashboard/PieChart.vue";
 import MapChart from "@/components/dashboard/MapChart.vue";
 
 import { average } from "@/api/dashboard.js";
+import { getUserInfo } from "@/api/user";
 
 export default {
   name: "DashBoard",
@@ -85,13 +110,49 @@ export default {
       c_lng: "",
       c_lat: "",
       loaded: false,
+      user: {
+        email: "",
+        name: "",
+        dwellArea: "",
+        favoriteArea: "",
+        favoriteAreaCode: String,
+      },
     };
   },
-  created() {},
+  created() {
+    console.log("사용자 정보 얻기");
+    getUserInfo(
+      ({ data }) => {
+        console.log("메뉴의 사용자 정보 설정");
+        console.log(data);
+        //사용자 정보 설정
+        this.user.email = data.email;
+        this.user.name = data.name;
+        this.user.dwellArea = data.dwellAreaName;
+        this.user.favoriteArea = data.favoriteAreaName;
+        if (this.user.dwellArea == null || this.user.dwellArea == "") {
+          this.user.dwellArea = "설정하지 않음";
+        }
+        if (this.user.favoriteArea == null || this.user.favoriteArea == "") {
+          this.user.favoriteArea = "설정하지 않음";
+        } else {
+          this.favoriteAreaCode = data.favoriteArea;
+        }
+      },
+      (e) => {
+        console.log("axios error");
+        console.log(e);
+      }
+    );
+  },
   mounted() {
     this.getData();
   },
   methods: {
+    changeDongCode(newDongCode) {
+      console.log("newDongCode: ", newDongCode);
+      this.dong_code = newDongCode;
+    },
     getData() {
       average(
         `${this.dong_code}`,
@@ -100,7 +161,15 @@ export default {
           this.c_lat = response.data.geoList[0].c_lat;
           // geo 좌표 배열로 생성
           // console.log(response.data.geoList[0].geo.split("[").join().split("]").join().replace(/,, ,/g, "]|[").replace(",,,,", "[").replace(",,,,", "]").split("|"));
-          this.map_data = response.data.geoList[0].geo.split("[").join().split("]").join().replace(/,, ,/g, "]|[").replace(",,,,", "[").replace(",,,,", "]").split("|");
+          this.map_data = response.data.geoList[0].geo
+            .split("[")
+            .join()
+            .split("]")
+            .join()
+            .replace(/,, ,/g, "]|[")
+            .replace(",,,,", "[")
+            .replace(",,,,", "]")
+            .split("|");
           console.log(this.map_data);
 
           // line Chart

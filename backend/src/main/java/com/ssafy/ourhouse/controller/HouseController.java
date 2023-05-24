@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ssafy.ourhouse.service.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,14 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
-import com.ssafy.ourhouse.api.BusAPI;
+//import com.ssafy.ourhouse.api.BusAPI;
 import com.ssafy.ourhouse.dto.AptInfoDto;
 import com.ssafy.ourhouse.dto.BusStopDto;
 import com.ssafy.ourhouse.dto.DealInfoDto;
-=======
 import com.ssafy.ourhouse.dto.CommercialDto;
->>>>>>> kakao-map
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
@@ -56,7 +54,7 @@ public class HouseController {
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	private final HouseService houseService;
-	private final JwtService JwtService;
+	private final JwtService jwtService;
 
     @ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.")
     @GetMapping("/sido")
@@ -112,7 +110,6 @@ public class HouseController {
         }
     }
 
-<<<<<<< HEAD
 	@ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력 - 유저일 때")
 	@PostMapping("/user")
 	public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition,@RequestHeader("Authorization") String jwt) {
@@ -120,7 +117,7 @@ public class HouseController {
 		System.out.println(searchCondition);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<HouseDto> houseList = new ArrayList<HouseDto>();
-		String userEmail = JwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
 		searchCondition.setEmail(userEmail);
 		try {
 			houseList = houseService.houseSearch(searchCondition);
@@ -152,25 +149,6 @@ public class HouseController {
 		resultMap.put("message", "success");
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
-=======
-    @ApiOperation(value = "조건을 충족하는 거래와 유저의 좋아요 여부 출력")
-    @PostMapping("/")
-    public ResponseEntity<Map<String, Object>> houseSearch(@RequestBody HouseSearchConditionDto searchCondition) {
-        System.out.println("house 출력");
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        List<HouseDto> houseList = new ArrayList<HouseDto>();
-        try {
-            houseList = houseService.houseSearch(searchCondition);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("message", "fail");
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-        }
-        resultMap.put("data", houseList);
-        resultMap.put("message", "success");
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-    }
->>>>>>> kakao-map
 
     @ApiOperation(value = "아파트 좋아요 설정", notes = "유저가 누른 아파트의 좋아요 설정")
     @ApiImplicitParam()
@@ -205,7 +183,6 @@ public class HouseController {
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
-<<<<<<< HEAD
 		try {
 			houseService.houseDislike(apartmentCode, jwt);
 			resultMap.put("message", "success");
@@ -216,20 +193,6 @@ public class HouseController {
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
 	}
-=======
-        try {
-            houseService.houseDislike(apartmentCode, jwt);
-            resultMap.put("message", "success");
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("message", "fail");
-            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
-        }
-
-//		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-    }
->>>>>>> kakao-map
 
     @ApiOperation(value = "거래 좋아요 설정", notes = "유저가 누른 거래의 좋아요 설정")
     @PostMapping("/like_deal")
