@@ -136,7 +136,7 @@ public class HouseServiceImpl implements HouseService {
 	@Override
 	public List<CommercialDto> getNearByCommercial(double lat, double lng) throws Exception {
 
-		double offset = 0.001;
+		double offset = 0.005;
 		double minLat = lat - offset;
 		double maxLat = lat + offset;
 		double minlng = lng - offset;
