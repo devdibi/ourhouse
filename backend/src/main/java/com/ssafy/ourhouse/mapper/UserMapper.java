@@ -12,6 +12,7 @@ import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
+import com.ssafy.ourhouse.dto.UserListDto;
 
 @Mapper
 public interface UserMapper {
@@ -26,7 +27,7 @@ public interface UserMapper {
 
     Boolean deleteUser(String email) throws SQLException;
 
-    List<UserDto> loadAllUsers() throws SQLException;
+    List<UserListDto> loadAllUsers() throws SQLException;
 
     void randomPassword(Map<String, String> map) throws SQLException;
 

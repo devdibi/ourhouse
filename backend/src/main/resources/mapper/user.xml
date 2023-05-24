@@ -49,7 +49,7 @@
 		WHERE email = #{email}
 	</update>
 	
-	<select id="loadAllUsers" resultType="userDto">
+	<select id="loadAllUsers" resultType="userListDto">
 		SELECT email, name, gender, age, dwell_area, favorite_area, password        
 		FROM USER
 		WHERE status = 1

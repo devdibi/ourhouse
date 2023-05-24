@@ -10,6 +10,8 @@ import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
+import com.ssafy.ourhouse.dto.UserListDto;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +30,7 @@ public interface UserService extends UserDetailsService {
 
 	Boolean deleteUser(String email) throws Exception;
 
-	List<UserDto> loadAllUsers() throws Exception;
+	List<UserListDto> loadAllUsers() throws Exception;
 
 	void randomPassword(Map<String, String> map) throws Exception;
 

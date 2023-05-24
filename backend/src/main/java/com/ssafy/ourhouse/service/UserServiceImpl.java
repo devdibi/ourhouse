@@ -23,6 +23,7 @@ import com.ssafy.ourhouse.dto.HouseDto;
 // import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 // import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
+import com.ssafy.ourhouse.dto.UserListDto;
 import com.ssafy.ourhouse.mapper.UserMapper;
 
 @Service
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDto> loadAllUsers() throws Exception {
+	public List<UserListDto> loadAllUsers() throws Exception {
 		return userMapper.loadAllUsers();
 	}
 	

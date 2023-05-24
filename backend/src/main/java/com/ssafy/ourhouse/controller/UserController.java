@@ -57,8 +57,8 @@ public class UserController {
 
     // TODO: Logic 코드를 나중에 서비스 계층으로 빼기
     @PostMapping(value = "/authenticate", produces = "application/json; charset=utf8")
-    public ResponseEntity<String> authenticate(@RequestBody UserDto user) {
-
+    public ResponseEntity<Map<String, Object>> authenticate(@RequestBody UserDto user) {
+    	Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -68,14 +68,16 @@ public class UserController {
         } catch (BadCredentialsException e) {
             logger.warn("'{}'님의 로그인 실패: {}", user.getEmail(), e.toString());
             String errorMsg = "로그인에 실패했습니다.";
-            return new ResponseEntity<>(errorMsg, HttpStatus.UNAUTHORIZED);
+            resultMap.put("message", FAIL);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.UNAUTHORIZED);
         }
 
         UserDto findUser = userService.loadUserByUsername(user.getEmail());
-
         String jwtToken = jwtService.generateToken(findUser);
-
-        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+        resultMap.put("userRole", findUser.getRole());
+        resultMap.put("jwtToken", jwtToken);
+        resultMap.put("message", SUCCESS);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
 //    // TODO: JWT 사용할 예정이기에, 나중에 제거하기!
@@ -158,21 +160,6 @@ public class UserController {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.OK);
-	}
-	
-	@ApiOperation(value = "유저 리스트", notes = "모든 유저 리스트 출력", response = List.class)
-	@GetMapping("/loadAllUsers")
-	public ResponseEntity<List<UserDto>> loadAllUsers() {
-		logger.debug("load All Users info");
-		List<UserDto> userList = null;
-		try {
-			userList = userService.loadAllUsers();
-			logger.debug("Seccess");
-			return new ResponseEntity<List<UserDto>>(userList, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	@ApiOperation(value = "비밀번호 찾기", notes = "해당 유저 정보를 비교 후, 이메일과 이름이 일치할 시 임시 비밀번호 이메일을 통해 할당", response = String.class)
