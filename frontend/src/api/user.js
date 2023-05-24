@@ -43,8 +43,8 @@ function getUserInfo(success, fail) {
   api.get(`/user/getUserInfo`).then(success).catch(fail);
 }
 
-function updateUserInfo(user, success, fail) {
-  api.put(`/user/updateUserInfo`, JSON.stringify(user)).then(success).catch(fail);
+async function updateUserInfo(user, success, fail) {
+  await api.put(`/user/updateUserInfo`, JSON.stringify(user)).then(success).catch(fail);
 }
 
 export {
