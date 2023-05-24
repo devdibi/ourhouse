@@ -237,7 +237,60 @@ export default {
     },
   },
   created() {
-    // let tmp = [];
+    //메인 화면에서 동 입력으로 넘어왔을 시, 바로 출력
+    if(this.$route.params.dongCode != null){
+      console.log(this.$route.params.dongCode);
+      let searchCondition = {
+        dongCode: this.$route.params.dongCode,
+      }
+      //로그인 했을 시
+      if (this.$store.getters.isLogin) {
+        let http = API();
+        http.post("/house/user", searchCondition)
+          .then(({ data }) => {
+            console.log(data);
+            if (data.data.length == null) { 
+              this.resultIsEmpty = true;
+            }
+            else if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      //로그인 안 했을 시
+      else {
+        console.log("로그인 안 했을 시")
+        let config = {
+          method: "post",
+          baseURL: "http://localhost:9999/house/",
+          data: {
+            ...searchCondition
+          },
+        };
+        axios(config)
+          .then(({ data }) => {
+            if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
 
 		let config = {
 			method: "get", // 기본값

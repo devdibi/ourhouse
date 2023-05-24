@@ -178,6 +178,7 @@ export default {
 		},
 		selectDong({ dongCode }) {
 			console.log(dongCode);
+			this.$router.push({ name: 'land', params: { dongCode: dongCode }});
 		},
 	},
 };
