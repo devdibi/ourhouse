@@ -118,7 +118,19 @@ export default {
           // alert("error 발생");
         }
       );
+      list((response) => {
+        this.news = response.data.newsList;
+
+        this.lists = [];
+
+        // 처음 리스트 출력
+        for (var p = 0 * 10; p < 10; p++) {
+          if (p == this.news.length) return;
+          this.lists.push(this.news[p]);
+        }
+      });
     },
+    // 뉴스 목록 강제 업데이트
     newsUpdate() {
       update((response) => {
         console.log(response);
