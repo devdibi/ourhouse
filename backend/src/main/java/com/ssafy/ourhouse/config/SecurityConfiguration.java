@@ -54,7 +54,7 @@ public class SecurityConfiguration {
 						// 토큰 발급 URL
 						"/user/**",
 						// House
-						"/house/sido", "/house/sigungu", "/house/dong", "/house/", "/house/bus",
+						"/house/sido", "/house/sigungu", "/house/dong", "/house/", "/house/commercial",
 						// Swagger 허용 URL
 						"/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
 						"/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",

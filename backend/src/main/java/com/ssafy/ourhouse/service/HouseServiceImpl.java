@@ -1,11 +1,14 @@
 package com.ssafy.ourhouse.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ourhouse.dto.BusStopDto;
+import com.ssafy.ourhouse.dto.CommercialDto;
 import com.ssafy.ourhouse.dto.DealDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
@@ -119,7 +122,7 @@ public class HouseServiceImpl implements HouseService {
 	public void dealDislike(Long dealCode, String jwt) throws Exception {
 		houseMapper.dealDislike(getEmailFromJwtToken(jwt), dealCode);
 	}
-	
+
 	private String getEmailFromJwtToken(String jwt) {
 		return jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
 	}
@@ -128,5 +131,24 @@ public class HouseServiceImpl implements HouseService {
 	public List<BusStopDto> getBusStation() throws Exception {
 		// TODO Auto-generated method stub
 		return houseMapper.getNearByBusStop();
+	}
+
+	@Override
+	public List<CommercialDto> getNearByCommercial(double lat, double lng) throws Exception {
+
+		double offset = 0.001;
+		double minLat = lat - offset;
+		double maxLat = lat + offset;
+		double minlng = lng - offset;
+		double maxlng = lng + offset;
+
+		Map<String, Double> map = new HashMap<String, Double>();
+		map.put("offset", offset);
+		map.put("minLat", minLat);
+		map.put("maxLat", maxLat);
+		map.put("minLng", minlng);
+		map.put("maxLng", maxlng);
+
+		return houseMapper.getNearByCommercial(map);
 	}
 }

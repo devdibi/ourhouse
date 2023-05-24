@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.ourhouse.api.BusAPI;
 import com.ssafy.ourhouse.dto.BusStopDto;
+import com.ssafy.ourhouse.dto.CommercialDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
@@ -247,5 +249,12 @@ public class HouseController {
         conn.disconnect();
         System.out.println(sb.toString());
         return sb.toString();
+	}
+	
+	@GetMapping(value = "/commercial", produces = "application/json; charset=utf8")
+	public List<CommercialDto> getCommercial(@RequestParam double lat, @RequestParam double lng) throws Exception {
+		System.out.println(lat);
+		System.out.println(lng);
+		return houseService.getNearByCommercial(lat, lng);
 	}
 }

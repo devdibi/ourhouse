@@ -127,5 +127,8 @@
 	<select id="getNearByBusStop" resultType="busStopDto">
 		select * from busstop;
 	</select>
-
+	
+	<select id="getNearByCommercial" resultType="commercialDto" parameterType="map">
+		select * from commercial where (lat between #{minLat} and #{maxLat}) and (lng between #{minLng} and #{maxLng});
+	</select>
 </mapper>
