@@ -12,6 +12,7 @@ import com.ssafy.ourhouse.dto.DealDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
+import com.ssafy.ourhouse.dto.MedicalDto;
 import com.ssafy.ourhouse.dto.SidoDto;
 import com.ssafy.ourhouse.dto.SigunguDto;
 
@@ -41,4 +42,8 @@ public interface HouseMapper {
 	List<BusStopDto> getNearByBusStop() throws Exception;
 	
 	List<CommercialDto> getNearByCommercial(Map<String, Double> map) throws Exception;
+	
+	List<MedicalDto> getNearByMedical(Map<String, Double> map) throws Exception;
+	
+	List<MedicalDto> getNearByHospital(Map<String, Double> map) throws Exception;
 }

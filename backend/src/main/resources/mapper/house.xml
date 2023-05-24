@@ -131,4 +131,12 @@
 	<select id="getNearByCommercial" resultType="commercialDto" parameterType="map">
 		select * from commercial where (lat between #{minLat} and #{maxLat}) and (lng between #{minLng} and #{maxLng});
 	</select>
+	
+	<select id="getNearByMedical" resultType="MedicalDto" parameterType="map">
+		select * from pharmacy where (lat between #{minLat} and #{maxLat}) and (lng between #{minLng} and #{maxLng});
+	</select>
+	
+	<select id="getNearByHospital" resultType="MedicalDto" parameterType="map">
+		select * from hospital where (lat between #{minLat} and #{maxLat}) and (lng between #{minLng} and #{maxLng});
+	</select>
 </mapper>

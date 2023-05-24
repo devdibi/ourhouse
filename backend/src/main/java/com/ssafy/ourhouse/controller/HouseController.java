@@ -28,6 +28,7 @@ import com.ssafy.ourhouse.dto.CommercialDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
+import com.ssafy.ourhouse.dto.MedicalDto;
 import com.ssafy.ourhouse.dto.SidoDto;
 import com.ssafy.ourhouse.dto.SigunguDto;
 import com.ssafy.ourhouse.service.HouseService;
@@ -251,44 +252,13 @@ public class HouseController {
 		return houseService.getNearByCommercial(lat, lng);
 	}
 
-	@GetMapping(value = "/cctv", produces = "application/json; charset=utf8")
-	public String getCCTV() throws Exception {
-		StringBuilder urlBuilder = new StringBuilder("https://openapi.its.go.kr:9443/cctvInfo"); /* URL */
-		urlBuilder.append(
-				"?" + URLEncoder.encode("apiKey", "UTF-8") + "=" + URLEncoder.encode("78816c1619534c18b1f6b436fa4ad772", "UTF-8")); /* 공개키 */
-		urlBuilder
-				.append("&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("all", "UTF-8")); /* 도로유형 */
-		urlBuilder.append(
-				"&" + URLEncoder.encode("cctvType", "UTF-8") + "=" + URLEncoder.encode("3", "UTF-8")); /* CCTV유형 */
-		urlBuilder.append(
-				"&" + URLEncoder.encode("minX", "UTF-8") + "=" + URLEncoder.encode("128.58096040982386", "UTF-8")); /* 최소경도영역 */
-		urlBuilder.append(
-				"&" + URLEncoder.encode("maxX", "UTF-8") + "=" + URLEncoder.encode("128.60606031174967", "UTF-8")); /* 최대경도영역 */
-		urlBuilder.append(
-				"&" + URLEncoder.encode("minY", "UTF-8") + "=" + URLEncoder.encode("35.87656409728413", "UTF-8")); /* 최소위도영역 */
-		urlBuilder.append(
-				"&" + URLEncoder.encode("maxY", "UTF-8") + "=" + URLEncoder.encode("35.858406471457855", "UTF-8")); /* 최대위도영역 */
-		urlBuilder.append(
-				"&" + URLEncoder.encode("getType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /* 출력타입 */
-		URL url = new URL(urlBuilder.toString());
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Content-type", "text/xml;charset=UTF-8");
-		System.out.println("Response code: " + conn.getResponseCode());
-		BufferedReader rd;
-		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		} else {
-			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-		}
-		StringBuilder sb = new StringBuilder();
-		String line;
-		while ((line = rd.readLine()) != null) {
-			sb.append(line);
-		}
-		rd.close();
-		conn.disconnect();
-//		System.out.println(sb.toString());
-		return sb.toString();
+	@GetMapping(value = "/medical", produces = "application/json; charset=utf8")
+	public List<MedicalDto> getMedical(@RequestParam double lat, @RequestParam double lng) throws Exception {
+		return houseService.getNearByMedical(lat, lng);
+	}
+	
+	@GetMapping(value = "/hospital", produces = "application/json; charset=utf8")
+	public List<MedicalDto> getHospital(@RequestParam double lat, @RequestParam double lng) throws Exception {
+		return houseService.getNearByHospital(lat, lng);
 	}
 }

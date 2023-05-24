@@ -9,6 +9,7 @@ import com.ssafy.ourhouse.dto.CommercialDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
+import com.ssafy.ourhouse.dto.MedicalDto;
 import com.ssafy.ourhouse.dto.SidoDto;
 import com.ssafy.ourhouse.dto.SigunguDto;
 
@@ -33,4 +34,8 @@ public interface HouseService {
 	List<BusStopDto> getBusStation() throws Exception;
 	
 	List<CommercialDto> getNearByCommercial(double lat, double lng) throws Exception;
+	
+	List<MedicalDto> getNearByMedical(double lat, double lng) throws Exception;
+	
+	List<MedicalDto> getNearByHospital(double lat, double lng) throws Exception;
 }

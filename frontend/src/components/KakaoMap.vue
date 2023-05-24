@@ -24,6 +24,7 @@ export default {
 			busMarkers: [],
 			commercialMarkers: [],
 			medicalMarkers: [],
+			hospitalMarkers: [],
 		};
 	},
 	props: {
@@ -37,25 +38,39 @@ export default {
 			if (type === "bus") {
 				this.setCommercialMarkers(null);
 				this.setBusMarkers(this.map);
+				this.setMedicalMarkers(null);
+				this.setHospitalMarkers(null);
 			} else if (type === "com") {
 				this.setCommercialMarkers(this.map);
 				this.setBusMarkers(null);
+				this.setMedicalMarkers(null);
+				this.setHospitalMarkers(null);
 			} else if (type === "medical") {
 				this.setCommercialMarkers(null);
 				this.setBusMarkers(null);
+				this.setMedicalMarkers(this.map);
+				this.setHospitalMarkers(null);
+			} else if (type === "hospital") {
+				this.setCommercialMarkers(null);
+				this.setBusMarkers(null);
+				this.setMedicalMarkers(null);
+				this.setHospitalMarkers(this.map);
 			}
 		},
 		location: {
 			// add parameter val
-			handler() {
+			async handler() {
 				console.log("=== watch handler ===");
 				this.setCommercialMarkers(null);
 				this.setBusMarkers(null);
 				this.comMarkers = [];
 				this.busMarkers = [];
-				this.createBusMarkers();
-				this.createCommercialMarkers();
+				await this.createBusMarkers();
+				await this.createCommercialMarkers();
+				await this.createMedicalMarkers();
+				await this.createHospitalMarkers();
 				this.markMarker();
+				// this.setCommercialMarkers(this.map);
 			},
 			deep: true,
 		},
@@ -91,6 +106,16 @@ export default {
 		setCommercialMarkers(map) {
 			for (let i = 0; i < this.comMarkers.length; i++) {
 				this.comMarkers[i].setMap(map);
+			}
+		},
+		setMedicalMarkers(map) {
+			for (let i = 0; i < this.medicalMarkers.length; i++) {
+				this.medicalMarkers[i].setMap(map);
+			}
+		},
+		setHospitalMarkers(map) {
+			for (let i = 0; i < this.hospitalMarkers.length; i++) {
+				this.hospitalMarkers[i].setMap(map);
 			}
 		},
 		createBusMarkers() {
@@ -186,7 +211,96 @@ export default {
 					console.log(err);
 				});
 		},
-		createMedicalMarkers() {},
+		createMedicalMarkers() {
+			let result;
+
+			let lat = this.location.lat;
+			let lng = this.location.lng;
+
+			let config = {
+				method: "get", // 기본값
+				baseURL: "http://localhost:9999/house/medical",
+				params: {
+					lat,
+					lng,
+				},
+			};
+			axios(config)
+				.then(({ data }) => {
+					// console.log(data);
+					result = data;
+					if (result.length != 0) {
+						let imageSrc = require("@/assets/icon/drugstore.png"), // 마커이미지의 주소입니다
+							imageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
+							imageOption = { offset: new kakao.maps.Point(35, 70) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+						let j;
+						for (j = 0; j < result.length; j++) {
+							// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+							let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+								markerPosition = new kakao.maps.LatLng(
+									result[j].lat - 0.0001,
+									result[j].lng + 0.0001
+								); // 마커가 표시될 위치입니다
+							// 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+							this.marker = new kakao.maps.Marker({
+								position: markerPosition,
+								image: markerImage, // 마커이미지 설정
+							});
+
+							this.medicalMarkers.push(this.marker);
+						}
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		createHospitalMarkers() {
+			let result;
+
+			let lat = this.location.lat;
+			let lng = this.location.lng;
+
+			let config = {
+				method: "get", // 기본값
+				baseURL: "http://localhost:9999/house/hospital",
+				params: {
+					lat,
+					lng,
+				},
+			};
+			axios(config)
+				.then(({ data }) => {
+					// console.log(data);
+					result = data;
+					if (result.length != 0) {
+						let imageSrc = require("@/assets/icon/hospital.png"), // 마커이미지의 주소입니다
+							imageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
+							imageOption = { offset: new kakao.maps.Point(35, 70) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+						let j;
+						for (j = 0; j < result.length; j++) {
+							// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+							let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+								markerPosition = new kakao.maps.LatLng(
+									result[j].lat - 0.0001,
+									result[j].lng + 0.0001
+								); // 마커가 표시될 위치입니다
+							// 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+							this.marker = new kakao.maps.Marker({
+								position: markerPosition,
+								image: markerImage, // 마커이미지 설정
+							});
+
+							this.hospitalMarkers.push(this.marker);
+						}
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
 		markAllMarkers() {
 			// 마커 다 지우기
 			// this.marker.setMap(null);

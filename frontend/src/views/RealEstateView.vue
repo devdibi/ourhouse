@@ -114,12 +114,20 @@
 						<div class="marker-name">버스</div>
 					</li>
 					<li :class="{ markerClick: comClick }" class="marker-box" @click="markerClick('com')">
-						<img class="marker-img" src="@/assets/icon/bus.png" alt="" />
+						<img class="marker-img" src="@/assets/icon/commercial.png" alt="" />
 						<div class="marker-name">상권</div>
 					</li>
 					<li :class="{ markerClick: medClick }" class="marker-box" @click="markerClick('medical')">
-						<img class="marker-img" src="@/assets/icon/bus.png" alt="" />
-						<div class="marker-name">의료</div>
+						<img class="marker-img" src="@/assets/icon/drugstore.png" alt="" />
+						<div class="marker-name">약국</div>
+					</li>
+					<li
+						:class="{ markerClick: hopClick }"
+						class="marker-box"
+						@click="markerClick('hospital')"
+					>
+						<img class="marker-img" src="@/assets/icon/hospital.png" alt="" />
+						<div class="marker-name">병원</div>
 					</li>
 				</ul>
 
@@ -183,6 +191,7 @@ export default {
 			busClick: false,
 			medClick: false,
 			comClick: false,
+			hopClick: false,
 			clickOption: "-1",
 		};
 	},
@@ -289,14 +298,22 @@ export default {
 				this.busClick = true;
 				this.comClick = false;
 				this.medClick = false;
+				this.hopClick = false;
 			} else if (option === "com") {
 				this.busClick = false;
 				this.comClick = true;
 				this.medClick = false;
+				this.hopClick = false;
 			} else if (option === "medical") {
 				this.busClick = false;
 				this.comClick = false;
 				this.medClick = true;
+				this.hopClick = false;
+			} else if (option === "hospital") {
+				this.busClick = false;
+				this.comClick = false;
+				this.medClick = false;
+				this.hopClick = true;
 			}
 		},
 		getBusStopInfo() {
@@ -326,6 +343,10 @@ export default {
 
 			this.location.lat = data.lat;
 			this.location.lng = data.lng;
+
+			this.busClick = false;
+			this.comClick = false;
+			this.medClick = false;
 
 			let index = data.id;
 			if (this.showDetailWindowIdx === index) {
@@ -453,14 +474,15 @@ export default {
 }
 
 #image-marker-box {
-	width: 150px;
+	width: 200px;
 	height: 75px;
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	background: pink;
+	background: white;
 	z-index: 2;
 	display: flex;
+	border-radius: 15px;
 }
 
 .marker-box {
@@ -478,6 +500,6 @@ export default {
 }
 
 .markerClick {
-	background: white;
+	background: pink;
 }
 </style>

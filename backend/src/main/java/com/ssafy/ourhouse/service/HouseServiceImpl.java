@@ -14,6 +14,7 @@ import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
+import com.ssafy.ourhouse.dto.MedicalDto;
 import com.ssafy.ourhouse.dto.SidoDto;
 import com.ssafy.ourhouse.dto.SigunguDto;
 import com.ssafy.ourhouse.mapper.HouseMapper;
@@ -150,5 +151,43 @@ public class HouseServiceImpl implements HouseService {
 		map.put("maxLng", maxlng);
 
 		return houseMapper.getNearByCommercial(map);
+	}
+
+	@Override
+	public List<MedicalDto> getNearByMedical(double lat, double lng) throws Exception {
+		
+		double offset = 0.0035;
+		double minLat = lat - offset;
+		double maxLat = lat + offset;
+		double minlng = lng - offset;
+		double maxlng = lng + offset;
+
+		Map<String, Double> map = new HashMap<String, Double>();
+		map.put("offset", offset);
+		map.put("minLat", minLat);
+		map.put("maxLat", maxLat);
+		map.put("minLng", minlng);
+		map.put("maxLng", maxlng);
+
+		return houseMapper.getNearByMedical(map);
+	}
+
+	@Override
+	public List<MedicalDto> getNearByHospital(double lat, double lng) throws Exception {
+		
+		double offset = 0.0035;
+		double minLat = lat - offset;
+		double maxLat = lat + offset;
+		double minlng = lng - offset;
+		double maxlng = lng + offset;
+
+		Map<String, Double> map = new HashMap<String, Double>();
+		map.put("offset", offset);
+		map.put("minLat", minLat);
+		map.put("maxLat", maxLat);
+		map.put("minLng", minlng);
+		map.put("maxLng", maxlng);
+
+		return houseMapper.getNearByHospital(map);
 	}
 }
