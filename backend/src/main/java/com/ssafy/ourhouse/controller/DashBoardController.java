@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.ourhouse.dto.DongDto;
+import com.ssafy.ourhouse.dto.SidoDto;
+import com.ssafy.ourhouse.dto.SigunguDto;
 import com.ssafy.ourhouse.service.DashBoardService;
+import com.ssafy.ourhouse.service.HouseService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,12 +36,13 @@ public class DashBoardController {
 	
 	@Autowired
 	private DashBoardService dashBoardService;
-
+	
 	public DashBoardController(DashBoardService dashBoardService) {
 		super();
 		this.dashBoardService = dashBoardService;
 	}
-	
+
+
 	@ApiOperation(value="연도별 평균 거래량")
 	@GetMapping("/{dongCode}")
 	public ResponseEntity<Map<String, Object>> getLists(@PathVariable long dongCode){

@@ -6,22 +6,10 @@
     </div>
     <!-- 중간 그래프 영역 -->
     <div style="display: block; padding: 0; height: 100%" v-if="loaded">
-      <div class="select-area" style="height: 50px">
-        <select name="sido" style="width: 30%; height: 30px; border: 1px solid #d9d9d9; border-radius: 5px; margin-right: 5%; text-align: center">
-          <option value="">시군구</option>
-        </select>
-        <select name="sigungu" style="width: 30%; height: 30px; border: 1px solid #d9d9d9; border-radius: 5px; margin-right: 5%; text-align: center">
-          <option value="">시군구</option>
-        </select>
-        <select name="dong" style="width: 30%; height: 30px; border: 1px solid #d9d9d9; border-radius: 5px; text-align: center">
-          <option value="">시군구</option>
-        </select>
-      </div>
-
       <!-- LineChart -->
       <!-- 해당지역 연도별 평균 거래금액 추세 linechart  -->
       <!-- [select avg(price) from house_deat_test where dong_code = "" group by year] 2015 ~ 2022-->
-      <div class="content-area" id="average" style="padding-top: 10px">
+      <div class="content-area" id="average" style="padding-top: 20px; margin-bottom: 20px">
         <line-chart class="chart-area" :year="line_year" :average="line_average" :dong="dong"></line-chart>
       </div>
 
@@ -34,7 +22,7 @@
           해당지역 월별 총 거래량 : 2015 ~ 2022년까지 매월 거래량의 차이를 확인하여 연 중 어느 시점에 집을 보는것이 좋을지 판단하는 지표
           select count(deal_code) from house_deal where dong_code = "" group by month 
         -->
-      <div class="content-area" id="amount" style="padding: 0px">
+      <div class="content-area" id="amount" style="padding: 0px; margin-bottom: 20px; margin-top: 20px">
         <bar-chart class="chart-area" :year="bar_year" :year_data="bar_year_data" :month="bar_month" :month_data="bar_month_data" :dong="dong" v-if="loaded"></bar-chart>
       </div>
 
@@ -46,7 +34,7 @@
       <!-- 해당지역 성별 관심 수 pie chart
           [select count(*) from search s left join user u on s.email = u.eamil where group by u.gender ] 
         -->
-      <div class="content-area" id="pie" style="padding: 0px">
+      <div class="content-area" id="pie" style="padding: 0px; margin-top: 20px">
         <pie-chart class="chart-area" v-if="loaded && this.age.length != 0" :age="age" :age_data="age_data" :gender="gender" :gender_data="gender_data"></pie-chart>
         <div style="width: 100%; height: 250px; text-align: center; vertical-align: middle" v-else>정보가 없습니다.</div>
       </div>
@@ -178,7 +166,7 @@ export default {
 
 #average {
   width: 500px;
-  height: 330px;
+  height: 350px;
   background: rgba(249, 247, 247, 0.7);
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
@@ -186,7 +174,7 @@ export default {
 
 #amount {
   width: 500px;
-  height: 330px;
+  height: 350px;
   margin-top: 25px;
   background: rgba(247, 247, 247, 0.7);
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
@@ -195,7 +183,7 @@ export default {
 
 #pie {
   width: 500px;
-  height: 330px;
+  height: 350px;
   margin-top: 25px;
   background: rgba(247, 247, 247, 0.7);
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
