@@ -18,8 +18,8 @@
           <vue-slider
             v-model="floorValue"
             :enable-cross="false"
-            :min="1"
-            :max="20"
+            :min="min"
+            :max="max"
             @change="setDetailOption"
           ></vue-slider>
         </div>
@@ -41,20 +41,18 @@ export default {
   data() {
     return {
       // displayText: "전체",
-      minValue: 1,
-      maxValue: 20,
-      floorValue: [1, 20],
+      floorValue: [this.min, this.max],
       unit: "",
     };
   },
   computed: {
     displayText: function () {
       let text = "";
-      if (this.minValue === this.floorValue[0] && this.maxValue === this.floorValue[1]) {
+      if (this.min === this.floorValue[0] && this.max === this.floorValue[1]) {
         text = "전체";
-      } else if (this.minValue === this.floorValue[0]) {
+      } else if (this.min === this.floorValue[0]) {
         text = `${this.floorValue[1]}${this.unit} 이하`;
-      } else if (this.maxValue === this.floorValue[1]) {
+      } else if (this.max === this.floorValue[1]) {
         text = `${this.floorValue[0]}${this.unit}  이상`;
       } else {
         text = `${this.floorValue[0]}${this.unit}  ~ ${this.floorValue[1]}${this.unit} `;
@@ -78,10 +76,12 @@ export default {
   props: {
     optionName: String,
     isOpen: Boolean,
+    min: Number,
+    max: Number,
   },
   created() {
     if (this.optionName === "가격대") {
-      this.unit = "원";
+      this.unit = "억원";
     } else if (this.optionName === "면적") {
       this.unit = "㎡";
     } else if (this.optionName === "층수") {

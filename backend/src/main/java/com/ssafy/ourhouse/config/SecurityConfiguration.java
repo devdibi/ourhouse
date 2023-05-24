@@ -49,6 +49,7 @@ public class SecurityConfiguration {
 				// JWT 인증없이, 접근 가능한 URL
 				.authorizeHttpRequests().antMatchers(
 						"/dashboard/**",
+						"/public/**",
 						"/notice/**",
 						"/board/**",
 						"/news/**",
@@ -56,6 +57,7 @@ public class SecurityConfiguration {
 						"/user/**",
 						// House
 						"/house/sido", "/house/sigungu", "/house/dong", "/house/", "/house/bus", "/house/topapt", "/house/topdeal",
+						"/house/bus", "/house/commercial", "/house/medical", "/house/hospital",
 						// Swagger 허용 URL
 						"/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
 						"/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",

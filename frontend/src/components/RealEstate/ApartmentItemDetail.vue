@@ -45,13 +45,27 @@
         <h3>거래 정보</h3>
       </div>
       <div id="sort-option">
-        <a href="#">최신 순</a>
+        <a href="#" @click="sortEvent('latestDate')">최신 순</a>
         <span> | </span>
-        <a href="#">오래된 순</a>
+        <a href="#" @click="sortEvent('oldestDate')">오래된 순</a>
         <span> | </span>
-        <a href="#">가격 순</a>
+        <a href="#" @click="sortEvent('price')">
+          가격 순
+          <span v-if="priceOption">⬇</span>
+          <span v-else>⬆</span>
+        </a>
         <span> | </span>
-        <a href="#">면적 순</a>
+        <a href="#" @click="sortEvent('area')">
+          면적 순
+          <span v-if="areaOption">⬇</span>
+          <span v-else>⬆</span>
+        </a>
+        <span> | </span>
+        <a href="#" @click="sortEvent('floor')">
+          층
+          <span v-if="floorOption">⬇</span>
+          <span v-else>⬆</span>
+        </a>
       </div>
       <div id="hr"></div>
       <div style="height: calc(100% - 80px); overflow-y: auto">
@@ -71,7 +85,32 @@ import ApartmentItemTrade from "./ApartmentItemTrade.vue";
 
 export default {
   data() {
-    return {};
+    return {
+      priceOption: true,
+      areaOption: true,
+      floorOption: true,
+    };
+  },
+  methods: {
+    sortEvent(sortOption) {
+      if (sortOption === "price") {
+        if (this.priceOption) {
+          sortOption = "priceAsc";
+        }
+        this.priceOption = !this.priceOption;
+      } else if (sortOption === "area") {
+        if (this.areaOption) {
+          sortOption = "areaAsc";
+        }
+        this.areaOption = !this.areaOption;
+      } else if (sortOption === "floor") {
+        if (this.floorOption) {
+          sortOption = "floorAsc";
+        }
+        this.floorOption = !this.floorOption;
+      }
+      this.$emit("sortEvent", sortOption);
+    },
   },
   props: ["showDetailWindowData"],
   components: {

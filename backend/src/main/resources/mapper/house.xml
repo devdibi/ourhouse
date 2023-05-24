@@ -139,6 +139,7 @@
 	<select id="getNearByBusStop" resultType="busStopDto">
 		select * from busstop;
 	</select>
+<<<<<<< HEAD
 
 	<select id="getTop5Apts" resultType="aptInfoDto">
 		SELECT count(apt_code) likeNums, name aptName, jibun_address jibunAddress, 
@@ -161,4 +162,18 @@
 		ORDER BY likeNums DESC LIMIT 5;
 	</select>
 	
+=======
+	
+	<select id="getNearByCommercial" resultType="commercialDto" parameterType="map">
+		select * from commercial where (lat between #{minLat} and #{maxLat}) and (lng between #{minLng} and #{maxLng});
+	</select>
+	
+	<select id="getNearByMedical" resultType="MedicalDto" parameterType="map">
+		select * from pharmacy where (lat between #{minLat} and #{maxLat}) and (lng between #{minLng} and #{maxLng});
+	</select>
+	
+	<select id="getNearByHospital" resultType="MedicalDto" parameterType="map">
+		select * from hospital where (lat between #{minLat} and #{maxLat}) and (lng between #{minLng} and #{maxLng});
+	</select>
+>>>>>>> kakao-map
 </mapper>

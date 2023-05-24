@@ -2,16 +2,19 @@ package com.ssafy.ourhouse.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.ourhouse.dto.AptInfoDto;
 import com.ssafy.ourhouse.dto.BusStopDto;
+import com.ssafy.ourhouse.dto.CommercialDto;
 import com.ssafy.ourhouse.dto.DealDto;
 import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
+import com.ssafy.ourhouse.dto.MedicalDto;
 import com.ssafy.ourhouse.dto.SidoDto;
 import com.ssafy.ourhouse.dto.SigunguDto;
 
@@ -40,8 +43,16 @@ public interface HouseMapper {
 
 	List<BusStopDto> getNearByBusStop() throws Exception;
 	
+<<<<<<< HEAD
 	List<DealInfoDto> getTop5Deals() throws Exception;
 
 	List<AptInfoDto> getTop5Apts() throws Exception;
 	
+=======
+	List<CommercialDto> getNearByCommercial(Map<String, Double> map) throws Exception;
+	
+	List<MedicalDto> getNearByMedical(Map<String, Double> map) throws Exception;
+	
+	List<MedicalDto> getNearByHospital(Map<String, Double> map) throws Exception;
+>>>>>>> kakao-map
 }
