@@ -26,13 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
 import com.ssafy.ourhouse.api.PublicDataAPI;
-=======
 import com.ssafy.ourhouse.api.BusAPI;
 import com.ssafy.ourhouse.dto.BusStopDto;
 import com.ssafy.ourhouse.dto.CommercialDto;
->>>>>>> a053a2ccb2636f11a0dc692dbc3e21c6bfbd211a
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
