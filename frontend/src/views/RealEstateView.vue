@@ -183,30 +183,57 @@ export default {
         });
     },
     selectDong(dongCode) {
-      let config = {
-        method: "post",
-        baseURL: "http://localhost:9999/house/",
-        data: {
-          dongCode,
-          // email: "",
-          // month: 1,
-          // year: 2015,
-        },
-      };
-      axios(config)
-        .then(({ data }) => {
-          if (data.data.length === 0) {
-            this.resultIsEmpty = true;
-          } else {
-            this.showDetailWindow = false;
-            console.log(data.data);
-            this.resultIsEmpty = false;
-            this.dealData = data.data;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      let searchCondition = {
+        dongCode: dongCode,
+        //나머지 정보 추가 가능
+      }
+      //로그인 했을 시
+      if (this.$store.getters.isLogin) {
+        let http = API();
+        http.post("/house/user", searchCondition)
+          .then(({ data }) => {
+            console.log(data);
+            if (data.data.length == null) { 
+              this.resultIsEmpty = true;
+            }
+            else if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      //로그인 안 했을 시
+      else {
+        console.log("로그인 안 했을 시")
+        let config = {
+          method: "post",
+          baseURL: "http://localhost:9999/house/",
+          data: {
+            ...searchCondition
+          },
+        };
+        axios(config)
+          .then(({ data }) => {
+            if (data.data.length === 0) {
+              this.resultIsEmpty = true;
+            } else {
+              this.showDetailWindow = false;
+              console.log(data.data);
+              this.resultIsEmpty = false;
+              this.dealData = data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
   created() {

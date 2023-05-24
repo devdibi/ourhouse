@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.ourhouse.dto.AptInfoDto;
 import com.ssafy.ourhouse.dto.BusStopDto;
 import com.ssafy.ourhouse.dto.DealDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
@@ -37,4 +39,9 @@ public interface HouseMapper {
 	void dealDislike(String userEmail, Long dealCode)throws SQLException;
 
 	List<BusStopDto> getNearByBusStop() throws Exception;
+	
+	List<DealInfoDto> getTop5Deals() throws Exception;
+
+	List<AptInfoDto> getTop5Apts() throws Exception;
+	
 }

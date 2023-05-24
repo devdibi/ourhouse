@@ -103,6 +103,11 @@ export default {
   left: 35px;
   font-family: 'Noto Sans';
   font-style: normal;
+  text-decoration-line: none;
+}
+
+*:link{
+  color: #000000;
 }
 
 #box {

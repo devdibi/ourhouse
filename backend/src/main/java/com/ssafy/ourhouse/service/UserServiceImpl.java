@@ -16,12 +16,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ourhouse.domain.Role;
+import com.ssafy.ourhouse.dto.HouseDatabaseDto;
+import com.ssafy.ourhouse.dto.HouseDto;
 // import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 // import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
 import com.ssafy.ourhouse.mapper.UserMapper;
 
-@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 

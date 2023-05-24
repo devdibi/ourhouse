@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.ourhouse.api.BusAPI;
+import com.ssafy.ourhouse.dto.AptInfoDto;
 import com.ssafy.ourhouse.dto.BusStopDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.HouseSearchConditionDto;
@@ -192,8 +194,6 @@ public class HouseController {
 			resultMap.put("message", "fail");
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
-
-//		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "거래 좋아요 설정", notes = "유저가 누른 거래의 좋아요 설정")
@@ -270,4 +270,38 @@ public class HouseController {
         System.out.println(sb.toString());
         return sb.toString();
 	}
+	
+	@ApiOperation(value = "좋아요 많은 아파트 5개", notes = "좋아요가 많은 아파트 상위 5개를 뽑음")
+	@GetMapping("/topapt")
+	public ResponseEntity<Map<String, Object>> getTopApts() {
+		logger.info("아파트 랭킹 5 출력");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			List<AptInfoDto> list = houseService.getTop5Apts();
+			resultMap.put("houses", list);
+			resultMap.put("message", "success");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@ApiOperation(value = "좋아요 많은 거래 5개", notes = "좋아요가 많은 거래 상위 5개를 뽑음")
+	@GetMapping("/topdeal")
+	public ResponseEntity<Map<String, Object>> getTopDeals() {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			List<DealInfoDto> list = houseService.getTop5Deals();
+			resultMap.put("deals", list);
+			resultMap.put("message", "success");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("message", "fail");
+			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
+		}
+	}
+	
 }

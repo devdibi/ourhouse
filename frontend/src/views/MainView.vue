@@ -6,53 +6,92 @@
 			</div>
 			<img src="@/assets/images/main-page-pic.png" alt="" />
 			<div id="select-area-input-box" data-app>
-				<v-select
-					v-model="selectSido"
-					:items="sidoList"
-					item-text="name"
-					item-value="sidoCode"
-					menu-props="auto"
-					label="시도 검색"
-					hide-details
-					outlined
-					return-object
-					color="#6750A4"
-					background-color="#E0D0F4"
-				></v-select>
+				<v-select v-model="selectSido" :items="sidoList" item-text="name" item-value="sidoCode" menu-props="auto"
+					label="시도 검색" hide-details outlined return-object color="#6750A4" background-color="#E0D0F4"></v-select>
 				<span class="mx-1"></span>
-				<v-select
-					v-model="selectSigungu"
-					:items="sigunguList"
-					item-text="name"
-					item-value="value"
-					menu-props="auto"
-					label="시군구 검색"
-					hide-details
-					outlined
-					return-object
-					color="#6750A4"
-					background-color="#E0D0F4"
-				></v-select>
+				<v-select v-model="selectSigungu" :items="sigunguList" item-text="name" item-value="value" menu-props="auto"
+					label="시군구 검색" hide-details outlined return-object color="#6750A4" background-color="#E0D0F4"></v-select>
 				<span class="mx-1"></span>
-				<v-select
-					v-model="selectDong"
-					:items="dongList"
-					item-text="name"
-					item-value="value"
-					menu-props="auto"
-					label="동 검색"
-					hide-details
-					outlined
-					return-object
-					color="#6750A4"
-					background-color="#E0D0F4"
-				></v-select>
+				<v-select v-model="selectDong" :items="dongList" item-text="name" item-value="value" menu-props="auto"
+					label="동 검색" hide-details outlined return-object color="#6750A4" background-color="#E0D0F4"></v-select>
 			</div>
 		</div>
+		<!-- 공지사항, 자유게시판, 부동산뉴스 시작-->
 		<div id="icon-navbar">
-			<!-- 공지사항, 자유게시판, 부동산뉴스 -->
+			<router-link to="/notice/list">
+				<div>
+					<img src="@/assets/icon/notice_icon.png" alt="공지 게시판" id="noticeIcon">
+					<label for="noticeIcon">공지사항</label>
+					<p>공지사항 바로가기</p>
+				</div>
+			</router-link>
+			<router-link to="/board/list">
+				<div>
+					<img src="@/assets/icon/board_icon.png" alt="자유 게시판" id="boardIcon">
+					<p>자유 게시판 바로가기</p>
+				</div>
+			</router-link>
+			<router-link to="/news">
+				<div>
+					<img src="@/assets/icon/news_icon.png" alt="뉴스" id="newsIcon">
+					<p>뉴스 바로가기</p>
+				</div>
+			</router-link>
 		</div>
-		<div id="main-stats-box"></div>
+		<!-- 좋아요 많은 아파트, 좋아요 많은 거래 상위 5개 출력 -->
+		<div id="main-stats-box">
+			<!-- 아파트 랭킹 출력 -->
+			<div id="aptContainer">
+				<h3>인기 아파트 Top 5</h3>
+				<table>
+					<caption>인기 아파트 Top 5</caption>
+					<thead>
+						<th>랭킹</th>
+						<th>주소</th>
+						<th>아파트 이름</th>
+						<th>평균 면적</th>
+						<th>평균 가격</th>
+						<th>좋아요 수</th>
+					</thead>
+					<tbody>
+						<tr v-for="(apt, index) in topApts" v-bind:key="apt">
+						<td>{{index+1}}</td>
+						<td>{{apt.sidoName}} {{apt.gugunName}} {{apt.jibunAddress}}</td>
+						<td>{{ apt.aptName }}</td>
+						<td>{{ apt.areaAvg }}m2</td>
+						<td>{{ apt.priceAvg }}(만원)</td>
+						<td>{{ apt.likeNums }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="dealContianer">
+			<!-- 거래 랭킹 출력 -->
+			<table>
+				<caption>인기 거래 Top 5</caption>
+					<thead>
+						<th>랭킹</th>
+						<th>주소</th>
+						<th>아파트 이름</th>
+						<th>층수</th>
+						<th>면적</th>
+						<th>가격</th>
+						<th>좋아요 수</th>
+					</thead>
+					<tbody>
+						<tr v-for="(deal, index) in topDeals" v-bind:key="deal">
+						<td>{{index+1}}</td>
+						<td>{{deal.sidoName}} {{deal.gugunName}} {{deal.jibunAddress}}</td>
+						<td>{{ deal.aptName }}</td>
+						<td>{{ deal.floor }}층</td>
+						<td>{{ deal.area }}m2</td>
+						<td>{{ deal.price }}(만원)</td>
+						<td>{{ deal.likeNums }}</td>
+						</tr>
+					</tbody>
+				</table>
+		</div>
 	</div>
 </template>
 
@@ -70,6 +109,8 @@ export default {
 			sigunguList: [""],
 			selectDong: String,
 			dongList: [""],
+			topApts: [],
+			topDeals: [],
 		};
 	},
 	created() {
@@ -85,6 +126,37 @@ export default {
 			.catch((err) => {
 				console.log(err);
 			});
+
+		config = {
+			method: "get",
+			baseURL: "http://localhost:9999/house/topapt",
+		}
+		axios(config)
+			.then(({ data }) => {
+				if (data.message == "success") { 
+					this.topApts = data.houses;
+					console.log(this.topApts);
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+			});			
+
+		config = {
+			method: "get",
+			baseURL: "http://localhost:9999/house/topdeal",
+		}
+		axios(config)
+			.then(({ data }) => {
+				if (data.message == "success") { 
+					this.topDeals = data.deals;
+					console.log(this.topDeals);
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+			});		
+
 	},
 	methods: {},
 	watch: {
@@ -134,6 +206,21 @@ export default {
 </script>
 
 <style scoped>
+* {
+	font-family: 'Noto Sans';
+	font-style: normal;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #6960d5;
+}
+
 #main {
 	height: 650px;
 	width: 100%;
@@ -182,12 +269,20 @@ export default {
 #icon-navbar {
 	width: 100%;
 	height: 250px;
-	border: 1px black solid;
+	/* border: 1px black solid; */
 }
 
 #main-stats-box {
 	width: 100%;
 	height: 400px;
-	border: 1px black solid;
+	/* border: 1px black solid; */
+}
+
+#newsIcon,
+#noticeIcon,
+#boardIcon {
+	display: inline-flex;
+	position: inherit;
+	width: 10%;
 }
 </style>

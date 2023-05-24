@@ -6,10 +6,11 @@
 
 	<!-- dealLike를 출력하기 위한 임시 resultMap -->
 	<resultMap type="dealDto" id="likeDto">
-		<result column="deal_code" property="dealCode" jdbcType="VARCHAR" />
+		<result column="deal_code" property="dealCode"
+			jdbcType="VARCHAR" />
 		<result column="apt_code" property="price" jdbcType="VARCHAR" />
 	</resultMap>
-	
+
 	<!-- column과 변수명 맞추기 위한 resultMap -->
 	<resultMap type="houseDatabaseDto" id="houseDBDto">
 		<result column="apt_code" property="aptCode" />
@@ -29,7 +30,7 @@
 		<result column="price_avg" property="priceAvg" />
 		<result column="area_avg" property="areaAvg" />
 	</resultMap>
-	
+
 	<!-- column과 변수명 맞추기 위한 resultMap -->
 	<resultMap type="dongDto" id="dongDtoMap">
 		<result column="dong_code" property="dongCode" />
@@ -43,31 +44,35 @@
 		resultMap="houseDBDto">
 		SELECT *
 		FROM house_deal LEFT JOIN house_info USING (apt_code)
-		WHERE dong_code = #{dongCode}
+		WHERE
+		house_info.dong_code = #{dongCode}
 		<if test="year != null and year != 0">
-          AND year = #{year}
-      	</if> 
-      	<if test="month != null and month != 0">
-          AND month = #{month}
-      	</if>
-      	<if test="minPrice != null and minPrice != 0">
-          AND price >= #{minPrice}
-      	</if>
-      	<if test="maxPrice != null and maxPrice != 0">
-      	  AND price <![CDATA[ <= ]]> #{maxPrice}
-      	</if>
-      	<if test="minFloor != null and minFloor != 0">
-          AND floor >= #{minFloor}
-      	</if>
-      	<if test="maxFloor != null and maxFloor != 0">
-          AND floor <![CDATA[ <= ]]> #{maxFloor}
-      	</if>
-      	<if test="minArea != null and minArea != 0">
-          AND area >= #{minArea}
-      	</if>
-      	<if test="maxArea != null and maxArea != 0">
-          AND area <![CDATA[ <= ]]> #{maxArea}
-      	</if> 
+			AND year = #{year}
+		</if>
+		<if test="month != null and month != 0">
+			AND month = #{month}
+		</if>
+		<if test="minPrice != null and minPrice != 0">
+			AND price >= #{minPrice}
+		</if>
+		<if test="maxPrice != null and maxPrice != 0">
+			AND price <![CDATA[ <= ]]>
+			#{maxPrice}
+		</if>
+		<if test="minFloor != null and minFloor != 0">
+			AND floor >= #{minFloor}
+		</if>
+		<if test="maxFloor != null and maxFloor != 0">
+			AND floor <![CDATA[ <= ]]>
+			#{maxFloor}
+		</if>
+		<if test="minArea != null and minArea != 0">
+			AND area >= #{minArea}
+		</if>
+		<if test="maxArea != null and maxArea != 0">
+			AND area <![CDATA[ <= ]]>
+			#{maxArea}
+		</if>
 	</select>
 
 	<!-- 관심 아파트 출력(house_code) -->
@@ -83,7 +88,8 @@
 		resultMap="likeDto">
 		SELECT deal_code, apt_code
 		FROM favorite_deal
-		WHERE email = #{email};
+		WHERE email =
+		#{email};
 	</select>
 
 	<select id="getSido" resultType="sidoDto">
@@ -91,31 +97,37 @@
 		FROM sido order by name asc;
 	</select>
 
-	<select id="getSigungu" parameterType="String" resultType="sigunguDto">
+	<select id="getSigungu" parameterType="String"
+		resultType="sigunguDto">
 		SELECT sido_code sidoCode, sigungu_code sigunguCode, name
 		FROM sigungu
 		WHERE sido_code = #{sido} order by name asc;
 	</select>
 
-	<select id="getDong" parameterType="String" resultMap="dongDtoMap">
+	<select id="getDong" parameterType="String"
+		resultMap="dongDtoMap">
 		SELECT dong_code, sigungu_code, name, sido_code
 		FROM dong
 		WHERE sigungu_code = #{sigungu} order by name asc;
 	</select>
 
 	<insert id="houseLike" parameterType="Map">
-		INSERT INTO favorite_house (email, apt_code, created_at)
+		INSERT INTO favorite_house
+		(email, apt_code, created_at)
 		VALUES (#{userEmail}, #{aptCode}, NOW())
 	</insert>
 
 	<insert id="dealLike" parameterType="Map">
-		INSERT INTO favorite_deal (email, deal_code, apt_code, created_at)
-		VALUES (#{userEmail}, #{dealCode},
-			(SELECT apt_code FROM house_deal WHERE deal_code = #{dealCode}), now());
+		INSERT INTO favorite_deal
+		(email, deal_code, apt_code, created_at)
+		VALUES (#{userEmail},
+		#{dealCode},
+		(SELECT apt_code FROM house_deal WHERE deal_code = #{dealCode}), now());
 	</insert>
 
 	<delete id="houseDislike" parameterType="Map">
-		DELETE FROM favorite_house
+		DELETE FROM
+		favorite_house
 		WHERE email=#{userEmail} AND apt_code=#{aptCode}
 	</delete>
 
@@ -123,9 +135,30 @@
 		DELETE FROM favorite_deal
 		WHERE email=#{userEmail} AND deal_code=#{dealCode}
 	</delete>
-	
+
 	<select id="getNearByBusStop" resultType="busStopDto">
 		select * from busstop;
 	</select>
 
+	<select id="getTop5Apts" resultType="aptInfoDto">
+		SELECT count(apt_code) likeNums, name aptName, jibun_address jibunAddress, 
+			price_avg priceAvg, area_avg areaAvg, sidoName, gugunName, dongName
+		FROM favorite_house
+		LEFT JOIN house_info USING (apt_code)
+		LEFT JOIN dongne ON house_info.dong_code = dongne.dongCode
+		GROUP BY apt_code
+		ORDER BY likeNums DESC LIMIT 5;
+	</select>
+
+	<select id="getTop5Deals" resultType="dealInfoDto">
+		SELECT price, area, floor, name aptName, jibun_address jibunAddress, 
+			sidoName, gugunName, dongName, count(deal_code) likeNums
+		FROM favorite_deal
+		LEFT JOIN house_deal USING (deal_code)
+		LEFT JOIN house_info ON house_deal.apt_code = house_info.apt_code
+		LEFT JOIN dongne ON house_info.dong_code = dongne.dongCode
+		GROUP BY deal_code
+		ORDER BY likeNums DESC LIMIT 5;
+	</select>
+	
 </mapper>
