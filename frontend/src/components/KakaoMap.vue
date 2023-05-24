@@ -229,7 +229,10 @@ export default {
 				for (j = 0; j < commercial.length; j++) {
 					// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
 					let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-						markerPosition = new kakao.maps.LatLng(commercial[j].lat, commercial[j].lng); // 마커가 표시될 위치입니다
+						markerPosition = new kakao.maps.LatLng(
+							commercial[j].lat - 0.0001,
+							commercial[j].lng + 0.0001
+						); // 마커가 표시될 위치입니다
 					// 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
 					this.marker = new kakao.maps.Marker({
 						position: markerPosition,
