@@ -60,9 +60,9 @@ export default {
     // 리스트 호출
     list((response) => {
       this.notices = response.data.noticeList;
-
       // 처음 리스트 출력
       for (var p = 0 * 10; p < 10; p++) {
+        if (this.notices == null) return;
         if (p == this.notices.length) return;
         this.lists.push(this.notices[p]);
       }
