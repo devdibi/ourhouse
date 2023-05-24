@@ -84,7 +84,7 @@
 			<!-- 상세 검색 Container -->
 			<!-- 카카오 지도 -->
 			<div id="wrap-map">
-				<KakaoMap :location="location" :locations="locations" />
+				<KakaoMap :location="location" :locations="locations" :option="clickOption" />
 				<!-- 검색 결과 -->
 				<div id="result">
 					<h3 v-if="resultIsEmpty" class="text-center mt-3">검색 결과가 없습니다.</h3>
@@ -183,6 +183,7 @@ export default {
 			busClick: false,
 			medClick: false,
 			comClick: false,
+			clickOption: "-1",
 		};
 	},
 	watch: {
@@ -282,6 +283,8 @@ export default {
 	},
 	methods: {
 		markerClick(option) {
+			this.clickOption = option;
+			console.log(this.clickOption);
 			if (option === "bus") {
 				this.busClick = true;
 				this.comClick = false;
