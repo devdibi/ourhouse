@@ -96,10 +96,10 @@ export default {
 					for (var i = 0; i < 5; i++){
 						var tmpApt = {
 							"순위":i+1,
-							"주소": data.houses[i].sidoName + data.houses[i].gugunName + data.houses[i].jibunAddress,
+							"주소": data.houses[i].sidoName + " " + data.houses[i].gugunName + " " + data.houses[i].jibunAddress,
 							"아파트 이름": data.houses[i].aptName,
 							"평균 가격":data.houses[i].priceAvg + " 만원",
-							"평균 면적": data.houses[i].areaAvg + "m2",
+							"평균 면적": data.houses[i].areaAvg + "㎡",
 							"좋아요 수": data.houses[i].likeNums
 						}
 						this.topApts.push(tmpApt);
@@ -120,11 +120,11 @@ export default {
 					for (var i = 0; i < 5; i++){
 						var tmpDeal = {
 							"순위":i+1,
-							"주소": data.deals[i].sidoName + data.deals[i].gugunName + data.deals[i].jibunAddress,
+							"주소": data.deals[i].sidoName + " " + data.deals[i].gugunName + " " + data.deals[i].jibunAddress,
 							"아파트 이름": data.deals[i].aptName,
 							"층":data.deals[i].floor,
 							"가격":data.deals[i].price + " 만원",
-							"면적": data.deals[i].area + "m2",
+							"면적": data.deals[i].area + "㎡",
 							"좋아요 수": data.deals[i].likeNums
 						}
 						this.topDeals.push(tmpDeal);

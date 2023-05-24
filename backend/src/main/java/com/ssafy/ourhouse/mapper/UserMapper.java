@@ -7,6 +7,8 @@ import java.util.Map;
 import com.ssafy.ourhouse.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 
+import com.ssafy.ourhouse.dto.AptInfoDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 import com.ssafy.ourhouse.dto.UserDto;
@@ -40,8 +42,8 @@ public interface UserMapper {
 
 	void updateUserInfo(UserDto user) throws SQLException;
 
-	List<HouseDto> getFavoriteHouses(String email) throws SQLException;
+	List<AptInfoDto> getFavoriteHouses(String email) throws SQLException;
 
-	List<HouseDatabaseDto> getFavoriteDeals(String email) throws SQLException;
+	List<DealInfoDto> getFavoriteDeals(String email) throws SQLException;
 
 }

@@ -8,9 +8,9 @@
     <div class="area"> {{ this.user.dwellArea }}</div>
     <hr />
     <div>대시보드</div>
-    <router-link to="user/modify">회원정보 열람 및 수정</router-link>
-    <div>관심 단지 목록</div>
-    <div>관심 매물 목록</div>
+    <router-link to="user/modify">회원정보 열람 및 수정</router-link><br>
+    <router-link to="user/likeapt">관심 단지 목록</router-link><br>
+    <router-link to="user/likedeal">관심 매물 목록</router-link>
   </div>
 </template>
 

@@ -128,6 +128,16 @@ const routes = [
         name: "modify",
         component: () => import("@/components/user/UserModify"),
       },
+      {
+        path: "likeapt",
+        name: "likeapt",
+        component: () => import("@/components/user/UserLikeApt"),
+      },
+      {
+        path: "likedeal",
+        name: "likedeal",
+        component: () => import("@/components/user/UserLikeDeal"),
+      },
     ],
   },
   {

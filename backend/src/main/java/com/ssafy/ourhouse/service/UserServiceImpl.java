@@ -16,6 +16,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ourhouse.domain.Role;
+import com.ssafy.ourhouse.dto.AptInfoDto;
+import com.ssafy.ourhouse.dto.DealInfoDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
 import com.ssafy.ourhouse.dto.HouseDto;
 // import com.ssafy.ourhouse.dto.HouseDatabaseDto;
@@ -150,13 +152,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<HouseDto> getFavoriteHouses(String jwt) throws Exception {
+	public List<AptInfoDto> getFavoriteHouses(String jwt) throws Exception {
 		String email = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
 		return userMapper.getFavoriteHouses(email);
 	}
 
 	@Override
-	public List<HouseDatabaseDto> getFavoriteDeals(String jwt) throws Exception {
+	public List<DealInfoDto> getFavoriteDeals(String jwt) throws Exception {
 		String email = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
 		return userMapper.getFavoriteDeals(email);
 	}

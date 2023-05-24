@@ -47,6 +47,14 @@ async function updateUserInfo(user, success, fail) {
   await api.put(`/user/updateUserInfo`, JSON.stringify(user)).then(success).catch(fail);
 }
 
+function getFavoriteDeals(success, fail) {
+  api.get(`/user/getFavoriteDeals`).then(success).catch(fail);
+}
+
+function getFavoriteHouses(success, fail) {
+  api.get(`/user/getFavoriteHouses`).then(success).catch(fail);
+}
+
 export {
   getSido,
   getSigungu,
@@ -56,4 +64,6 @@ export {
   emailCheck,
   getUserInfo,
   updateUserInfo,
+  getFavoriteDeals,
+  getFavoriteHouses,
 };
