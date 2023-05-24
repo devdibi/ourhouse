@@ -15,6 +15,12 @@ export default {
     dong: {
       type: String,
     },
+    c_lng: {
+      type: Number,
+    },
+    c_lat: {
+      type: Number,
+    },
   },
   data() {
     return {
@@ -38,27 +44,45 @@ export default {
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src = "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=f66b2cab49a7421a828121c529ee0415";
+      script.src = "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=e5ce35d20b0d537bb79b6c137aba1ed7";
       document.head.appendChild(script);
     },
     addMap() {
+      // 위도
+      let min_lat = 40;
+      let max_lat = 0;
+      // 경도
+      let min_lng = 150;
+      let max_lng = 0;
+
       // console.log(this.areas.join().replace(/\],\[/g, "|").replace("[", "").replace("]", "").split("|")[0].split(", "));
       for (var j = 0; j < this.areas.length; j++) {
         this.lng.push(this.areas.join().replace(/\],\[/g, "|").replace("[", "").replace("]", "").split("|")[j].split(", ")[0]);
         this.lat.push(this.areas.join().replace(/\],\[/g, "|").replace("[", "").replace("]", "").split("|")[j].split(", ")[1]);
         this.polygon.push(new kakao.maps.LatLng(this.lat[j], this.lng[j]));
-      }
-      var areas = [
-        {
-          name: this.dong,
-          path: this.polygon,
-        },
-      ];
 
+        if (min_lat > this.lat[j]) {
+          min_lat = this.lat[j];
+        } else if (max_lat < this.lat[j]) {
+          max_lat = this.lat[j];
+        }
+        if (min_lng > this.lng[j]) {
+          min_lng = this.lng[j];
+        } else if (max_lng < this.lng[j]) {
+          max_lng = this.lng[j];
+        }
+      }
+
+      let diff = max_lat - min_lat > max_lng - min_lng ? max_lat - min_lat : max_lng - min_lng;
+      let size = Math.round(100 * diff);
+      var areas = {
+        name: this.dong,
+        path: this.polygon,
+      };
       var mapContainer = document.getElementById("map"), // 지도를 표시할 div
         mapOption = {
-          center: new kakao.maps.LatLng(this.lat[0], this.lng[0]), // 지도의 중심좌표
-          level: 4, // 지도의 확대 레벨
+          center: new kakao.maps.LatLng(this.c_lat, this.c_lng), // 지도의 중심좌표
+          level: size, // 지도의 확대 레벨
         };
 
       var map = new kakao.maps.Map(mapContainer, mapOption),
@@ -66,9 +90,7 @@ export default {
         infowindow = new kakao.maps.InfoWindow({ removable: true });
 
       // 지도에 영역데이터를 폴리곤으로 표시합니다
-      for (var i = 0, len = areas.length; i < len; i++) {
-        displayArea(areas[i]);
-      }
+      displayArea(areas);
 
       // 다각형을 생상하고 이벤트를 등록하는 함수입니다
       function displayArea(area) {
@@ -87,8 +109,7 @@ export default {
         // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
         kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
           polygon.setOptions({ fillColor: "#09f" });
-
-          customOverlay.setContent('<div class="area">' + area.name + "</div>");
+          customOverlay.setContent('<div class="area">' + areas.name + "</div>");
 
           customOverlay.setPosition(mouseEvent.latLng);
           customOverlay.setMap(map);
@@ -107,10 +128,8 @@ export default {
         });
 
         // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다
-        kakao.maps.event.addListener(polygon, "click", function (mouseEvent) {
-          var content =
-            '<div class="info">' + '   <div class="title">' + area.name + "</div>" + '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + " m<sup>2</sup></div>" + "</div>";
-
+        kakao.maps.event.addListener(polygon, "click", (mouseEvent) => {
+          var content = '<div class="info">' + '<div class="title" > ' + area.name + "</div>" + "</div>";
           infowindow.setContent(content);
           infowindow.setPosition(mouseEvent.latLng);
           infowindow.setMap(map);

@@ -11,4 +11,6 @@ public interface DashBoardMapper {
 	List<Integer> getYearAmount(long dongCode) throws SQLException;
 	List<Integer> getMonthAmount(long dongCode) throws SQLException;
 	List<Object> getPolygon(long dongCode) throws SQLException;
+	List<Object> getGender(long dongCode) throws SQLException;
+	List<Object> getAge(long dongCode) throws SQLException;
 }

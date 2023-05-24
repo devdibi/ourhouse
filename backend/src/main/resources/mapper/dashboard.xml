@@ -18,7 +18,16 @@
 </select>
 
 <select id="getPolygon" parameterType="long" resultType="map">
-	SELECT name,geo from polygon where dong_code = #{dongCode}
+	SELECT name, geo, c_lat, c_lng from polygon where dong_code = #{dongCode}
 </select>
+
+ <select id="getGender" parameterType="long" resultType="map">
+	select count(*) count, gender from user where favorite_area = #{dongCode} group by gender;
+</select>	
+
+<select id="getAge" parameterType="long" resultType="map">
+	select count(*) count, age_group from user where favorite_area = #{dongCode} group by age_group;
+</select> 
+
 </mapper>
 

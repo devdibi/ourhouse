@@ -1,59 +1,67 @@
 <template>
   <div style="width: 100%; height: 1100px; display: flex; margin-top: 30px">
     <!-- 좌측 메뉴 영역 -->
-    <div style="margin-left: 20px; width: 300px">
+    <div style="margin-left: 20px; width: 300px; height: 100%">
       <the-menu></the-menu>
     </div>
-    <div style="display: block; padding: 0">
-      <!-- 우측 대시보드 영역 -->
-      <div style="margin-left: 30px; height: 40%; display: flex">
-        <!-- LineChart -->
-        <!-- 해당지역 연도별 평균 거래금액 추세 linechart  -->
-        <!-- [select avg(price) from house_deat_test where dong_code = "" group by year] 2015 ~ 2022-->
-        <div class="content-area" id="average">
-          <line-chart class="chart-area" :year="line_year" :average="line_average" :dong="dong" v-if="loaded"></line-chart>
-        </div>
+    <!-- 중간 그래프 영역 -->
+    <div style="display: block; padding: 0; height: 100%" v-if="loaded">
+      <div class="select-area" style="height: 50px">
+        <select name="sido" style="width: 30%; height: 30px; border: 1px solid #d9d9d9; border-radius: 5px; margin-right: 5%; text-align: center">
+          <option value="">시군구</option>
+        </select>
+        <select name="sigungu" style="width: 30%; height: 30px; border: 1px solid #d9d9d9; border-radius: 5px; margin-right: 5%; text-align: center">
+          <option value="">시군구</option>
+        </select>
+        <select name="dong" style="width: 30%; height: 30px; border: 1px solid #d9d9d9; border-radius: 5px; text-align: center">
+          <option value="">시군구</option>
+        </select>
+      </div>
 
-        <!-- BarChart 스위칭 가능하도록 -->
-        <!-- 
+      <!-- LineChart -->
+      <!-- 해당지역 연도별 평균 거래금액 추세 linechart  -->
+      <!-- [select avg(price) from house_deat_test where dong_code = "" group by year] 2015 ~ 2022-->
+      <div class="content-area" id="average" style="padding-top: 10px">
+        <line-chart class="chart-area" :year="line_year" :average="line_average" :dong="dong"></line-chart>
+      </div>
+
+      <!-- BarChart 스위칭 가능하도록 -->
+      <!-- 
           해당지역 연도별 총 거래량 : 연도별 거래량의 차이를 확인할 수 있다.
           [select count(deal_code) from house_deal where dong_code = "" group by year]
         -->
-        <!-- 
+      <!-- 
           해당지역 월별 총 거래량 : 2015 ~ 2022년까지 매월 거래량의 차이를 확인하여 연 중 어느 시점에 집을 보는것이 좋을지 판단하는 지표
           select count(deal_code) from house_deal where dong_code = "" group by month 
         -->
-        <div class="content-area" id="amount" style="margin-left: 70px">
-          <bar-chart class="chart-area" :year="bar_year" :year_data="bar_year_data" :month="bar_month" :month_data="bar_month_data" :dong="dong" v-if="loaded"></bar-chart>
-        </div>
+      <div class="content-area" id="amount" style="padding: 0px">
+        <bar-chart class="chart-area" :year="bar_year" :year_data="bar_year_data" :month="bar_month" :month_data="bar_month_data" :dong="dong" v-if="loaded"></bar-chart>
+      </div>
 
-        <!-- Pie Chart 스위칭 가능하도록 -->
-        <!-- 
+      <!-- Pie Chart 스위칭 가능하도록 -->
+      <!-- 
           해당지역 연령별 관심 수 
           [select count(*) from search s left join user u on s.email = u.eamil where group by u.age_group ]
         -->
-        <!-- 해당지역 성별 관심 수 pie chart
+      <!-- 해당지역 성별 관심 수 pie chart
           [select count(*) from search s left join user u on s.email = u.eamil where group by u.gender ] 
         -->
-        <div class="content-area" id="pie" style="margin-left: 70px">
-          <pie-chart class="chart-area" v-if="loaded"></pie-chart>
-        </div>
+      <div class="content-area" id="pie" style="padding: 0px">
+        <pie-chart class="chart-area" v-if="loaded && this.age.length != 0" :age="age" :age_data="age_data" :gender="gender" :gender_data="gender_data"></pie-chart>
+        <div style="width: 100%; height: 250px; text-align: center; vertical-align: middle" v-else>정보가 없습니다.</div>
       </div>
 
       <!-- 우측 하단 -->
-      <div style="height: 60%; display: flex">
-        <!-- 
+    </div>
+    <!-- dn -->
+    <div style="width: 1600px; height: 100%; margin-left: 50px" v-if="loaded">
+      <!-- 
           해당지역 중심 주변 평균 거래금액 비교 지도
           해당지역의 시군구에 속하는 지역 모두 출력 
           단, 지도의 중심은 관심지역 -->
-        <!-- polygon을 이용하여 event 생성 => dongcode 전달로 지도검색 수행 -->
-        <div class="content-area" id="map" style="margin-left: 30px; margin-top: 50px; padding: 0">
-          <map-chart class="chart-area" v-if="loaded" :areas="map_data" :dong="dong"></map-chart>
-        </div>
-
-        <!-- 해당 지역에서 거래량이 가장 많은 순서 건물 순위 10개 -->
-        <!-- 해당 지역에서 거래 금액이 가장 큰 거래 순위 10개 -->
-        <div class="content-area" id="list" style="margin-left: 30px; margin-top: 50px">hello</div>
+      <!-- polygon을 이용하여 event 생성 => dongcode 전달로 지도검색 수행 -->
+      <div class="content-area" id="map" style="padding: 0">
+        <map-chart class="chart-area" v-if="loaded" :areas="map_data" :dong="dong" :c_lng="c_lng" :c_lat="c_lat"></map-chart>
       </div>
     </div>
   </div>
@@ -73,7 +81,7 @@ export default {
   components: { TheMenu, LineChart, BarChart, PieChart, MapChart },
   data() {
     return {
-      dong_code: "5011010500", // dong code만 넘겨주면 세개의 시각화가 완성됨, 연령대 성별은 데이터가 없어서 추후 고민
+      dong_code: "1162010200", // dong code만 넘겨주면 세개의 시각화가 완성됨, 연령대 성별은 데이터가 없어서 추후 고민
       dong: "",
       line_year: [],
       line_average: [],
@@ -82,6 +90,12 @@ export default {
       bar_month: [],
       bar_month_data: [],
       map_data: [[]],
+      age: [],
+      age_data: [],
+      gender: [],
+      gender_data: [],
+      c_lng: "",
+      c_lat: "",
       loaded: false,
     };
   },
@@ -94,13 +108,16 @@ export default {
       average(
         `${this.dong_code}`,
         (response) => {
+          this.c_lng = response.data.geoList[0].c_lng;
+          this.c_lat = response.data.geoList[0].c_lat;
           // geo 좌표 배열로 생성
           // console.log(response.data.geoList[0].geo.split("[").join().split("]").join().replace(/,, ,/g, "]|[").replace(",,,,", "[").replace(",,,,", "]").split("|"));
           this.map_data = response.data.geoList[0].geo.split("[").join().split("]").join().replace(/,, ,/g, "]|[").replace(",,,,", "[").replace(",,,,", "]").split("|");
           console.log(this.map_data);
+
           // line Chart
           const line = response.data.averageList;
-          this.dong = line[0].name;
+          this.dong = response.data.geoList[0].name;
           console.log(line);
           let len = line.length;
           for (var i = 0; i < len; i++) {
@@ -124,6 +141,20 @@ export default {
             this.bar_month.push(monthList[i].month);
             this.bar_month_data.push(monthList[i].count);
           }
+          // pie Chart
+          const ageList = response.data.ageList;
+          len = ageList.length;
+          for (i = 0; i < len; i++) {
+            this.age.push(ageList[i].ageGroup);
+            this.age_data.push(ageList[i].count);
+          }
+
+          const genderList = response.data.genderList;
+          len = genderList.length;
+          for (i = 0; i < len; i++) {
+            this.gender.push(genderList[i].gender);
+            this.gender_data.push(genderList[i].count);
+          }
 
           this.loaded = true;
         },
@@ -137,38 +168,43 @@ export default {
 </script>
 
 <style scoped>
+#select-area {
+  width: 500px;
+  height: 50px;
+  background: rgba(249, 247, 247, 0.7);
+  box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
 #average {
-  width: 650px;
-  height: auto;
-  max-width: 700px;
-  max-height: 500px;
+  width: 500px;
+  height: 330px;
   background: rgba(249, 247, 247, 0.7);
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
 }
 
 #amount {
-  width: 650px;
-  height: auto;
-  max-width: 700px;
-  max-height: 500px;
+  width: 500px;
+  height: 330px;
+  margin-top: 25px;
   background: rgba(247, 247, 247, 0.7);
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
 }
 
 #pie {
-  width: 650px;
-  height: auto;
-  max-height: 500px;
+  width: 500px;
+  height: 330px;
+  margin-top: 25px;
   background: rgba(247, 247, 247, 0.7);
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
 }
 
 #map {
-  width: 60%;
-  height: auto;
+  width: 100%;
+  height: 100%;
   background: rgba(247, 247, 247, 0.7);
   box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
@@ -202,6 +238,8 @@ export default {
 }
 
 .chart-area {
+  height: 100%;
+  width: 100%;
   position: relative;
   animation: fadeInUp 2s;
 }

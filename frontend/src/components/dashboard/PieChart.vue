@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <div>
+  <div style="padding: 20px">
+    <Pie :opdtions="chartOptions" :data="chartData" style="max-height: 250px" />
+    <div style="margin-top: 30px; margin-right: 20px; float: right; color: #939393; margin-bottom: 10px">
       <button @click="loadAge()">연령대</button>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
       <button @click="loadGender()">성별</button>
     </div>
-    <Pie :options="chartOptions" :data="chartData" style="max-height: 300px" />
   </div>
 </template>
 <script>
@@ -16,15 +17,29 @@ ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 export default {
   name: "LineChart",
   components: { Pie },
+  props: {
+    gender: {
+      type: Array,
+    },
+    gender_data: {
+      type: Array,
+    },
+    age: {
+      type: Array,
+    },
+    age_data: {
+      type: Array,
+    },
+  },
   data() {
     return {
       chartData: {
-        labels: ["남", "여"],
+        labels: this.gender,
         datasets: [
           {
             label: "성별에 따른 관심도(관심지역)",
             backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
-            data: [40, 19],
+            data: this.gender_data,
           },
         ],
       },
@@ -38,12 +53,27 @@ export default {
   methods: {
     loadAge() {
       this.chartData = {
-        labels: ["10대", "20대", "30대", "40대", "50대", "60대", "70대", "80대"],
+        labels: this.age,
         datasets: [
           {
             label: "연령별(10 ~ 80대) 관심도(관심지역)",
-            backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
-            data: [40, 19],
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+            ],
+            data: this.age_data,
           },
         ],
       };
@@ -54,12 +84,12 @@ export default {
     },
     loadGender() {
       this.chartData = {
-        labels: ["남", "여"],
+        labels: this.gender,
         datasets: [
           {
             label: "성별에 따른 관심도(관심지역)",
             backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
-            data: [40, 19],
+            data: this.gender_data,
           },
         ],
       };

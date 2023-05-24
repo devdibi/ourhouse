@@ -46,17 +46,23 @@ public class DashBoardController {
 		List<Integer> yearAmountList;
 		List<Integer> monthAmountList;
 		List<Object> geoList;
+		List<Object> ageList;
+		List<Object> genderList;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			averageList = dashBoardService.getAverages(dongCode);
 			yearAmountList = dashBoardService.getYearAmount(dongCode);
 			monthAmountList = dashBoardService.getMonthAmount(dongCode);
 			geoList = dashBoardService.getPolygon(dongCode);
+			ageList = dashBoardService.getAge(dongCode);
+			genderList = dashBoardService.getGender(dongCode);
 			resultMap.put("message", "success");
 			resultMap.put("averageList", averageList);
 			resultMap.put("yearAmountList", yearAmountList);
 			resultMap.put("monthAmountList", monthAmountList);
 			resultMap.put("geoList", geoList);
+			resultMap.put("ageList", ageList);
+			resultMap.put("genderList", genderList);
 			return new ResponseEntity<Map<String,Object>>(resultMap, HttpStatus.OK);
 		}catch(Exception e) {
 			resultMap.put("message", "fail");

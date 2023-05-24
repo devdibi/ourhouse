@@ -40,5 +40,17 @@ public class DashBoardServiceImpl implements DashBoardService{
 	public List<Object> getPolygon(long dongCode) throws Exception {
 		return dashBoardMapper.getPolygon(dongCode);
 	}
+
+
+	@Override
+	public List<Object> getGender(long dongCode) throws Exception {
+		return dashBoardMapper.getGender(dongCode);
+	}
+
+
+	@Override
+	public List<Object> getAge(long dongCode) throws Exception {
+		return dashBoardMapper.getAge(dongCode);
+	}
 	
 }

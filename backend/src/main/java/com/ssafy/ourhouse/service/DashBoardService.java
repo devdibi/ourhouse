@@ -7,4 +7,6 @@ public interface DashBoardService {
 	List<Integer> getYearAmount(long dongCode) throws Exception;
 	List<Integer> getMonthAmount(long dongCode) throws Exception;
 	List<Object> getPolygon(long dongCode) throws Exception;
+	List<Object> getGender(long dongCode) throws Exception;
+	List<Object> getAge(long dongCode) throws Exception;
 }

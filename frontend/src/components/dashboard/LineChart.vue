@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 20px">
-    <LineChartGenerator :options="options" :data="chartData" style="height: 300px" />
+    <LineChartGenerator :options="options" :data="chartData" style="height: 100%" />
   </div>
 </template>
 <script>
