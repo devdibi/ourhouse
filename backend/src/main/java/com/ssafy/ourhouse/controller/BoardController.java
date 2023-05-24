@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.ourhouse.dto.BoardDto;
 import com.ssafy.ourhouse.dto.CommentDto;
 import com.ssafy.ourhouse.service.BoardService;
+import com.ssafy.ourhouse.service.JwtService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,9 +40,14 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	public BoardController(BoardService boardService) {
+	@Autowired
+	private JwtService jwtService;
+	
+	
+	public BoardController(BoardService boardService, JwtService jwtService) {
 		super();
 		this.boardService = boardService;
+		this.jwtService = jwtService;
 	}
 
 	// list
@@ -66,7 +72,7 @@ public class BoardController {
 	// detail, hit, comment
 	@ApiOperation(value = "게시글의 상세페이지 조회 및 댓글 조회")
 	@GetMapping("/{boardNo}")
-	public ResponseEntity<Map<String,Object>> getBoard(@PathVariable("boardNo")int boardNo ){
+	public ResponseEntity<Map<String,Object>> getBoard(@PathVariable("boardNo")int boardNo){
 		logger.info("게시글을 불러와요");
 		BoardDto board;
 		List<CommentDto> commentList;
@@ -105,6 +111,7 @@ public class BoardController {
 	@ApiOperation(value="자유게시판에 글을 작성해보아요")
 	@PostMapping("/")
 	public ResponseEntity<String> writeBoard(@RequestBody BoardDto boardDto){
+		boardDto.setEmail(jwtService.extractUserEmail(boardDto.getEmail()));
 		logger.debug("boardDto info: {}", boardDto);
 		try {
 			boardService.writeBoard(boardDto);

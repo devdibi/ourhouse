@@ -21,13 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          class="trow"
-          v-for="board in lists"
-          :key="board.boardNo"
-          @click="move(`/board/detail/${board.boardNo}`)"
-          style="cursor: pointer"
-        >
+        <tr class="trow" v-for="board in lists" :key="board.boardNo" @click="move(`/board/detail/${board.boardNo}`)" style="cursor: pointer">
           <td>{{ board.boardNo }}</td>
           <td>{{ board.title }}</td>
           <td>{{ board.email }}</td>
@@ -44,7 +38,7 @@
           <td style="width: 150px; border-color: white">{{ page_no }} 페이지</td>
           <td @click="next" class="paging">&gt;&gt;</td>
         </tr>
-        <button class="crud" @click="() => this.$router.push('/board/write')" style="float: right">글 작성</button>
+        <button v-if="this.$store.getters.isLogin" class="crud" @click="() => this.$router.push('/board/write')" style="float: right">글 작성</button>
       </table>
     </div>
   </div>

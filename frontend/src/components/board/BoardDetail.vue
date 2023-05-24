@@ -64,7 +64,6 @@
 </template>
 <script>
 import { detail, addComment, removeComment, remove } from "@/api/board.js";
-
 export default {
   name: "BoardDetail",
   components: {},

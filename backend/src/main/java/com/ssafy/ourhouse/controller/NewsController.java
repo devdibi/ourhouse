@@ -71,11 +71,12 @@ public class NewsController {
 	
 	// hit 추가
 	@ApiOperation(value="뉴스 조회수 추가")
-	@PutMapping("/{newsNo}")
-	public ResponseEntity<String> updateBoard(@PathVariable("newsNo")int newsNo){
+	@PutMapping("/")
+	public ResponseEntity<String> updateBoard(int newsNo){
 		logger.info("뉴스 조회수 추가");
 		try {
 			newsService.updateHit(newsNo);
+			System.out.println("hit");
 			return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -87,7 +88,7 @@ public class NewsController {
 	// 일단 뉴스를 json으로 가져와서 바로 DB로 적용하는 방식으로 진행 뉴스 기사는 1회 100개 수행
 	// Scheduler와 버튼으로 관리자에서 구현하는 방식으로 수행
 	@Scheduled(cron="0 0 9 * * *") // 0초 0분 9시 매일 매월 매요일 자동 실행
-	@ApiOperation(value="뉴스 추가 버튼으로 구현(겹치는 뉴스기사를 불러올 수도 있습니다.)")
+	@ApiOperation(value="뉴스 추가 버튼으로 구현(겹치는 뉴스기사를 불러올 수도 있습니다.)") 
 	@PostMapping("/")
 	public ResponseEntity<String> updateNews(){
 		logger.info("뉴스 추가");

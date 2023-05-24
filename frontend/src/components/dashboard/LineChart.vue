@@ -14,15 +14,11 @@ export default {
   components: { LineChartGenerator },
   data() {
     return {
+      region: "",
+      value: [40, 0, 10, 40, 39, 80, 100, 70],
       chartData: {
-        labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
-        datasets: [
-          {
-            label: "Data One",
-            backgroundColor: "#f87979",
-            data: [40, 0, 10, 40, 39, 80, 100],
-          },
-        ],
+        labels: ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"],
+        datasets: [],
       },
       options: {
         responsive: true,
@@ -30,7 +26,14 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    this.region = "화북동";
+    this.chartData.datasets.push({
+      label: this.region + "의 연도별 평균 거래가격 추세",
+      backgroundColor: "#f87979",
+      data: this.value,
+    });
+  },
   methods: {},
 };
 </script>

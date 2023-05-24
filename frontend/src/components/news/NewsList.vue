@@ -3,14 +3,12 @@
     <h1>뉴스 게시판</h1>
     <table id="list">
       <colgroup>
-        <col style="width: 10%" />
         <col style="width: 50%" />
         <col style="width: 10%" />
         <col style="width: 20%" />
       </colgroup>
       <thead>
         <tr>
-          <th>글번호</th>
           <th>제목 및 요약</th>
           <th>조회수</th>
           <th>작성일자</th>
@@ -18,8 +16,7 @@
       </thead>
       <tbody>
         <tr class="trow" v-for="article in lists" :key="article.newsNo" @click="moveLink(article.link, article.newsNo)" style="cursor: pointer">
-          <td>{{ article.newsNo }}</td>
-          <td>
+          <td style="padding: 10px">
             <div style="text-align: left; font-size: 18px; font-weight: bold">
               <span v-html="article.title"></span>
             </div>
@@ -48,8 +45,7 @@
 </template>
 
 <script>
-import { list, hit, update } from "@/api/news.js";
-
+import { list, update, hit } from "@/api/news.js";
 export default {
   name: "NewsList",
   components: {},
@@ -110,11 +106,18 @@ export default {
     },
     // detail 페이지로 이동
     moveLink(path, newsNo) {
+      console.log(newsNo);
       window.open(path);
-      hit(newsNo, (response) => {
-        console.log(response);
-      });
-      this.lists[newsNo - 1].hit += 1;
+      hit(
+        newsNo,
+        (response) => {
+          console.log(response);
+        },
+        (err) => {
+          console.log(err);
+          // alert("error 발생");
+        }
+      );
     },
     newsUpdate() {
       update((response) => {

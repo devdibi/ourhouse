@@ -43,7 +43,7 @@
 		resultMap="houseDBDto">
 		SELECT *
 		FROM house_deal LEFT JOIN house_info USING (apt_code)
-		WHERE house_info.dong_code = #{dongCode}
+		WHERE dong_code = #{dongCode}
 		<if test="year != null and year != 0">
           AND year = #{year}
       	</if> 
@@ -88,19 +88,19 @@
 
 	<select id="getSido" resultType="sidoDto">
 		SELECT sido_code sidoCode, name
-		FROM sido;
+		FROM sido order by name asc;
 	</select>
 
 	<select id="getSigungu" parameterType="String" resultType="sigunguDto">
 		SELECT sido_code sidoCode, sigungu_code sigunguCode, name
 		FROM sigungu
-		WHERE sido_code = #{sido};
+		WHERE sido_code = #{sido} order by name asc;
 	</select>
 
 	<select id="getDong" parameterType="String" resultMap="dongDtoMap">
 		SELECT dong_code, sigungu_code, name, sido_code
 		FROM dong
-		WHERE sigungu_code = #{sigungu};
+		WHERE sigungu_code = #{sigungu} order by name asc;
 	</select>
 
 	<insert id="houseLike" parameterType="Map">
@@ -123,5 +123,9 @@
 		DELETE FROM favorite_deal
 		WHERE email=#{userEmail} AND deal_code=#{dealCode}
 	</delete>
+	
+	<select id="getNearByBusStop" resultType="busStopDto">
+		select * from busstop;
+	</select>
 
 </mapper>

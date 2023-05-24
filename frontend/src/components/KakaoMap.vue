@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "KakaoMap",
   components: {},
@@ -13,22 +15,36 @@ export default {
       map: Object,
       marker: Object,
       tmp: 1,
+      markerslocations: [],
+      clickMarker: null,
     };
   },
   props: {
     // lat lng
     location: Object,
+    locations: Array,
   },
   watch: {
     location: {
       // add parameter val
       handler() {
-        // console.log("=== watch handler ===");
-        // console.log(val.lat);
-        // console.log(val.lng);
+        console.log("=== watch handler ===");
+
         this.markMarker();
       },
       deep: true,
+    },
+    locations(loc) {
+      console.log("카카오맵");
+      // console.log(loc);
+
+      this.markerslocations = [];
+      loc.forEach((element) => {
+        this.markerslocations.push(new kakao.maps.LatLng(element.lat, element.lng));
+      });
+      console.log(this.markerslocations);
+
+      this.markAllMarkers();
     },
   },
   created() {},
@@ -41,9 +57,9 @@ export default {
   },
   unmounted() {},
   methods: {
-    markMarker() {
+    markAllMarkers() {
       // 마커 다 지우기
-      this.marker.setMap(null);
+      // this.marker.setMap(null);
 
       // 카카오맵 가져오기
       var container = document.getElementById("map");
@@ -60,14 +76,148 @@ export default {
 
       // 카카오맵 생성
       this.map = new kakao.maps.Map(container, options);
+      // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+      var bounds = new kakao.maps.LatLngBounds();
 
-      // Marker 객체 생성
-      this.marker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(this.location.lat, this.location.lng),
+      var imageSrc = require("@/assets/icon/marker.png"), // 마커이미지의 주소입니다
+        imageSize = new kakao.maps.Size(70, 70), // 마커이미지의 크기입니다
+        imageOption = { offset: new kakao.maps.Point(35, 70) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+      // var i, marker;
+      let i;
+      for (i = 0; i < this.markerslocations.length; i++) {
+        // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+          markerPosition = this.markerslocations[i]; // 마커가 표시될 위치입니다
+
+        // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+        this.marker = new kakao.maps.Marker({
+          position: markerPosition,
+          image: markerImage, // 마커이미지 설정
+        });
+        this.marker.setMap(this.map);
+
+        // LatLngBounds 객체에 좌표를 추가합니다
+        bounds.extend(this.markerslocations[i]);
+      }
+
+      this.map.setBounds(bounds);
+    },
+    async getBusStation() {
+      let result;
+      // let lat = Math.ceil(this.location.lat * 100) / 100;
+      // let lng = Math.ceil(this.location.lng * 100) / 100;
+
+      let lat = this.location.lat;
+      let lng = this.location.lng;
+
+      let config = {
+        method: "post", // 기본값
+        baseURL: "http://localhost:9999/house/bus",
+        data: {
+          lat,
+          lng,
+        },
+      };
+      await axios(config)
+        .then(({ data }) => {
+          console.log("totalCount");
+          console.log(data.response.body.totalCount);
+          if (data.response.body.totalCount != 0) {
+            result = data.response.body.items.item;
+          } else {
+            result = -1;
+          }
+          // this.sidoList = data.sidoList;
+          // data.sidoList.forEach((element) => {
+          // 	tmp.push({ text: element.name, value: element.sidoCode });
+          // });
+          // console.log(tmp);
+          // tmp.unshift({ text: "시도 검색", value: null, disabled: true });
+          // this.sidoList = tmp;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      return result;
+    },
+    async markMarker() {
+      let bus = await this.getBusStation();
+      console.log(bus);
+
+      // // 카카오맵 가져오기
+      // var container = document.getElementById("map");
+
+      // // 지도 offset
+      // let offset = Number(this.location.lng) - 0.002;
+      // // console.log("offset: ", offset);
+
+      // // 카카오맵 설정
+      // var options = {
+      //   center: new kakao.maps.LatLng(this.location.lat, offset),
+      //   level: 2,
+      // };
+
+      // // 카카오맵 생성
+      // this.map = new kakao.maps.Map(container, options);
+      // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+      var bounds = new kakao.maps.LatLngBounds();
+
+      if (bus != -1) {
+        let imageSrc = require("@/assets/icon/bus.png"), // 마커이미지의 주소입니다
+          imageSize = new kakao.maps.Size(35, 35), // 마커이미지의 크기입니다
+          imageOption = { offset: new kakao.maps.Point(35, 70) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+        let i;
+        for (i = 0; i < bus.length; i++) {
+          // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+          let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+            markerPosition = new kakao.maps.LatLng(bus[i].gpslati, bus[i].gpslong); // 마커가 표시될 위치입니다
+
+          // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+          this.marker = new kakao.maps.Marker({
+            position: markerPosition,
+            image: markerImage, // 마커이미지 설정
+          });
+          this.marker.setMap(this.map);
+
+          // LatLngBounds 객체에 좌표를 추가합니다
+          bounds.extend(new kakao.maps.LatLng(bus[i].gpslati, bus[i].gpslong));
+        }
+
+        this.map.setBounds(bounds);
+      }
+
+      // 아파트 좌표
+      if (this.clickMarker != null) {
+        // console.log("==============");
+        // console.dir(this.clickMarker);
+        this.clickMarker.setMap(null);
+      }
+
+      let offset = Number(this.location.lng) - 0.002;
+      var moveLatLon = new kakao.maps.LatLng(this.location.lat, offset);
+
+      // 지도 중심을 이동 시킵니다
+      this.map.setCenter(moveLatLon);
+      this.map.setLevel(2);
+
+      let imageSrc = require("@/assets/icon/smarker.png"), // 마커이미지의 주소입니다
+        imageSize = new kakao.maps.Size(70, 70), // 마커이미지의 크기입니다
+        imageOption = { offset: new kakao.maps.Point(35, 70) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+      // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+      let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+        markerPosition = new kakao.maps.LatLng(this.location.lat, this.location.lng); // 마커가 표시될 위치입니다
+
+      // 마커를 생성합니다
+      this.clickMarker = new kakao.maps.Marker({
+        position: markerPosition,
+        image: markerImage, // 마커이미지 설정
       });
 
-      // 마커 카카오맵에 추가하기
-      this.marker.setMap(this.map);
+      // 마커가 지도 위에 표시되도록 설정합니다
+      this.clickMarker.setMap(this.map);
     },
     initMap() {
       var container = document.getElementById("map");
