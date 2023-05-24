@@ -258,6 +258,7 @@ a:hover {
 	width: 33%;
 	margin-top: 50px; 
 	margin-bottom: 50px;
+	font-size: 20px;
 }
 
 #newsIcon,
@@ -265,7 +266,7 @@ a:hover {
 #boardIcon {
 	display: inline-flex;
 	width: auto;
-	max-width: 160px;
+	max-width: 140px;
 	margin: auto;
   justify-content: center;
   align-items: center;
