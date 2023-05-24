@@ -107,6 +107,22 @@
 					:showDetailWindowData="showDetailWindowData"
 				/>
 
+				<!-- 이미지 마커 표시 -->
+				<ul id="image-marker-box">
+					<li :class="{ markerClick: busClick }" class="marker-box" @click="markerClick('bus')">
+						<img class="marker-img" src="@/assets/icon/bus.png" alt="" />
+						<div class="marker-name">버스</div>
+					</li>
+					<li :class="{ markerClick: comClick }" class="marker-box" @click="markerClick('com')">
+						<img class="marker-img" src="@/assets/icon/bus.png" alt="" />
+						<div class="marker-name">상권</div>
+					</li>
+					<li :class="{ markerClick: medClick }" class="marker-box" @click="markerClick('medical')">
+						<img class="marker-img" src="@/assets/icon/bus.png" alt="" />
+						<div class="marker-name">의료</div>
+					</li>
+				</ul>
+
 				<!-- 검색 결과 상세 페이지 -->
 			</div>
 			<!-- 카카오 지도 -->
@@ -163,6 +179,10 @@ export default {
 			showDetailWindowData: Object,
 			// 검색 결과 데이터
 			dealData: Array,
+
+			busClick: false,
+			medClick: false,
+			comClick: false,
 		};
 	},
 	watch: {
@@ -261,6 +281,21 @@ export default {
 			});
 	},
 	methods: {
+		markerClick(option) {
+			if (option === "bus") {
+				this.busClick = true;
+				this.comClick = false;
+				this.medClick = false;
+			} else if (option === "com") {
+				this.busClick = false;
+				this.comClick = true;
+				this.medClick = false;
+			} else if (option === "medical") {
+				this.busClick = false;
+				this.comClick = false;
+				this.medClick = true;
+			}
+		},
 		getBusStopInfo() {
 			console.log("=== 버스 정류장 정보 불러오기 ===");
 		},
@@ -412,5 +447,34 @@ export default {
 	position: absolute;
 	top: 50px;
 	left: 0;
+}
+
+#image-marker-box {
+	width: 150px;
+	height: 75px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: pink;
+	z-index: 2;
+	display: flex;
+}
+
+.marker-box {
+	width: 100%;
+	list-style: none;
+}
+
+.marker-img {
+	width: 100%;
+	height: 50px;
+}
+.marker-name {
+	height: 25px;
+	text-align: center;
+}
+
+.markerClick {
+	background: white;
 }
 </style>

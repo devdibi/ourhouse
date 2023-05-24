@@ -20,6 +20,8 @@ export default {
 			markerslocations: [],
 			clickMarker: null,
 			circle: null,
+			//
+			medicalMarkers: [],
 		};
 	},
 	props: {
