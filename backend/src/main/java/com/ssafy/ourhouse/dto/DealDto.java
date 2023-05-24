@@ -31,7 +31,9 @@ public class DealDto {
 	
 	@ApiModelProperty(value = "거래 좋아요 여부")
 	private boolean dealLike;
-	
+
+	private boolean showWindow = true;
+
 	@Override
 	public String toString() {
 		return "DealDto [dealCode=" + dealCode + ", price=" + price + ", year=" + year + ", month=" + month + ", area="

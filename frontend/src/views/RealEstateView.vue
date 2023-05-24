@@ -45,18 +45,24 @@
         <ApartmentItemOption
           optionName="가격대"
           :isOpen="isOpen[1]"
+          :min="1"
+          :max="10"
           @changeDetailOption="changeDetailOption"
           @toggleOptionWindow="changeWindow(1)"
         />
         <ApartmentItemOption
           optionName="면적"
           :isOpen="isOpen[2]"
+          :min="10"
+          :max="100"
           @changeDetailOption="changeDetailOption"
           @toggleOptionWindow="changeWindow(2)"
         />
         <ApartmentItemOption
           optionName="층수"
           :isOpen="isOpen[3]"
+          :min="1"
+          :max="20"
           @changeDetailOption="changeDetailOption"
           @toggleOptionWindow="changeWindow(3)"
         />
@@ -167,7 +173,7 @@ export default {
       showDetailWindowIdx: -1,
       showDetailWindowData: Object,
       // 검색 결과 데이터
-      dealData: Array,
+      dealData: [],
 
       busClick: false,
       medClick: false,
@@ -347,9 +353,49 @@ export default {
     getBusStopInfo() {
       console.log("=== 버스 정류장 정보 불러오기 ===");
     },
-    changeDetailOption(option) {
-      console.log("=== RealEstateView ===");
-      console.log(option);
+    // 상세 옵션 제어 함수
+    changeDetailOption({ optionName, value }) {
+      console.log("=== 상세 옵션 ===");
+      console.log(optionName, value);
+      console.log("=================");
+
+      if (this.dealData.length === 0) {
+        return;
+      }
+
+      if (optionName === "층수") {
+        for (let i = 0; i < this.dealData.length; i++) {
+          Array.from(this.dealData[i].deals).forEach((element) => {
+            if (value[0] <= element.floor && element.floor <= value[1]) {
+              element.showWindow = true;
+            } else {
+              element.showWindow = false;
+            }
+          });
+        }
+      } else if (optionName === "면적") {
+        for (let i = 0; i < this.dealData.length; i++) {
+          Array.from(this.dealData[i].deals).forEach((element) => {
+            if (value[0] <= element.area && element.area <= value[1]) {
+              element.showWindow = true;
+            } else {
+              element.showWindow = false;
+            }
+          });
+        }
+      } else if (optionName === "가격대") {
+        let minPirce = value[0] * 10000;
+        let maxPrice = value[1] * 10000;
+        for (let i = 0; i < this.dealData.length; i++) {
+          Array.from(this.dealData[i].deals).forEach((element) => {
+            if (minPirce <= element.price && element.price <= maxPrice) {
+              element.showWindow = true;
+            } else {
+              element.showWindow = false;
+            }
+          });
+        }
+      }
     },
     /**
      * 상세 옵션 열고 닫기 함수
