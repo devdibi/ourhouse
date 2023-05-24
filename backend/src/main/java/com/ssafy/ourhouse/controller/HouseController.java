@@ -2,6 +2,7 @@ package com.ssafy.ourhouse.controller;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -39,6 +40,7 @@ import com.ssafy.ourhouse.dto.SigunguDto;
 import com.ssafy.ourhouse.service.HouseService;
 import com.ssafy.ourhouse.service.JwtService;
 
+import io.jsonwebtoken.io.IOException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -54,7 +56,7 @@ public class HouseController {
 
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private final BusAPI busAPI;
-	
+
 	private final HouseService houseService;
 //	private final JwtService JwtService;
 
@@ -216,45 +218,96 @@ public class HouseController {
 			return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
 	@PostMapping(value = "/bus", produces = "application/json; charset=utf8")
 	public String getBusStations(@RequestBody Map<String, String> data) throws Exception {
 //		System.out.println("=======================");
 //		System.out.println(data.get("lat"));
 //		System.out.println(data.get("lng"));
-		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getCrdntPrxmtSttnList"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=jxxl3rLm%2FskTLPONvQj6KXkjSZlpHSCuH8JPt9ueN49v0P0hU68Wew6dcM2ihtRP%2BQsUHpOGexuUVwl9XyOwBw%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/
-        urlBuilder.append("&" + URLEncoder.encode("_type","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*데이터 타입(xml, json)*/
-        urlBuilder.append("&" + URLEncoder.encode("gpsLati","UTF-8") + "=" + URLEncoder.encode(data.get("lat"), "UTF-8")); /*WGS84 위도 좌표*/
-        urlBuilder.append("&" + URLEncoder.encode("gpsLong","UTF-8") + "=" + URLEncoder.encode(data.get("lng"), "UTF-8")); /*WGS84 경도 좌표*/
-        URL url = new URL(urlBuilder.toString());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-type", "application/json");
-        System.out.println("Response code: " + conn.getResponseCode());
-        BufferedReader rd;
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        } else {
-            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-        }
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = rd.readLine()) != null) {
-            sb.append(line).append("\n");
-        }
-        rd.close();
-        conn.disconnect();
-        System.out.println(sb.toString());
-        return sb.toString();
+		StringBuilder urlBuilder = new StringBuilder(
+				"http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getCrdntPrxmtSttnList"); /* URL */
+		urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8")
+				+ "=jxxl3rLm%2FskTLPONvQj6KXkjSZlpHSCuH8JPt9ueN49v0P0hU68Wew6dcM2ihtRP%2BQsUHpOGexuUVwl9XyOwBw%3D%3D"); /*
+																														 * Service
+																														 * Key
+																														 */
+		urlBuilder
+				.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /* 페이지번호 */
+		urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "="
+				+ URLEncoder.encode("50", "UTF-8")); /* 한 페이지 결과 수 */
+		urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "="
+				+ URLEncoder.encode("json", "UTF-8")); /* 데이터 타입(xml, json) */
+		urlBuilder.append("&" + URLEncoder.encode("gpsLati", "UTF-8") + "="
+				+ URLEncoder.encode(data.get("lat"), "UTF-8")); /* WGS84 위도 좌표 */
+		urlBuilder.append("&" + URLEncoder.encode("gpsLong", "UTF-8") + "="
+				+ URLEncoder.encode(data.get("lng"), "UTF-8")); /* WGS84 경도 좌표 */
+		URL url = new URL(urlBuilder.toString());
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Content-type", "application/json");
+		System.out.println("Response code: " + conn.getResponseCode());
+		BufferedReader rd;
+		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		} else {
+			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+		}
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ((line = rd.readLine()) != null) {
+			sb.append(line).append("\n");
+		}
+		rd.close();
+		conn.disconnect();
+		System.out.println(sb.toString());
+		return sb.toString();
 	}
-	
+
 	@GetMapping(value = "/commercial", produces = "application/json; charset=utf8")
 	public List<CommercialDto> getCommercial(@RequestParam double lat, @RequestParam double lng) throws Exception {
 		System.out.println(lat);
 		System.out.println(lng);
 		return houseService.getNearByCommercial(lat, lng);
+	}
+
+	@GetMapping(value = "/cctv", produces = "application/json; charset=utf8")
+	public String getCCTV() throws Exception {
+		StringBuilder urlBuilder = new StringBuilder("https://openapi.its.go.kr:9443/cctvInfo"); /* URL */
+		urlBuilder.append(
+				"?" + URLEncoder.encode("apiKey", "UTF-8") + "=" + URLEncoder.encode("78816c1619534c18b1f6b436fa4ad772", "UTF-8")); /* 공개키 */
+		urlBuilder
+				.append("&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("all", "UTF-8")); /* 도로유형 */
+		urlBuilder.append(
+				"&" + URLEncoder.encode("cctvType", "UTF-8") + "=" + URLEncoder.encode("3", "UTF-8")); /* CCTV유형 */
+		urlBuilder.append(
+				"&" + URLEncoder.encode("minX", "UTF-8") + "=" + URLEncoder.encode("128.58096040982386", "UTF-8")); /* 최소경도영역 */
+		urlBuilder.append(
+				"&" + URLEncoder.encode("maxX", "UTF-8") + "=" + URLEncoder.encode("128.60606031174967", "UTF-8")); /* 최대경도영역 */
+		urlBuilder.append(
+				"&" + URLEncoder.encode("minY", "UTF-8") + "=" + URLEncoder.encode("35.87656409728413", "UTF-8")); /* 최소위도영역 */
+		urlBuilder.append(
+				"&" + URLEncoder.encode("maxY", "UTF-8") + "=" + URLEncoder.encode("35.858406471457855", "UTF-8")); /* 최대위도영역 */
+		urlBuilder.append(
+				"&" + URLEncoder.encode("getType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /* 출력타입 */
+		URL url = new URL(urlBuilder.toString());
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Content-type", "text/xml;charset=UTF-8");
+		System.out.println("Response code: " + conn.getResponseCode());
+		BufferedReader rd;
+		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		} else {
+			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+		}
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ((line = rd.readLine()) != null) {
+			sb.append(line);
+		}
+		rd.close();
+		conn.disconnect();
+//		System.out.println(sb.toString());
+		return sb.toString();
 	}
 }
