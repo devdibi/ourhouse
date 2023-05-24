@@ -6,7 +6,7 @@
       <table>
         <thead>
           <tr>
-            <th>유저 이메일</th>
+            <th>이메일</th>
             <th>이름</th>
             <th>성별</th>
             <th>나이</th>
@@ -19,7 +19,13 @@
             <td v-if="user.gender == 1">남성</td>
             <td v-if="user.gender == 2">여성</td>
             <td>{{ user.age }}</td>
-            <td><input type="button" value="유저 삭제" /></td>
+            <td>
+              <input
+                type="button"
+                value="유저 삭제"
+                @click="deleteUser(user.email)"
+              />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -53,7 +59,39 @@ export default {
         console.log(err);
       });
   },
-  methods: {},
+  methods: {
+    deleteUser(userEmail) {
+      console.log("유저 삭제 : " + userEmail);
+      let http = API();
+      http
+        .delete("/admin/" + userEmail)
+        .then(({ data }) => {
+          if (data == "success") {
+            console.log(data);
+            this.userList = data.userInfo;
+            alert("삭제 성공");
+            // this.$router.go(0);
+
+            //성공시 데이터 리로드
+            http
+              .get("/admin/loadAllUsers")
+              .then(({ data }) => {
+                if (data.message == "success") {
+                  console.log(data);
+                  this.userList = data.userInfo;
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(userEmail);
+    },
+  },
 };
 </script>
 
