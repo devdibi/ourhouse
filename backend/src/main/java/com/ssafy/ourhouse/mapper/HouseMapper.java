@@ -2,10 +2,12 @@ package com.ssafy.ourhouse.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.ourhouse.dto.BusStopDto;
+import com.ssafy.ourhouse.dto.CommercialDto;
 import com.ssafy.ourhouse.dto.DealDto;
 import com.ssafy.ourhouse.dto.DongDto;
 import com.ssafy.ourhouse.dto.HouseDatabaseDto;
@@ -37,4 +39,6 @@ public interface HouseMapper {
 	void dealDislike(String userEmail, Long dealCode)throws SQLException;
 
 	List<BusStopDto> getNearByBusStop() throws Exception;
+	
+	List<CommercialDto> getNearByCommercial(Map<String, Double> map) throws Exception;
 }
