@@ -59,6 +59,10 @@ export default {
   created() {
     // 리스트 호출
     list((response) => {
+      console.log(response);
+      if (response.data.admin == "true") { 
+        this.userinfo = "admin";
+      }
       this.notices = response.data.noticeList;
       // 처음 리스트 출력
       for (var p = 0 * 10; p < 10; p++) {

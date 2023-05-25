@@ -1,4 +1,5 @@
-import { API } from "./index.js";
+// import { API } from "./index.js";
+import { API } from "@/api/axios-jwt";
 
 const api = API();
 
@@ -7,7 +8,7 @@ function list(success, fail) {
 }
 
 function write(notice, success, fail) {
-  api.post(`/notice/`, JSON.stringify(notice)).then(success).catch(fail);
+  api.post(`/admin/`, JSON.stringify(notice)).then(success).catch(fail);
 }
 
 function detail(noticeNo, success, fail) {
@@ -15,11 +16,11 @@ function detail(noticeNo, success, fail) {
 }
 
 function update(noticeNo, notice, success, fail) {
-  api.put(`/notice/${noticeNo}`, JSON.stringify(notice)).then(success).catch(fail);
+  api.put(`/admin/${noticeNo}`, JSON.stringify(notice)).then(success).catch(fail);
 }
 
 function remove(noticeNo, success, fail) {
-  api.delete(`/notice/${noticeNo}`).then(success).catch(fail);
+  api.delete(`/admin/${noticeNo}`).then(success).catch(fail);
 }
 
 export { list, write, detail, update, remove };

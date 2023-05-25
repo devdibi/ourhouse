@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,7 +43,6 @@ public class BoardController {
 	
 	@Autowired
 	private JwtService jwtService;
-	
 	
 	public BoardController(BoardService boardService, JwtService jwtService) {
 		super();
@@ -110,9 +110,11 @@ public class BoardController {
 	// write
 	@ApiOperation(value="자유게시판에 글을 작성해보아요")
 	@PostMapping("/")
-	public ResponseEntity<String> writeBoard(@RequestBody BoardDto boardDto){
+	public ResponseEntity<String> writeBoard(@RequestBody BoardDto boardDto, @RequestHeader("Authorization") String jwt){
 		logger.debug("boardDto info: {}", boardDto);
 		try {
+			String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+			boardDto.setEmail(userEmail);
 			boardService.writeBoard(boardDto);
 			return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
 		}catch(Exception e) {
