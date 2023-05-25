@@ -10,7 +10,9 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-import vuetify from './plugins/vuetify'
+import vuetify from "./plugins/vuetify";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
@@ -24,8 +26,11 @@ Vue.use(mdiVue, {
 Vue.use(IconsPlugin);
 
 new Vue({
+  created() {
+    AOS.init();
+  },
   router,
   store,
   vuetify,
-  render: (h) => h(App)
+  render: (h) => h(App),
 }).$mount("#app");

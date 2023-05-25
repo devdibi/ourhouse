@@ -1,6 +1,7 @@
 /** @format */
 
-import { API } from "./index.js";
+// import { API } from "./index.js";
+import { API } from "@/api/axios-jwt";
 
 const api = API();
 
