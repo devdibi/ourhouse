@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,7 +43,6 @@ public class BoardController {
 	
 	@Autowired
 	private JwtService jwtService;
-	
 	
 	public BoardController(BoardService boardService, JwtService jwtService) {
 		super();
@@ -90,15 +90,16 @@ public class BoardController {
 			resultMap.put("message", FAIL);
 			return new ResponseEntity<Map<String,Object>>(resultMap,HttpStatus.NO_CONTENT);
 		}
-		
 	}
 	
 	// update
 	@ApiOperation(value="게시글을 수정해 보아요")
 	@PutMapping("/{boardNo}")
-	public ResponseEntity<String> updateBoard(@PathVariable("boardNo")int boardNo, @RequestBody BoardDto boardDto){
+	public ResponseEntity<String> updateBoard(@PathVariable("boardNo")int boardNo, @RequestBody BoardDto boardDto, @RequestHeader("Authorization") String jwt){
 		logger.info("게시글을 수정해봅시다잉");
 		try {
+			String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+			boardDto.setEmail(userEmail);
 			boardService.updateBoard(boardNo, boardDto);
 			return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
 		}catch(Exception e) {
@@ -109,10 +110,12 @@ public class BoardController {
 
 	// write
 	@ApiOperation(value="자유게시판에 글을 작성해보아요")
-	@PostMapping("/")
-	public ResponseEntity<String> writeBoard(@RequestBody BoardDto boardDto){
+	@PostMapping("/write")
+	public ResponseEntity<String> writeBoard(@RequestBody BoardDto boardDto, @RequestHeader("Authorization") String jwt){
 		logger.debug("boardDto info: {}", boardDto);
 		try {
+			String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+			boardDto.setEmail(userEmail);
 			boardService.writeBoard(boardDto);
 			return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
 		}catch(Exception e) {
@@ -141,9 +144,11 @@ public class BoardController {
 	
 	@ApiOperation(value="댓글을 작성해 보아요")
 	@PostMapping("/*/comment")
-	public ResponseEntity<String> writeComment(@RequestBody CommentDto commentDto){
+	public ResponseEntity<String> writeComment(@RequestBody CommentDto commentDto, @RequestHeader("Authorization") String jwt){
 		logger.info("commentDto: {}", commentDto);
 		try {
+			String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+			commentDto.setEmail(userEmail);
 			boardService.writeComment(commentDto);
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}catch(Exception e) {

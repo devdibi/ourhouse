@@ -1,6 +1,7 @@
 /** @format */
 
-import { API } from "./index.js";
+// import { API } from "./index.js";
+import { API } from "@/api/axios-jwt";
 
 const api = API();
 
@@ -9,7 +10,7 @@ function list(success, fail) {
 }
 
 function write(board, success, fail) {
-  api.post(`/board/`, JSON.stringify(board)).then(success).catch(fail);
+  api.post(`/board/write`, JSON.stringify(board)).then(success).catch(fail);
 }
 
 function detail(boardNo, success, fail) {

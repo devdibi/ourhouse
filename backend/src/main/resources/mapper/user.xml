@@ -52,7 +52,7 @@
 	<select id="loadAllUsers" resultType="userListDto">
 		SELECT email, name, gender, age, dwell_area, favorite_area, password        
 		FROM USER
-		WHERE status = 1
+		WHERE status = 1 AND gender != 0
 		ORDER BY join_date
 	</select>
 	

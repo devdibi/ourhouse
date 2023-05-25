@@ -167,7 +167,7 @@ public class HouseServiceImpl implements HouseService {
 	@Override
 	public List<MedicalDto> getNearByMedical(double lat, double lng) throws Exception {
 		
-		double offset = 0.0035;
+		double offset = 0.004;
 		double minLat = lat - offset;
 		double maxLat = lat + offset;
 		double minlng = lng - offset;
@@ -186,7 +186,7 @@ public class HouseServiceImpl implements HouseService {
 	@Override
 	public List<MedicalDto> getNearByHospital(double lat, double lng) throws Exception {
 		
-		double offset = 0.0035;
+		double offset = 0.004;
 		double minLat = lat - offset;
 		double maxLat = lat + offset;
 		double minlng = lng - offset;

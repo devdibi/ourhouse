@@ -17,7 +17,7 @@
 			</div>
 		</div>
 		<!-- 공지사항, 자유게시판, 부동산뉴스 시작-->
-		<div id="icon-navbar">
+		<div id="icon-navbar" data-aos="flip-left">
 			<div class="iconContainer">
 				<router-link to="/notice/list">
 					<img src="@/assets/icon/notice_icon.png" alt="공지 게시판" id="noticeIcon">
@@ -40,12 +40,12 @@
 		<!-- 좋아요 많은 아파트, 좋아요 많은 거래 상위 5개 출력 -->
 		<div id="main-stats-box">
 			<!-- 아파트 랭킹 출력 -->
-			<div id="aptContainer">
+			<div id="aptContainer"  data-aos="fade-up">
 				<h3 id="aptTitle">아파트 랭킹 Top 5</h3>
 				<b-table :items="topApts"></b-table>
 			</div>
 			<!-- 거래 랭킹 출력 -->
-			<div id="dealContainer">
+			<div id="dealContainer" data-aos="fade-up">
 				<h3 id="dealTitle">거래 랭킹 Top 5</h3>
 				<b-table :items="topDeals"></b-table>
 			</div>
