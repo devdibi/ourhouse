@@ -7,7 +7,7 @@ function list(success, fail) {
 
 function write(notice, success, fail) {
 	let api = API();
-	api.post(`/admin/`, JSON.stringify(notice)).then(success).catch(fail);
+	api.post(`/admin/write`, JSON.stringify(notice)).then(success).catch(fail);
 }
 
 function detail(noticeNo, success, fail) {

@@ -6,41 +6,75 @@
 			</div>
 			<img src="@/assets/images/main-page-pic.png" alt="" />
 			<div id="select-area-input-box" data-app>
-				<v-select v-model="selectSido" :items="sidoList" item-text="name" item-value="sidoCode" menu-props="auto"
-					label="시도 검색" hide-details outlined return-object color="#6750A4" background-color="#E0D0F4"></v-select>
+				<v-select
+					v-model="selectSido"
+					:items="sidoList"
+					item-text="name"
+					item-value="sidoCode"
+					menu-props="auto"
+					label="시도 검색"
+					hide-details
+					outlined
+					return-object
+					color="#6750A4"
+					background-color="#E0D0F4"
+				></v-select>
 				<span class="mx-1"></span>
-				<v-select v-model="selectSigungu" :items="sigunguList" item-text="name" item-value="value" menu-props="auto"
-					label="시군구 검색" hide-details outlined return-object color="#6750A4" background-color="#E0D0F4"></v-select>
+				<v-select
+					v-model="selectSigungu"
+					:items="sigunguList"
+					item-text="name"
+					item-value="value"
+					menu-props="auto"
+					label="시군구 검색"
+					hide-details
+					outlined
+					return-object
+					color="#6750A4"
+					background-color="#E0D0F4"
+				></v-select>
 				<span class="mx-1"></span>
-				<v-select v-model="selectDong" :items="dongList" item-text="name" item-value="value" menu-props="auto"
-					label="동 검색" hide-details outlined return-object color="#6750A4" background-color="#E0D0F4"></v-select>
+				<v-select
+					v-model="selectDong"
+					:items="dongList"
+					item-text="name"
+					item-value="value"
+					menu-props="auto"
+					label="동 검색"
+					hide-details
+					outlined
+					return-object
+					color="#6750A4"
+					background-color="#E0D0F4"
+				></v-select>
 			</div>
 		</div>
+		<div></div>
 		<!-- 공지사항, 자유게시판, 부동산뉴스 시작-->
 		<div id="icon-navbar" data-aos="flip-left">
 			<div class="iconContainer">
 				<router-link to="/notice/list">
-					<img src="@/assets/icon/notice_icon.png" alt="공지 게시판" id="noticeIcon">
+					<img src="@/assets/icon/notice_icon.png" alt="공지 게시판" id="noticeIcon" />
 					<p>공지사항</p>
 				</router-link>
 			</div>
 			<div class="iconContainer">
 				<router-link to="/board/list">
-					<img src="@/assets/icon/board_icon.png" alt="자유 게시판" id="boardIcon">
+					<img src="@/assets/icon/board_icon.png" alt="자유 게시판" id="boardIcon" />
 					<p>자유 게시판</p>
 				</router-link>
 			</div>
 			<div class="iconContainer">
 				<router-link to="/news">
-					<img src="@/assets/icon/news_icon.png" alt="뉴스" id="newsIcon">
+					<img src="@/assets/icon/news_icon.png" alt="뉴스" id="newsIcon" />
 					<p>뉴스</p>
 				</router-link>
 			</div>
 		</div>
 		<!-- 좋아요 많은 아파트, 좋아요 많은 거래 상위 5개 출력 -->
-		<div id="main-stats-box">
+		<div id="main-stats-box" v-if="loading">
 			<!-- 아파트 랭킹 출력 -->
-			<div id="aptContainer"  data-aos="fade-up">
+			<div id="aptContainer" data-aos="fade-up">
 				<h3 id="aptTitle">아파트 랭킹 Top 5</h3>
 				<b-table :items="topApts"></b-table>
 			</div>
@@ -69,14 +103,15 @@ export default {
 			dongList: [""],
 			topApts: [],
 			topDeals: [],
+			loading: false,
 		};
 	},
-	created() {
+	async created() {
 		let config = {
 			method: "get", // 기본값
 			baseURL: "http://localhost:9999/house/sido",
 		};
-		axios(config)
+		await axios(config)
 			.then(({ data }) => {
 				console.log(data);
 				this.sidoList = data.sidoList;
@@ -89,52 +124,63 @@ export default {
 		config = {
 			method: "get",
 			baseURL: "http://localhost:9999/house/topapt",
-		}
-		axios(config)
+		};
+		await axios(config)
 			.then(({ data }) => {
 				if (data.message == "success") {
-					for (var i = 0; i < 5; i++){
+					for (var i = 0; i < 5; i++) {
 						var tmpApt = {
-							"순위":i+1,
-							"주소": data.houses[i].sidoName + " " + data.houses[i].gugunName + " " + data.houses[i].jibunAddress,
+							순위: i + 1,
+							주소:
+								data.houses[i].sidoName +
+								" " +
+								data.houses[i].gugunName +
+								" " +
+								data.houses[i].jibunAddress,
 							"아파트 이름": data.houses[i].aptName,
-							"평균 가격":data.houses[i].priceAvg + " 만원",
+							"평균 가격": data.houses[i].priceAvg + " 만원",
 							"평균 면적": data.houses[i].areaAvg + "㎡",
-							"좋아요 수": data.houses[i].likeNums
-						}
+							"좋아요 수": data.houses[i].likeNums,
+						};
 						this.topApts.push(tmpApt);
 					}
 				}
 			})
 			.catch((err) => {
-				console.log(err)
+				console.log(err);
 			});
 
 		config = {
 			method: "get",
 			baseURL: "http://localhost:9999/house/topdeal",
-		}
+		};
 		axios(config)
 			.then(({ data }) => {
 				if (data.message == "success") {
-					for (var i = 0; i < 5; i++){
+					for (var i = 0; i < 5; i++) {
 						var tmpDeal = {
-							"순위":i+1,
-							"주소": data.deals[i].sidoName + " " + data.deals[i].gugunName + " " + data.deals[i].jibunAddress,
+							순위: i + 1,
+							주소:
+								data.deals[i].sidoName +
+								" " +
+								data.deals[i].gugunName +
+								" " +
+								data.deals[i].jibunAddress,
 							"아파트 이름": data.deals[i].aptName,
-							"층":data.deals[i].floor,
-							"가격":data.deals[i].price + " 만원",
-							"면적": data.deals[i].area + "㎡",
-							"좋아요 수": data.deals[i].likeNums
-						}
+							층: data.deals[i].floor,
+							가격: data.deals[i].price + " 만원",
+							면적: data.deals[i].area + "㎡",
+							"좋아요 수": data.deals[i].likeNums,
+						};
 						this.topDeals.push(tmpDeal);
 					}
 				}
 			})
 			.catch((err) => {
-				console.log(err)
+				console.log(err);
 			});
 
+		this.loading = true;
 	},
 	methods: {},
 	watch: {
@@ -178,7 +224,7 @@ export default {
 		},
 		selectDong({ dongCode }) {
 			console.log(dongCode);
-			this.$router.push({ name: 'land', params: { dongCode: dongCode }});
+			this.$router.push({ name: "land", params: { dongCode: dongCode } });
 		},
 	},
 };
@@ -186,9 +232,9 @@ export default {
 
 <style scoped>
 * {
-	font-family: 'Noto Sans';
+	font-family: "Noto Sans";
 	font-style: normal;
-	color: #929292;;
+	color: #929292;
 }
 
 a {
@@ -257,7 +303,7 @@ a:hover {
 .iconContainer {
 	float: left;
 	width: 33%;
-	margin-top: 50px; 
+	margin-top: 50px;
 	margin-bottom: 50px;
 	font-size: 20px;
 }
@@ -269,8 +315,8 @@ a:hover {
 	width: auto;
 	max-width: 140px;
 	margin: auto;
-  justify-content: center;
-  align-items: center;
+	justify-content: center;
+	align-items: center;
 	padding-bottom: 20px;
 }
 
@@ -278,21 +324,22 @@ a:hover {
 	width: 100%;
 }
 
-#aptContainer, 
-#dealContainer{
+#aptContainer,
+#dealContainer {
 	display: inline-flex;
 	margin: auto;
 	margin-bottom: 50px;
 }
 
-#aptTable, #dealTable{
+#aptTable,
+#dealTable {
 	text-align: center;
 	padding: 20px;
 }
 
-#dealTitle, #aptTitle{
+#dealTitle,
+#aptTitle {
 	color: #6a60d5ad;
-	font-weight:bold;
+	font-weight: bold;
 }
-
 </style>

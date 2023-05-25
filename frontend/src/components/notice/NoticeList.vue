@@ -79,8 +79,10 @@ export default {
 		http
 			.get("/notice/list")
 			.then(({ data }) => {
+				console.log("데이터임: ", data);
 				this.notices = data.noticeList;
 				if (data.admin == "true") {
+					console.log("어드민임");
 					this.userinfo = "admin";
 				}
 				for (var p = 0 * 10; p < 10; p++) {

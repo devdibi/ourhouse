@@ -83,7 +83,7 @@
 					@toggleOptionWindow="changeWindow(3)"
 				/>
 				<div>
-					<button class="btn btn-primary ml-2" @click="getBusStopInfo">test</button>
+					<!-- <button class="btn btn-primary ml-2" @click="getBusStopInfo">test</button> -->
 				</div>
 				<!-- 상세 검색 -->
 			</div>
