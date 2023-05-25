@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	public void randomPassword(Map<String, String> map) throws Exception {
 		// 랜덤 패스워드 생성
 		String randomPassword = UUID.randomUUID().toString().substring(0, 8);
-		map.put("password", randomPassword);
+		map.put("password", passwordEncoder.encode(randomPassword));
 		userMapper.randomPassword(map);
 		// 이메일로 전송
 		// 이메일 세팅

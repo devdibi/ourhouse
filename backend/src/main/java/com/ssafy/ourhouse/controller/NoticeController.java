@@ -55,11 +55,14 @@ public class NoticeController {
 		logger.info("NoticeList 모두 반환");
 		List<NoticeDto> noticeList;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
-		if(userEmail.equals("admin@ssafy.com")) {
-			resultMap.put("admin", "true");
-		}else {
-			resultMap.put("admin", "false");			
+		System.out.println("jwt--: " + jwt);
+		if (!jwt.equals("-1")) {
+			String userEmail = jwtService.extractUserEmail(jwt.replace("Bearer ", ""));
+			if(userEmail.equals("admin@ssafy.com")) {
+				resultMap.put("admin", "true");
+			}else {
+				resultMap.put("admin", "false");			
+			}
 		}
 		try {
 			noticeList = noticeService.getNotices();
