@@ -74,7 +74,7 @@ export default {
       }
 
       let diff = max_lat - min_lat > max_lng - min_lng ? max_lat - min_lat : max_lng - min_lng;
-      let size = Math.round(100 * diff);
+      let size = Math.round(100 * diff) + 2;
       var areas = {
         name: this.dong,
         path: this.polygon,

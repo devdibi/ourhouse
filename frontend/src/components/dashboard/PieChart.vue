@@ -77,6 +77,7 @@ export default {
           },
         ],
       };
+      console.log(this.age);
       this.chartOptions = {
         responsive: true,
         maintainAspectRatio: false,

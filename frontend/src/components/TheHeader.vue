@@ -66,15 +66,16 @@ export default {
     moveNews() {
       this.$router.push("/news").catch(() => {});
     },
-    moveLikeApt() { 
+    moveLikeApt() {
       this.$router.push("/user/likeapt").catch(() => {});
     },
-    moveLikeDeal() { 
+    moveLikeDeal() {
       this.$router.push("/user/likedeal").catch(() => {});
     },
     logout() {
       this.setToken(null);
       console.log("로그아웃 완료");
+      this.$router.push("/").catch(() => {});
     },
     moveDashBoard() {
       this.$router.push("/dashboard").catch(() => {});

@@ -5,7 +5,7 @@
       <the-menu :user="user"></the-menu>
     </div>
     <!-- 중간 그래프 영역 -->
-    <div style="display: block; padding: 0; height: 100%" v-if="loaded">
+    <div style="display: block; padding: 0; height: 100%" v-if="loaded == 1">
       <!-- LineChart -->
       <!-- 해당지역 연도별 평균 거래금액 추세 linechart  -->
       <!-- [select avg(price) from house_deat_test where dong_code = "" group by year] 2015 ~ 2022-->
@@ -23,15 +23,7 @@
           select count(deal_code) from house_deal where dong_code = "" group by month 
         -->
       <div class="content-area" id="amount" style="padding: 0px; margin-bottom: 20px; margin-top: 20px">
-        <bar-chart
-          class="chart-area"
-          :year="bar_year"
-          :year_data="bar_year_data"
-          :month="bar_month"
-          :month_data="bar_month_data"
-          :dong="dong"
-          v-if="loaded"
-        ></bar-chart>
+        <bar-chart class="chart-area" :year="bar_year" :year_data="bar_year_data" :month="bar_month" :month_data="bar_month_data" :dong="dong" v-if="loaded"></bar-chart>
       </div>
 
       <!-- Pie Chart 스위칭 가능하도록 -->
@@ -43,37 +35,23 @@
           [select count(*) from search s left join user u on s.email = u.eamil where group by u.gender ] 
         -->
       <div class="content-area" id="pie" style="padding: 0px; margin-top: 20px">
-        <pie-chart
-          class="chart-area"
-          v-if="loaded && this.age.length != 0"
-          :age="age"
-          :age_data="age_data"
-          :gender="gender"
-          :gender_data="gender_data"
-        ></pie-chart>
-        <div style="width: 100%; height: 250px; text-align: center; vertical-align: middle" v-else>
-          정보가 없습니다.
-        </div>
+        <pie-chart class="chart-area" v-if="loaded && this.age.length != 0" :age="age" :age_data="age_data" :gender="gender" :gender_data="gender_data"></pie-chart>
+        <div style="width: 100%; height: 250px; text-align: center; vertical-align: middle" v-else>정보가 없습니다.</div>
       </div>
-
-      <!-- 우측 하단 -->
     </div>
+    <div v-else-if="loaded == 2" style="padding-top: 200px; width: 100%; height: 1100px; text-align: center; vertical-align: middle">관심지역 또는 거주지역을 설정해주세요.</div>
+    <div v-else-if="loaded == 0" style="padding-top: 200px; width: 100%; height: 1100px; text-align: center; vertical-align: middle">대시보드 정보를 불러오는 중입니다.</div>
+    <div v-else-if="loaded == 4" style="padding-top: 200px; width: 100%; height: 1100px; text-align: center; vertical-align: middle">리 단위 지역의 정보는 제공되지 않습니다.</div>
+    <!-- 우측 하단 -->
     <!-- dn -->
-    <div style="width: 1600px; height: 100%; margin-left: 50px" v-if="loaded">
+    <div style="width: 1600px; height: 100%; margin-left: 50px" v-if="loaded == 1">
       <!-- 
-          해당지역 중심 주변 평균 거래금액 비교 지도
-          해당지역의 시군구에 속하는 지역 모두 출력 
-          단, 지도의 중심은 관심지역 -->
+        해당지역 중심 주변 평균 거래금액 비교 지도
+        해당지역의 시군구에 속하는 지역 모두 출력 
+        단, 지도의 중심은 관심지역 -->
       <!-- polygon을 이용하여 event 생성 => dongcode 전달로 지도검색 수행 -->
       <div class="content-area" id="map" style="padding: 0">
-        <map-chart
-          class="chart-area"
-          v-if="loaded"
-          :areas="map_data"
-          :dong="dong"
-          :c_lng="c_lng"
-          :c_lat="c_lat"
-        ></map-chart>
+        <map-chart class="chart-area" v-if="loaded" :areas="map_data" :dong="dong" :c_lng="c_lng" :c_lat="c_lat"></map-chart>
       </div>
     </div>
   </div>
@@ -94,7 +72,7 @@ export default {
   components: { TheMenu, LineChart, BarChart, PieChart, MapChart },
   data() {
     return {
-      dong_code: "1162010200", // dong code만 넘겨주면 세개의 시각화가 완성됨, 연령대 성별은 데이터가 없어서 추후 고민
+      dong_code: "", // dong code만 넘겨주면 세개의 시각화가 완성됨, 연령대 성별은 데이터가 없어서 추후 고민
       dong: "",
       line_year: [],
       line_average: [],
@@ -109,7 +87,7 @@ export default {
       gender_data: [],
       c_lng: "",
       c_lat: "",
-      loaded: false,
+      loaded: 0,
       user: {
         email: "",
         name: "",
@@ -135,9 +113,19 @@ export default {
         }
         if (this.user.favoriteArea == null || this.user.favoriteArea == "") {
           this.user.favoriteArea = "설정하지 않음";
-        } else {
-          this.favoriteAreaCode = data.favoriteArea;
         }
+
+        if (this.user.favoriteArea == null || this.user.favoriteArea == "") {
+          this.dong_code = data.dwellArea;
+        } else {
+          this.dong_code = data.favoriteArea;
+        }
+
+        if (this.dong_code.substring(8, 10) != "00") {
+          this.loaded = 4;
+        }
+        console.log(this.dong_code);
+        console.log(this.dong_code.substring(8, 10));
       },
       (e) => {
         console.log("axios error");
@@ -146,13 +134,9 @@ export default {
     );
   },
   mounted() {
-    this.getData();
+    setTimeout(() => this.getData(), 1000);
   },
   methods: {
-    changeDongCode(newDongCode) {
-      console.log("newDongCode: ", newDongCode);
-      this.dong_code = newDongCode;
-    },
     getData() {
       average(
         `${this.dong_code}`,
@@ -161,15 +145,7 @@ export default {
           this.c_lat = response.data.geoList[0].c_lat;
           // geo 좌표 배열로 생성
           // console.log(response.data.geoList[0].geo.split("[").join().split("]").join().replace(/,, ,/g, "]|[").replace(",,,,", "[").replace(",,,,", "]").split("|"));
-          this.map_data = response.data.geoList[0].geo
-            .split("[")
-            .join()
-            .split("]")
-            .join()
-            .replace(/,, ,/g, "]|[")
-            .replace(",,,,", "[")
-            .replace(",,,,", "]")
-            .split("|");
+          this.map_data = response.data.geoList[0].geo.split("[").join().split("]").join().replace(/,, ,/g, "]|[").replace(",,,,", "[").replace(",,,,", "]").split("|");
           console.log(this.map_data);
 
           // line Chart
@@ -201,22 +177,32 @@ export default {
           // pie Chart
           const ageList = response.data.ageList;
           len = ageList.length;
+          let ageGroup = 0;
           for (i = 0; i < len; i++) {
-            this.age.push(ageList[i].ageGroup);
+            ageGroup = ageList[i].age_group + "0대";
+            this.age.push(ageGroup);
             this.age_data.push(ageList[i].count);
           }
 
           const genderList = response.data.genderList;
           len = genderList.length;
           for (i = 0; i < len; i++) {
-            this.gender.push(genderList[i].gender);
+            if (genderList[i].gender == 1) {
+              this.gender.push("남자");
+            } else if (genderList[i].gender == 2) {
+              this.gender.push("여자");
+            } else {
+              this.gender.push("미확인성별");
+            }
             this.gender_data.push(genderList[i].count);
           }
-
-          this.loaded = true;
+          if (this.loaded != 4) {
+            this.loaded = 1;
+          }
         },
         (err) => {
           console.log(err);
+          this.loaded = 2;
         }
       );
     },
