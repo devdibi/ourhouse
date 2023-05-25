@@ -591,7 +591,7 @@ export default {
 #wrap-map {
 	position: relative;
 	background: purple;
-	height: calc(100% - 56px);
+	height: calc(100% - 6px);
 	/* margin: 5px; */
 }
 

@@ -10,10 +10,6 @@ function write(notice, success, fail) {
 	api.post(`/admin/`, JSON.stringify(notice)).then(success).catch(fail);
 }
 
-function write(notice, success, fail) {
-  api.post(`/admin/write`, JSON.stringify(notice)).then(success).catch(fail);
-}
-
 function detail(noticeNo, success, fail) {
 	let api = API();
 	api.get(`/notice/${noticeNo}`).then(success).catch(fail);

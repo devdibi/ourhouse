@@ -74,17 +74,10 @@ export default {
 		};
 	},
 	created() {
-		console.log(this.token);
-		if (this.token === -1) {
-			console.log("=== Access Token이 없음 ===");
-			alert("로그인 하셈");
-			return;
-		}
-
 		let http = API();
 
 		http
-			.get("/notice/")
+			.get("/notice/list")
 			.then(({ data }) => {
 				this.notices = data.noticeList;
 				if (data.admin == "true") {
@@ -99,21 +92,6 @@ export default {
 			.catch((err) => {
 				console.log(err);
 			});
-
-		// 리스트 호출
-		// list((response) => {
-		//   console.log(response);
-		//   if (response.data.admin == "true") {
-		//     this.userinfo = "admin";
-		//   }
-		//   this.notices = response.data.noticeList;
-		//   // 처음 리스트 출력
-		//   for (var p = 0 * 10; p < 10; p++) {
-		//     if (this.notices == null) return;
-		//     if (p == this.notices.length) return;
-		//     this.lists.push(this.notices[p]);
-		//   }
-		// });
 	},
 	methods: {
 		prev() {
