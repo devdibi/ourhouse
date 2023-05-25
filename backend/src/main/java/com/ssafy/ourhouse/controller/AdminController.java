@@ -70,7 +70,7 @@ public class AdminController {
 	}
 	
 	@ApiOperation(value="유저 삭제", notes="해당 이메일의 유저를 삭제, 삭제 성공 여부에 따라 success, fail 문자열 반환", response=String.class)
-	@DeleteMapping("/{email}")
+	@DeleteMapping("/delete/{email}")
 	public ResponseEntity<String> deleteUser (@PathVariable("email")  @ApiParam(value = "삭제할 유저의 이메일", required = true)String userEmail, @RequestHeader("Authorization") String jwt) throws Exception{
 		logger.debug("deleteUser " + userEmail);
 		if(userService.deleteUser(userEmail)) {
@@ -95,7 +95,7 @@ public class AdminController {
 
 	// write
 	@ApiOperation(value="공지에 글을 작성해보아요")
-	@PostMapping("/")
+	@PostMapping("/write")
 	public ResponseEntity<String> writeNotice(@RequestBody NoticeDto noticeDto, @RequestHeader("Authorization") String jwt){
 		logger.debug("noticeDto info: {}", noticeDto);
 		try {

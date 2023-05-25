@@ -1,4 +1,3 @@
-// import { API } from "./index.js";
 import { API } from "@/api/axios-jwt";
 
 function getSido(success, fail) {

@@ -45,11 +45,11 @@
           <!-- 댓글 리스트 영역 -->
           <div class="comment-list" v-for="item in comments" :key="item.comment_no">
             <!-- 댓글 작성자 -->
-            <span style="display: block; font-size: 18px; margin-bottom: 3px">
-              {{ item.email }}
-            </span>
-            <!-- 댓글 내용 -->
-            <span style="display: inline-block; margin-left: 10px">
+          <span style="display: inline-block; margin-left: 10px">
+            {{ item.email }}
+          </span>
+          <!-- 댓글 내용 -->
+          <span style="display: block; font-size: 18px; margin-bottom: 3px">
               {{ item.comment }}
             </span>
             <!-- 댓글 삭제 버튼 -->

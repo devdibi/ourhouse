@@ -1,14 +1,17 @@
-// import { API } from "./index.js";
 import { API } from "@/api/axios-jwt";
 
 function list(success, fail) {
 	let api = API();
-	api.get(`/notice/`).then(success).catch(fail);
+	api.get(`/notice/list`).then(success).catch(fail);
 }
 
 function write(notice, success, fail) {
 	let api = API();
 	api.post(`/admin/`, JSON.stringify(notice)).then(success).catch(fail);
+}
+
+function write(notice, success, fail) {
+  api.post(`/admin/write`, JSON.stringify(notice)).then(success).catch(fail);
 }
 
 function detail(noticeNo, success, fail) {
