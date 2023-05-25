@@ -8,15 +8,29 @@
       <div class="title">이메일</div>
       {{ this.user.email }}
     </div>
-    <div><div class="title">관심지역</div></div>
+    <div>
+      <div class="title">관심지역</div>
+    </div>
     <div class="area">{{ this.user.favoriteArea }}</div>
-    <div><div class="title">거주지역</div></div>
+    <div>
+      <div class="title">거주지역</div>
+    </div>
     <div class="area">{{ this.user.dwellArea }}</div>
     <hr />
-    <div>대시보드</div>
-    <router-link to="user/modify">회원정보 열람 및 수정</router-link><br />
-    <router-link to="user/likeapt">관심 단지 목록</router-link><br />
-    <router-link to="user/likedeal">관심 매물 목록</router-link>
+    <ul>
+      <ol class="menu">
+        <router-link :to="{ name: dashboard }" class="menu-item">대시보드</router-link>
+      </ol>
+      <ol class="menu">
+        <router-link to="user/modify" class="menu-item">회원정보 열람 및 수정</router-link>
+      </ol>
+      <ol class="menu">
+        <router-link to="user/likeapt" class="menu-item">관심 단지 목록</router-link>
+      </ol>
+      <ol class="menu">
+        <router-link to="user/likedeal" class="menu-item">관심 매물 목록</router-link>
+      </ol>
+    </ul>
   </div>
 </template>
 
@@ -58,5 +72,16 @@ a {
 .title {
   font-size: 1.8vmin;
   color: rgba(232, 230, 255, 0.8);
+}
+.menu {
+  margin-top: 20px;
+}
+.menu-item {
+  font-size: 1.8vmin;
+  text-decoration: none;
+}
+
+.menu-item:hover {
+  color: #f2f2f2;
 }
 </style>
