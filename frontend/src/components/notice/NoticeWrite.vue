@@ -3,7 +3,7 @@
 <template>
   <div>
     <div class="inner-box">
-      <span class="back" @click="() => this.$router.go(-1)"><mdicon name="arrow-left" /> 뒤로가기</span>
+      <span class="back" @click="() => this.$router.go(-1)"><v-icon>mdi-arrow-left</v-icon>뒤로가기</span>
       <div class="main">
         <!-- title -->
         <div>

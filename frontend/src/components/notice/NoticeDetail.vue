@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="inner-box">
-      <span class="back" @click="() => this.$router.go(-1)"><mdicon name="arrow-left" />뒤로가기</span>
+      <div class="back" @click="() => this.$router.go(-1)">
+        <v-icon>mdi-arrow-left</v-icon>
+        뒤로가기
+      </div>
       <div class="main">
         <!-- title -->
         <div>
@@ -90,7 +93,7 @@ export default {
 }
 .back {
   cursor: pointer;
-  color: #d9d9d9;
+  color: #939393;
 }
 .back:hover {
   color: #939393;
