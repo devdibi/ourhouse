@@ -90,7 +90,12 @@
 			<!-- 상세 검색 Container -->
 			<!-- 카카오 지도 -->
 			<div id="wrap-map">
-				<KakaoMap :location="location" :locations="locations" :option="clickOption" />
+				<KakaoMap
+					:location="location"
+					:locations="locations"
+					:option="clickOption"
+					@changeApt="changeApt"
+				/>
 				<!-- 검색 결과 -->
 				<div id="result">
 					<h3 v-if="resultIsEmpty" class="text-center mt-3">검색 결과가 없습니다.</h3>
@@ -372,6 +377,11 @@ export default {
 			});
 	},
 	methods: {
+		changeApt(coord) {
+			console.log(coord.La);
+			console.log(coord.Ma);
+			this.location = { lat: coord.Ma, lng: coord.La };
+		},
 		sortEvent(sortOption) {
 			console.log(sortOption);
 			let desc = -1;
