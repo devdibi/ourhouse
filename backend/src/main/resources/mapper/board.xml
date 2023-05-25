@@ -89,9 +89,5 @@
 		DELETE FROM comment
 		where comment_no = #{commentNo}
 	</delete>
-
-
-
-
-
+	
 </mapper>

@@ -50,7 +50,7 @@ public class NoticeController {
 
 	// list
 	@ApiOperation(value = "모든 Notice 반환")
-	@GetMapping("/")
+	@GetMapping("/list")
 	public ResponseEntity<Map<String, Object>> getNotices(@RequestHeader("Authorization") String jwt){
 		logger.info("NoticeList 모두 반환");
 		List<NoticeDto> noticeList;

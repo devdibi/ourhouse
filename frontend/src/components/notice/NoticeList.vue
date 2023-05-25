@@ -57,11 +57,13 @@ export default {
     };
   },
   created() {
-    // 리스트 호출
+// 리스트 호출
     list((response) => {
-      console.log(response);
-      if (response.data.admin == "true") { 
+      console.log(response.data);
+      if (response.data.admin == "true") {
         this.userinfo = "admin";
+      } else { 
+        this.userinfo = "";
       }
       this.notices = response.data.noticeList;
       // 처음 리스트 출력
