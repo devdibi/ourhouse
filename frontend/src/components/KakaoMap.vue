@@ -25,6 +25,8 @@ export default {
 			commercialMarkers: [],
 			medicalMarkers: [],
 			hospitalMarkers: [],
+
+			medicalInfoWindow: [],
 		};
 	},
 	props: {
@@ -63,8 +65,12 @@ export default {
 				console.log("=== watch handler ===");
 				this.setCommercialMarkers(null);
 				this.setBusMarkers(null);
+				this.setMedicalMarkers(null);
+				this.setHospitalMarkers(null);
 				this.comMarkers = [];
 				this.busMarkers = [];
+				this.medicalMarkers = [];
+				this.hospitalMarkers = [];
 				await this.createBusMarkers();
 				await this.createCommercialMarkers();
 				await this.createMedicalMarkers();
@@ -82,7 +88,7 @@ export default {
 			loc.forEach((element) => {
 				this.markerslocations.push(new kakao.maps.LatLng(element.lat, element.lng));
 			});
-			console.log(this.markerslocations);
+			// console.log(this.markerslocations);
 
 			this.markAllMarkers();
 		},
@@ -98,7 +104,7 @@ export default {
 	unmounted() {},
 	methods: {
 		setBusMarkers(map) {
-			console.log(this.busMarkers);
+			// console.log(this.busMarkers);
 			for (let i = 0; i < this.busMarkers.length; i++) {
 				this.busMarkers[i].setMap(map);
 			}
@@ -111,6 +117,7 @@ export default {
 		setMedicalMarkers(map) {
 			for (let i = 0; i < this.medicalMarkers.length; i++) {
 				this.medicalMarkers[i].setMap(map);
+				this.medicalInfoWindow[i].setMap(map);
 			}
 		},
 		setHospitalMarkers(map) {
@@ -294,6 +301,18 @@ export default {
 							});
 
 							this.hospitalMarkers.push(this.marker);
+
+							// 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+							var content = `<h6> ${result[j].name} </h6>`;
+
+							// 커스텀 오버레이가 표시될 위치입니다
+							var position = new kakao.maps.LatLng(result[j].lat, result[j].lng);
+
+							// 커스텀 오버레이를 생성합니다
+							this.medicalInfoWindow[j] = new kakao.maps.CustomOverlay({
+								position: position,
+								content: content,
+							});
 						}
 					}
 				})
