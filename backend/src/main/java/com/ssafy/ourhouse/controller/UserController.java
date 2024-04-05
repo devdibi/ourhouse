@@ -81,26 +81,26 @@ public class UserController {
     }
 
 //    // TODO: JWT 사용할 예정이기에, 나중에 제거하기!
-//    @ApiOperation(value = "로그인", notes = "로그인을 위해 아이디와 비밀번호 입력, 성공시 userDto 반환, 실패 시 null 값의 userDto 반환", response = Map.class)
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody UserDto user) {
-//        logger.debug("login");
-//        Map<String, String> map = new HashMap<>();
-//        map.put("password", user.getPassword());
-//        map.put("email", user.getEmail());
-//        UserDto userDto = null;
-//        HttpStatus status = HttpStatus.ACCEPTED;
-//        try {
-//            userDto = userService.loginUser(map);
-//            String jwtToken = jwtService.generateToken(userDto);
-//
-//            return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
-//        } catch (Exception e) {
-//            logger.error("로그인 실패 : {}", e);
-//            status = HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//        return new ResponseEntity<String>("에러 발생", HttpStatus.NO_CONTENT);
-//    }
+    @ApiOperation(value = "로그인", notes = "로그인을 위해 아이디와 비밀번호 입력, 성공시 userDto 반환, 실패 시 null 값의 userDto 반환", response = Map.class)
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserDto user) {
+        logger.debug("login");
+        Map<String, String> map = new HashMap<>();
+        map.put("password", user.getPassword());
+        map.put("email", user.getEmail());
+        UserDto userDto = null;
+        HttpStatus status = HttpStatus.ACCEPTED;
+        try {
+            userDto = userService.loginUser(map);
+            String jwtToken = jwtService.generateToken(userDto);
+
+            return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("로그인 실패 : {}", e);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<String>("에러 발생", HttpStatus.NO_CONTENT);
+    }
 
     @ApiOperation(value = "회원가입", notes = "회원 가입 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
     @PostMapping("/register")
@@ -111,7 +111,9 @@ public class UserController {
         logger.debug("userDto info : {}", userDto);
         try {
             userService.registerUser(userDto);
-//            String jwtToken = jwtService.generateToken(userDto);
+            String jwtToken = jwtService.generateToken(userDto);
+
+			logger.info(jwtToken);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

@@ -63,10 +63,10 @@ public class UserServiceImpl implements UserService {
 		userMapper.registerUser(userDto);
 	}
 //
-//	@Override
-//	public UserDto loginUser(Map<String, String> map) throws Exception {
-//		return userMapper.loginUser(map);
-//	}
+	@Override
+	public UserDto loginUser(Map<String, String> map) throws Exception {
+		return userMapper.loginUser(map);
+	}
 
 	@Override
 	public void randomPassword(Map<String, String> map) throws Exception {

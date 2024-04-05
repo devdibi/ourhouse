@@ -8,19 +8,19 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema mydb
 -- -----------------------------------------------------
 -- -----------------------------------------------------
--- Schema whereismyhome
+-- Schema ssafy
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema whereismyhome
+-- Schema ssafy
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `whereismyhome` DEFAULT CHARACTER SET utf8 ;
-USE `whereismyhome` ;
+CREATE SCHEMA IF NOT EXISTS `ssafy` DEFAULT CHARACTER SET utf8 ;
+USE `ssafy` ;
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`user`
+-- Table `ssafy`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`user` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`user` (
   `email` VARCHAR(45) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
@@ -39,9 +39,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`board`
+-- Table `ssafy`.`board`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`board` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`board` (
   `board_no` INT(11) NOT NULL AUTO_INCREMENT,
   `title` LONGTEXT NOT NULL,
   `content` LONGTEXT NOT NULL,
@@ -53,16 +53,16 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`board` (
   INDEX `board_user_fk` (`email` ASC) VISIBLE,
   CONSTRAINT `board_user_fk`
     FOREIGN KEY (`email`)
-    REFERENCES `whereismyhome`.`user` (`email`))
+    REFERENCES `ssafy`.`user` (`email`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 55
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`bus`
+-- Table `ssafy`.`bus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`bus` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`bus` (
   `bus_no` LONGTEXT NULL DEFAULT NULL,
   `stop_name` TEXT NULL DEFAULT NULL,
   `lat` TEXT NULL DEFAULT NULL,
@@ -77,9 +77,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`comment`
+-- Table `ssafy`.`comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`comment` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`comment` (
   `comment_no` INT(11) NOT NULL AUTO_INCREMENT,
   `board_no` INT(11) NOT NULL,
   `comment` LONGTEXT NOT NULL,
@@ -90,11 +90,11 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`comment` (
   INDEX `fk_user_comment` (`email` ASC) VISIBLE,
   CONSTRAINT `fk_board_comment`
     FOREIGN KEY (`board_no`)
-    REFERENCES `whereismyhome`.`board` (`board_no`)
+    REFERENCES `ssafy`.`board` (`board_no`)
     ON DELETE CASCADE,
   CONSTRAINT `fk_user_comment`
     FOREIGN KEY (`email`)
-    REFERENCES `whereismyhome`.`user` (`email`)
+    REFERENCES `ssafy`.`user` (`email`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -103,9 +103,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`commercial`
+-- Table `ssafy`.`commercial`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`commercial` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`commercial` (
   `name` TEXT NULL DEFAULT NULL,
   `category` TEXT NULL DEFAULT NULL,
   `classification` TEXT NULL DEFAULT NULL,
@@ -121,9 +121,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`sido`
+-- Table `ssafy`.`sido`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`sido` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`sido` (
   `sido_code` INT(11) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`sido_code`),
@@ -133,9 +133,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`sigungu`
+-- Table `ssafy`.`sigungu`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`sigungu` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`sigungu` (
   `sigungu_code` INT(11) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `sido_code` INT(11) NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`sigungu` (
   INDEX `fk_sigungu_sido1_idx` (`sido_code` ASC) VISIBLE,
   CONSTRAINT `fk_sigungu_sido1`
     FOREIGN KEY (`sido_code`)
-    REFERENCES `whereismyhome`.`sido` (`sido_code`)
+    REFERENCES `ssafy`.`sido` (`sido_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -151,9 +151,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`dong`
+-- Table `ssafy`.`dong`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`dong` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`dong` (
   `dong_code` BIGINT(20) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `sido_code` INT(11) NOT NULL,
@@ -163,12 +163,12 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`dong` (
   INDEX `fk_dong_sigungu1_idx` (`sigungu_code` ASC) VISIBLE,
   CONSTRAINT `fk_dong_sido1`
     FOREIGN KEY (`sido_code`)
-    REFERENCES `whereismyhome`.`sido` (`sido_code`)
+    REFERENCES `ssafy`.`sido` (`sido_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_dong_sigungu1`
     FOREIGN KEY (`sigungu_code`)
-    REFERENCES `whereismyhome`.`sigungu` (`sigungu_code`)
+    REFERENCES `ssafy`.`sigungu` (`sigungu_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -176,9 +176,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`dongne`
+-- Table `ssafy`.`dongne`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`dongne` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`dongne` (
   `dongCode` VARCHAR(10) NOT NULL,
   `sidoName` VARCHAR(30) NULL DEFAULT NULL,
   `gugunName` VARCHAR(30) NULL DEFAULT NULL,
@@ -189,9 +189,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`house_info`
+-- Table `ssafy`.`house_info`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`house_info` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`house_info` (
   `apt_code` BIGINT(20) NOT NULL,
   `build_year` INT(11) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`house_info` (
   INDEX `fk_info_dong` (`dong_code` ASC) VISIBLE,
   CONSTRAINT `fk_info_dong`
     FOREIGN KEY (`dong_code`)
-    REFERENCES `whereismyhome`.`dong` (`dong_code`)
+    REFERENCES `ssafy`.`dong` (`dong_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -214,9 +214,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`house_deal`
+-- Table `ssafy`.`house_deal`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`house_deal` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`house_deal` (
   `deal_code` BIGINT(20) NOT NULL DEFAULT '0',
   `price` BIGINT(20) NOT NULL,
   `year` INT(11) NOT NULL,
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`house_deal` (
   INDEX `fk_house_deal_house_info1_idx` (`apt_code` ASC) VISIBLE,
   CONSTRAINT `fk_deal_info`
     FOREIGN KEY (`apt_code`)
-    REFERENCES `whereismyhome`.`house_info` (`apt_code`)
+    REFERENCES `ssafy`.`house_info` (`apt_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -237,9 +237,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`favorite_deal`
+-- Table `ssafy`.`favorite_deal`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`favorite_deal` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`favorite_deal` (
   `email` VARCHAR(45) NOT NULL,
   `deal_code` BIGINT(20) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -249,12 +249,12 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`favorite_deal` (
   INDEX `fk_user_has_house_deal_user1_idx` (`email` ASC) VISIBLE,
   CONSTRAINT `fk_user_has_house_deal_user1`
     FOREIGN KEY (`email`)
-    REFERENCES `whereismyhome`.`user` (`email`)
+    REFERENCES `ssafy`.`user` (`email`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_deal_favorite`
     FOREIGN KEY (`deal_code`)
-    REFERENCES `whereismyhome`.`house_deal` (`deal_code`)
+    REFERENCES `ssafy`.`house_deal` (`deal_code`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -262,9 +262,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`favorite_house`
+-- Table `ssafy`.`favorite_house`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`favorite_house` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`favorite_house` (
   `email` VARCHAR(45) NOT NULL,
   `apt_code` BIGINT(20) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -273,12 +273,12 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`favorite_house` (
   INDEX `fk_user_has_house_info_user1_idx` (`email` ASC) VISIBLE,
   CONSTRAINT `fk_user_has_house_info_user1`
     FOREIGN KEY (`email`)
-    REFERENCES `whereismyhome`.`user` (`email`)
+    REFERENCES `ssafy`.`user` (`email`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_user_house`
     FOREIGN KEY (`apt_code`)
-    REFERENCES `whereismyhome`.`house_info` (`apt_code`)
+    REFERENCES `ssafy`.`house_info` (`apt_code`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -286,9 +286,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`hospital`
+-- Table `ssafy`.`hospital`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`hospital` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`hospital` (
   `name` TEXT NULL DEFAULT NULL,
   `lng` DOUBLE NULL DEFAULT NULL,
   `lat` DOUBLE NULL DEFAULT NULL)
@@ -297,9 +297,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`news`
+-- Table `ssafy`.`news`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`news` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`news` (
   `news_no` INT(11) NOT NULL AUTO_INCREMENT,
   `title` LONGTEXT NOT NULL,
   `context` LONGTEXT NOT NULL,
@@ -313,9 +313,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`notice`
+-- Table `ssafy`.`notice`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`notice` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`notice` (
   `notice_no` INT(11) NOT NULL AUTO_INCREMENT,
   `title` LONGTEXT NOT NULL,
   `content` LONGTEXT NOT NULL,
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`notice` (
   INDEX `fk_user_notice_idx` (`email` ASC) VISIBLE,
   CONSTRAINT `fk_user_notice`
     FOREIGN KEY (`email`)
-    REFERENCES `whereismyhome`.`user` (`email`)
+    REFERENCES `ssafy`.`user` (`email`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -336,9 +336,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`pharmacy`
+-- Table `ssafy`.`pharmacy`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`pharmacy` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`pharmacy` (
   `name` TEXT NULL DEFAULT NULL,
   `lng` DOUBLE NULL DEFAULT NULL,
   `lat` DOUBLE NULL DEFAULT NULL)
@@ -347,9 +347,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`polygon`
+-- Table `ssafy`.`polygon`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`polygon` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`polygon` (
   `dong_code` TEXT NULL DEFAULT NULL,
   `name` TEXT NULL DEFAULT NULL,
   `geo` TEXT NULL DEFAULT NULL,
@@ -360,9 +360,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`static`
+-- Table `ssafy`.`static`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`static` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`static` (
   `count` BIGINT(21) NOT NULL DEFAULT '0',
   `price` DECIMAL(41,0) NULL DEFAULT NULL,
   `year` INT(11) NOT NULL,
@@ -374,9 +374,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `whereismyhome`.`search`
+-- Table `ssafy`.`search`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `whereismyhome`.`search` (
+CREATE TABLE IF NOT EXISTS `ssafy`.`search` (
   `email` VARCHAR(45) NOT NULL,
   `dong_code` BIGINT(20) NOT NULL,
   `search_date` DATETIME NOT NULL DEFAULT current_timestamp,
@@ -385,12 +385,12 @@ CREATE TABLE IF NOT EXISTS `whereismyhome`.`search` (
   INDEX `fk_user_has_dong_user1_idx` (`email` ASC) VISIBLE,
   CONSTRAINT `fk_user_has_dong_user1`
     FOREIGN KEY (`email`)
-    REFERENCES `whereismyhome`.`user` (`email`)
+    REFERENCES `ssafy`.`user` (`email`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_user_has_dong_dong1`
     FOREIGN KEY (`dong_code`)
-    REFERENCES `whereismyhome`.`dong` (`dong_code`)
+    REFERENCES `ssafy`.`dong` (`dong_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
