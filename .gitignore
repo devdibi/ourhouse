@@ -2,3 +2,4 @@
 /.metadata/
 /Servers/
 .DS_Store
+application.properties
