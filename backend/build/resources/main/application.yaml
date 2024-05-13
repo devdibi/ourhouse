@@ -1,0 +1,30 @@
+# server configure
+server:
+  port: 9999
+  servlet:
+    context-path: /ourhouse
+
+# DB configure
+spring:
+  datasource:
+    url: jdbc:mysql://dibi-oracle.duckdns.org:3306/ourhouse_test
+    username: ourhouse
+    password: snsn5488!
+
+# DDL option
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+
+# reload denied
+  devtools:
+    remote:
+      restart:
+        enabled: false
+
+
+# Token key
+springboot:
+  jwt:
+    secret: secret
