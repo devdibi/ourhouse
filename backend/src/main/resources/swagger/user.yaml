@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: Ourhouse Docs
+  description: <h1>우리의집 API</h1>
+  version: 1.0.0
+security:
+  - api_key: []
+#servers:
+#  - url: https://devdibi.site/ousrhouse/
+#    description: ourhouse 서비스
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /user/sign-up:
+    post:
+      tags:
+        - user
+      summay: Sign-up
+      requestBody:
+        description: "회원가입"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test_admin@gmail.com
+                password:
+                  type: string
+                  example: test_admin
+                name:
+                  type: string
+                  example: test_admin
+                gender:
+                  type: integer
+                  example: 1
+                age:
+                  type: integer
+                  example: 20
+                role:
+                  type: string
+                  example: admin
+      responses:
+        '200':
+          description: 회원가입완료
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: string
+                    example: OK
+                  msg:
+                    type: string
+                    example: 회원 가입 완료
+                  data:
+                    type: object
+                    example: null
+
+  /user/sign-in:
+    post:
+      tags:
+        - user
+      summay: Sign-in
+      requestBody:
+        description: "로그인"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test_admin@gmail.com
+                password:
+                  type: string
+                  example: test_admin
+      responses:
+        '200':
+          description: 로그인 완료
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  code:
+                    type: string
+                    example: OK
+                  msg:
+                    type: string
+                    example: 로그인 완료
+                  data:
+                    type: string
+                    example: token
+
+  /test:
+    get:
+      tags:
+        - test
+      summary: auth-test
+      responses:
