@@ -31,7 +31,7 @@ public class FavoriteArea {
     @Column(name = "dong", updatable = false, nullable = false)
     private String dong;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
 }

@@ -2,7 +2,10 @@ package org.ourhouse.backend.user.model.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.ourhouse.backend.freeboard.model.entity.FreeBoard;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="user")
@@ -57,8 +61,11 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
 
     // 관심지역 리스트
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<FavoriteArea> favoriteAreaList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<FreeBoard> freeBoardList;
 
     // role
 
