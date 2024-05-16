@@ -1,13 +1,13 @@
 openapi: 3.0.0
 info:
-  title: Ourhouse Docs
-  description: <h1>우리의집 API</h1>
+  title: Ourhouse UserAPI
+  description: <h2>우리의집 유저 API</h2>
   version: 1.0.0
 security:
   - bearerAuth: []
-servers:
-  - url: https://devdibi.site/ousrhouse/
-    description: ourhouse 서비스
+#servers:
+#  - url: https://devdibi.site/ousrhouse/
+#    description: ourhouse 서비스
 components:
   securitySchemes:
     bearerAuth:
@@ -17,13 +17,14 @@ components:
       name: Authorization
       in: header
 paths:
+  # 유저 - 회원가입
   /user/sign-up:
     post:
       tags:
         - user
-      summay: Sign-up
+      summary: 회원가입
       requestBody:
-        description: "회원가입"
+        description: 회원가입
         required: true
         content:
           application/json:
@@ -49,7 +50,7 @@ paths:
                   type: string
                   example: admin
       responses:
-        '200':
+        200:
           description: 회원가입완료
           content:
             application/json:
@@ -68,12 +69,31 @@ paths:
                   data:
                     type: object
                     example: null
-
+        409:
+          description: 이메일 중복
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  code:
+                    type: string
+                    example: CONFLICT
+                  msg:
+                    type: string
+                    example: 이미 존재하는 회원입니다.
+                  data:
+                    type: object
+                    example: null
+  # 유저  - 로그인
   /user/sign-in:
     post:
       tags:
         - user
-      summay: Sign-in
+      summary: 로그인
       requestBody:
         description: "로그인"
         required: true
@@ -89,7 +109,7 @@ paths:
                   type: string
                   example: test_admin
       responses:
-        '200':
+        200:
           description: 로그인 완료
           content:
             application/json:
@@ -108,17 +128,8 @@ paths:
                   data:
                     type: string
                     example: token
-
-  /test:
-    get:
-      tags:
-        - test
-      summary: auth-test
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: 테스트
+        404:
+          description: 이메일 오류
           content:
             application/json:
               schema:
@@ -126,13 +137,32 @@ paths:
                 properties:
                   success:
                     type: boolean
-                    example: true
+                    example: false
                   code:
                     type: string
-                    example: OK
+                    example: NOT_FOUND
                   msg:
                     type: string
-                    example: 테스트 완료
+                    example: 존재하지 않는 회원입니다.
                   data:
-                    type: object
+                    type: string
+                    example: null
+        400:
+          description: 비밀번호 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  code:
+                    type: string
+                    example: BAD_REQUEST
+                  msg:
+                    type: string
+                    example: 잘못된 비밀번호입니다.
+                  data:
+                    type: string
                     example: null

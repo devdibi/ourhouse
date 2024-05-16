@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/docs/**", "/user/**").permitAll()
-                                .requestMatchers("/test").authenticated()
+                                .anyRequest().authenticated()
                 )
                 .exceptionHandling(authenticationManager -> authenticationManager
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
