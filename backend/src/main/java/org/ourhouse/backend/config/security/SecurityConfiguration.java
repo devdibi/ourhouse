@@ -30,8 +30,8 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/docs/**").permitAll()
-                                .requestMatchers("/user/**").permitAll()
+                                .requestMatchers("/docs/**", "/user/**").permitAll()
+                                .requestMatchers("/test").authenticated()
                 )
                 .exceptionHandling(authenticationManager -> authenticationManager
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
