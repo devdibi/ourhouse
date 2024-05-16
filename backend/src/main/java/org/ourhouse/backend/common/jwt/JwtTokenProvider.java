@@ -44,7 +44,7 @@ public class JwtTokenProvider {
 
         Date now = new Date();
 
-        String token = Jwts.builder()
+        String token = "Bearer " + Jwts.builder()
                 .claims(claims)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + tokenValidMillisecond))
@@ -91,7 +91,6 @@ public class JwtTokenProvider {
 
             return !claims.getBody().getExpiration().before(new Date());
         }catch (Exception e){
-            log.info("[error] {}", e.getMessage());
             log.info("[validateToken] 토큰 유효 체크 예외 발생");
             return false;
         }
