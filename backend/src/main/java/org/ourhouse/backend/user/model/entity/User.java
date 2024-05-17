@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.ourhouse.backend.freeboard.model.entity.FreeBoard;
+import org.ourhouse.backend.noticeboard.model.entity.NoticeBoard;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -64,8 +65,13 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<FavoriteArea> favoriteAreaList;
 
+    // 자유 게시판 리스트
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<FreeBoard> freeBoardList;
+
+    // 공지사항 게시판 리스트
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<NoticeBoard> noticeBoardList;
 
     // role
 

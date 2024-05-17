@@ -25,6 +25,9 @@ public class OpenAPIConfig {
     @Bean
     public GroupedOpenApi freeBoardApi(){return generateApi(2,"free-board");}
 
+    @Bean
+    public GroupedOpenApi noticeBoardApi(){return generateApi(3,"notice-board");}
+
     public GroupedOpenApi generateApi(int num, String document){
         return GroupedOpenApi.builder()
                 .group(convert(num) + document)

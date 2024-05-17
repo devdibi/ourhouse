@@ -30,7 +30,8 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/docs/**", "/user/**").permitAll()
+                                .requestMatchers("/docs/**", "/user/**", "/notice-board/read", "/notice-board/list").permitAll()
+                                .requestMatchers("/notice-board/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(authenticationManager -> authenticationManager
